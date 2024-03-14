@@ -1,0 +1,411 @@
+<?php
+
+namespace Modules\Restaurant\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller as Controller;
+use App\Models\AccountTransaction;
+use App\Models\NonInvoicePayment;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
+use Modules\Accounts\Entities\LedgerAccount;
+use Modules\Hotel\Entities\Booking;
+use Modules\Hotel\Entities\BookingDetails;
+use Modules\Hotel\Transformers\CommonResource;
+use Modules\Restaurant\Entities\RestroInvoice;
+use Modules\Restaurant\Entities\RestroItem;
+use Modules\Restaurant\Entities\Restroorder;
+use Modules\Restaurant\Transformers\RestaurantOrderResource;
+use Modules\Restaurant\Transformers\RestaurantOrderShowResource;
+use Modules\Accounts\Entities\PlutusEntries;
+use Modules\Hotel\Entities\Hotel;
+
+class OrderController extends Controller
+{
+    public function index(Request $request)
+    {
+        $startDate = $request->startDate ? Carbon::parse($request->startDate) : null;
+        $endDate = $request->endDate ? Carbon::parse($request->endDate)->addDay() : null;
+        return RestaurantOrderResource::collection(Restroorder::with('items',
+            'items.restaurantItem')->when($startDate, function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('order_date', [$startDate, $endDate]);
+        })->latest()->paginate(15));
+    }
+
+    public function show($id)
+    {
+        try {
+            $orderDetails = Restroorder::where('id', $id)->with('items', 'items.restaurantItem','items.restaurantItem.variant','booking.customer', 'room')->first();
+            
+            if (@$orderDetails) {
+                return new RestaurantOrderShowResource($orderDetails);
+            } else {
+                return $this->responseWithError('Sorry your request can\'t Process!');
+            }
+        } catch (Exception $e) {
+            return $this->responseWithError($e->getMessage());
+        }
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            $this->storeOrder($request->all());
+
+            return $this->responseWithSuccess('Order added successfully!');
+        } catch (Exception $e) {
+            return $this->responseWithError($e->getMessage());
+        }
+    }
+
+    public function update(Request $request,$id){
+        dd($request->input());
+        dd($id);
+    }
+
+    public function updateOrder($data,$id)
+    {
+        // dd($data);
+        $order = Restroorder::find($id);
+        if($order){
+
+            $order->update([
+                'total_amount'  => @$data['netTotal'] ?? 0,
+                'discount'      => @$data['discountAmount'] ?? 0,
+                'tax'           => @$data['orderTax'] ?? @$data['tax'] ?? 0,
+            ]);
+    
+            $orderItems = $data['selectedProducts'];
+    
+            if ($orderItems && !empty($orderItems)) {
+                /*delete Old Records*/
+                $deleteOld = RestroItem::where('order_id',$id)->delete();
+    
+                foreach ($orderItems as $item) {
+                    $optionalItems = @$item['addon'] ? Arr::pluck($item['addon'], 'id') : [];
+                    RestroItem::create([
+                        'order_id'           => $id,
+                        'restaurant_item_id' => $item['variant']['id'],
+                        'optional_item_ids'  => $optionalItems,
+                        'qty'                => $item['quantity'],
+                    ]);
+                }
+            }
+        }
+        return $order;
+    }
+
+    public function storeOrder($data)
+    {
+        // dd($data);
+        $hotelId = $data['hotel_id'];
+        $prevOrder = Restroorder::where('hotel_id', $hotelId)->latest()->first();
+        if (!empty($prevOrder)) {
+            $previousBookingId = "RO-0000".$prevOrder->id;
+        } else {
+            $previousBookingId = "RO-00000";
+        }
+
+        $room = @$data['room'] ?? null;
+        $booking = null;
+        if ($room) {
+            $bookingDetail = BookingDetails::where('room_id', $room['id'])->whereNotIn('booking_status',
+                [1, 4])->whereHas('booking', function ($bookingQuery) {
+                    $bookingQuery->whereDate('check_out_date', '>=', Carbon::now())->where('booking_status_main', Booking::CHECKIN);
+            })->first();
+            if ($bookingDetail) {
+                $booking = $bookingDetail->booking;
+                $booking->paid_amount = floatval($booking->paid_amount) + floatval(@$data['netTotal'] ?? 0);
+                $booking->total_price = floatval($booking->total_price) + floatval(@$data['netTotal'] ?? 0);
+                $booking->save();
+            }
+        }
+
+        $order = Restroorder::create([
+            'order_id_uniq' => $this->generateBookingId($previousBookingId,$hotelId),
+            'order_date'    => Carbon::now(),
+            'order_status'  => 0,
+            'total_amount'  => @$data['netTotal'] ?? 0,
+            'discount'      => @$data['discountAmount'] ?? 0,
+            'tax'           => @$data['orderTax'] ?? @$data['tax'] ?? 0,
+            'room_id'       => $room ? @$room['id'] : null,
+            'booking_id'    => $booking ? @$booking->id : null,
+            'hotel_id'      => $hotelId,
+            'customer_id'   => @$data['client'] ? @$data['client']['id'] : null,
+        ]);
+
+        $orderItems = $data['selectedProducts'];
+
+        if ($orderItems && !empty($orderItems)) {
+            foreach ($orderItems as $item) {
+                $optionalItems = @$item['addon'] ? Arr::pluck($item['addon'], 'id') : [];
+                RestroItem::create([
+                    'order_id'           => $order->id,
+                    'restaurant_item_id' => $item['variant']['id'],
+                    'optional_item_ids'  => $optionalItems,
+                    'qty'                => $item['quantity'],
+                ]);
+            }
+        }
+
+        return $order;
+    }
+
+    public function payInvoice(Request $request)
+    {
+        $input = $request->all();
+        $hotelId = $input['hotel_id'];
+        $orderId = $input['invoice_slug'];
+        $userId = auth()->user()->id;
+
+        /*Create Plutus Entry ABhi(11-12-23)*/
+
+        $note = '[' . $orderId . '] Restaurant order payment';
+        $plutusId = $this->createPlutusEntry($hotelId,$note,now(),floatval($request->paidAmount ?? 0));
+        
+        if (floatval($request->paidAmount ?? 0)) {
+            if($request->account['id'] == 0){
+                $account = $payableAccount = LedgerAccount::where('code', 'ACCOUNT-RECEIVABLE')->first();
+            }
+            $transaction = AccountTransaction::create([
+                'account_id' => ($request->account['id'] == 0) ? $account->id : $request->account['id'],
+                'amount' => floatval($request->paidAmount ?? 0),
+                'reason' => ($request->account['id'] == 0) ? '[' . $orderId . '] Restaurant invoice payment Pending' : '[' . $orderId . '] Restaurant invoice payment',
+                'type' => 1,
+                'transaction_date' => Carbon::now(),
+                'cheque_no' => $request->chequeNo,
+                'receipt_no' => $request->receiptNo,
+                'created_by' => $userId,
+                'status' => 1,
+                'hotel_id' => $hotelId,
+                'order_id' => @$input['invoice_id'],
+                'customer_id' => @$input['client'] ? @$input['client']['id'] : null,
+                'plutus_entries_id' => $plutusId,
+            ]);
+
+            NonInvoicePayment::create([
+                'slug' => uniqid(),
+                'client_id' => @$input['client'] ? @$input['client']['id'] : null,
+                'amount' => floatval($request->paidAmount ?? 0),
+                'type' => 1,
+                'transaction_id' => $transaction->id,
+                'date' => Carbon::now(),
+                'note' => '[' . $orderId . '] Restaurant invoice payment',
+                'status' => 1,
+                'created_by' => $userId,
+                'order_id' => @$input['invoice_id'],
+                'hotel_id' => $hotelId,
+            ]);
+
+            $payableAccount = LedgerAccount::where('code', 'RESTAURANT-REVENUE')->first();
+            $payableAccount = $payableAccount->getAccoutnbalance;
+            $payableAccount->balanceTransactions()->create([
+                'amount' => floatval($request->paidAmount ?? 0) - floatval($input['tax'] ?? 0),
+                'reason' => '[' . $orderId . '] Restaurant invoice Payment',
+                'type' => 1,
+                'transaction_date' => now(),
+                'cheque_no' => null,
+                'receipt_no' => null,
+                'created_by' => $userId,
+                'status' => 1,
+                'order_id' => @$input['invoice_id'],
+                'hotel_id' => $hotelId,
+                'customer_id' => @$input['client'] ? @$input['client']['id'] : null,
+                'plutus_entries_id' => $plutusId,
+            ]);
+
+            $outputGst = LedgerAccount::where('code', 'GST-OUTPUT')->first();
+            if ($outputGst) {
+                $outputGst = $outputGst->getAccoutnbalance;
+                $outputGst && $outputGst->balanceTransactions()->create([
+                    'amount' => $input['tax'],
+                    'reason' => '[' . $orderId . '] Restaurant invoice Payment GST',
+                    'type' => 1,
+                    'transaction_date' => now(),
+                    'cheque_no' => null,
+                    'receipt_no' => null,
+                    'created_by' => $userId,
+                    'status' => 1,
+                    'order_id' => @$input['invoice_id'],
+                    'reference' => 'restaurant order',
+                    'hotel_id' => $hotelId,
+                    'customer_id' => @$input['client'] ? @$input['client']['id'] : null,
+                    'plutus_entries_id' => $plutusId,
+                ]);
+            }
+
+            //update Status in RestoOrder Table
+            $updateStatus = Restroorder::where('id',$input['invoice_id'])->first();
+            $updateStatus->order_status = 1;
+            $updateStatus->payment_status = ($request->account['id'] == 0) ? 0 : 1;
+            $updateStatus->save();
+        }
+    }
+
+    protected function cancelOrder(Request $request,$id){
+        
+        try {
+            $updateStatus = Restroorder::where('id',$id)->first();
+            $updateStatus->order_status = 2;
+            $updateStatus->cancel_note = $request->cancel_note;
+            $updateStatus->save();
+
+            return $this->responseWithSuccess('Order Cancel Successfully');
+        } catch (Exception $e) {
+            return $this->responseWithError($e->getMessage());
+        }
+    }
+
+    protected function updateOrderStatus(Request $request,$id){
+       
+        try {
+            $updateStatus = Restroorder::where('id',$id)->first();
+            $updateStatus->order_status = $request->order_status['id'];
+            $updateStatus->save();
+
+            return $this->responseWithSuccess('Order Status Updated Successfully');
+        } catch (Exception $e) {
+            return $this->responseWithError($e->getMessage());
+        }
+    }
+
+    protected function createPlutusEntry($hotelId,$note,$date,$amount){
+
+        $createPlutus = PlutusEntries::create([
+            'hotel_id' => $hotelId,
+            'note' => $note,
+            'date' => $date,
+            'amount' => $amount,
+        ]);
+       
+        return $createPlutus->id;
+    }
+
+    protected function generateBookingId($previousBookingId,$hotelId)
+    {
+
+        $hotel1 = Hotel::where('id',$hotelId)->first();
+        
+        $hotel = str_replace('hotel', '', $hotel1->hotel_name);
+        $hotel = str_replace('Hotel', '', $hotel);
+        
+        $hotel = ($hotel1->hotel_prefix !== null) ? $hotel1->hotel_prefix : Str::slug($hotel);
+        
+        
+        // Extract the numeric part of the previous booking ID
+        $previousNumber = substr($previousBookingId, 3);
+        $nextNumber = intval($previousNumber) + 1;
+
+        // Pad the numeric part with leading zeros
+        $nextNumberPadded = str_pad($nextNumber, strlen($previousNumber), '0', STR_PAD_LEFT);
+
+        // Concatenate the prefix and the padded numeric part to form the new booking ID
+        $prefix = substr($previousBookingId, 0, 3);
+
+        return $prefix.$hotel.'-'.$nextNumberPadded;
+    }
+
+    public function createInvoice(Request $request)
+    {
+        try {
+            $order = $this->storeOrder($request->all());
+
+            NonInvoicePayment::create([
+                'slug' => uniqid(),
+                'client_id' => $order->customer_id,
+                'amount' => $order->total_amount,
+                'type' => 0,
+                'transaction_id' => null,
+                'date' => Carbon::now(),
+                'note' => '[' . $order->order_id_uniq . '] Restaurant order due',
+                'status' => 1,
+                'created_by' => auth()->user()->id,
+                'order_id' => $order->id,
+                'hotel_id' => $order->hotel_id,
+            ]);
+
+            return CommonResource::make($order);
+        } catch (Exception $e) {
+            return $this->responseWithError($e->getMessage());
+        }
+    }
+
+    public function updateInvoice(Request $request,$id)
+    {
+        
+        try {
+            $order = $this->updateOrder($request->all(),$id);
+
+            $nonInvoicePayment = NonInvoicePayment::where('order_id',$id)->get();
+            if(!empty($nonInvoicePayment)){
+               foreach($nonInvoicePayment as $nonInvoicePayment){
+                NonInvoicePayment::updateOrCreate(
+                    ['id' => $nonInvoicePayment->id], 
+                    ['amount' => $order->total_amount] 
+                );
+               }
+            }
+            return CommonResource::make($order);
+        } catch (Exception $e) {
+            return $this->responseWithError($e->getMessage());
+        }
+    }
+
+    
+
+    public function destroy($id)
+    {
+        try {
+            $hotelcategory = Restroorder::where('id', $id)->first();
+            $hotelcategory->delete();
+
+            return $this->responseWithSuccess('Order deleted successfully');
+        } catch (Exception $e) {
+            return $this->responseWithError($e->getMessage());
+        }
+    }
+
+    public function makePaymentRequest(Request $request)
+    {
+        try {
+            $orderPayment = Restroorder::where("id", $request->order_id)->where('payment_status', 0)->first();
+            if ($orderPayment) {
+                $invChec = RestroInvoice::latest()->first();
+                if (!empty($invChec)) {
+                    $inv_id = "TH-HOTEL-0000".$invChec->id;
+                } else {
+                    $inv_id = "TH-00000";
+                }
+                if (isset($orderPayment) && !empty($orderPayment)) {
+                    $discount = isset($request->discount) && $request->discount > 0 ? $request->discount : $orderPayment->discount;
+                    $order_amount = isset($request->order_amount) && $request->order_amount > 0 ? $request->order_amount : $orderPayment->order_amount;
+                    $total_amount = isset($request->total_amount) && $request->total_amount > 0 ? $request->total_amount : $orderPayment->total_amount;
+                    $tax = isset($request->tax) && $request->tax > 0 ? $request->tax : $orderPayment->tax;
+                    $newBooking = RestroInvoice::firstOrNew(['order_id' => $request->order_id]);
+                    $newBooking->order_id = $request->order_id;
+                    $newBooking->invoice_id = $inv_id;
+                    $newBooking->order_amount = $order_amount;
+                    $newBooking->total_amount = $total_amount;
+                    $newBooking->discount = $discount;
+                    $newBooking->tax = $tax;
+                    $newBooking->save();
+                    if (!empty($newBooking)) {
+                        $order_status = Restroorder::where('id', $request->order_id)->first();
+                        $order_status->update([
+                            'payment_status' => 2,
+                        ]);
+                    }
+
+                    return $this->responseWithSuccess('Order added successfully!');
+                }
+            } else {
+                return $this->responseWithError("Payment status Already Updated !");
+            }
+        } catch (Exception $e) {
+            return $this->responseWithError($e->getMessage());
+        }
+    }
+}

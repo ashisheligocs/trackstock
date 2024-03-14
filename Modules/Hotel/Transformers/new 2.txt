@@ -1,0 +1,31 @@
+{
+    "category_id": 1,
+    "item_name": "momos",
+    "item_image":1, 
+    "description": "this is test data ",
+    "notes": "test data ",
+    "status": 1
+	}
+    "price": [
+        {
+            "item_id": null,
+            "varient_id": 1,
+            "price": 1
+        },
+         {
+            "item_id": null,
+            "varient_id": 1,
+            "price": 1
+        },
+         {
+            "item_id": null,
+            "varient_id": 1,
+            "price": 1
+        },
+         {
+            "item_id": null,
+            "varient_id": 1,
+            "price": 1
+        }
+    ]
+}

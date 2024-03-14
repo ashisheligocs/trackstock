@@ -1,0 +1,39 @@
+# /.zip
+/node_modules
+# /public/hot
+# /public/storage
+/storage/*.key
+/vendor
+.env
+# .env.backup
+# .env.dusk.local
+# .phpunit.result.cache
+# Homestead.json
+# Homestead.yaml
+# npm-debug.log
+# yarn-error.log
+# phpunit.dusk.xml
+/public/dist
+/storage
+!public/storage/modules/*
+# /public/build
+# /public/mix-manifest.json
+# /.idea
+# /.vscode
+# .zip
+# digitalocean-info.txt
+# !storage/backup/
+public/mix-manifest.json
+public/dist/css/app.css
+public/dist/js/app.js
+public/mix-manifest.json
+public/dist/css/app.css
+public/dist/js/app.js
+public/mix-manifest.json
+public/dist/css/app.css
+public/dist/js/app.js
+public/mix-manifest.json
+public/dist/js/app.js
+public/dist/js/app.js
+public/mix-manifest.json
+package.json

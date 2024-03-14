@@ -1,0 +1,9 @@
+{
+  "Hotel": true,
+  "Restaurant": true,
+  "Blog": true,
+  "User": true,
+  "Accounts": true,
+  "Model": true,
+  "LedgersCategory": true
+}

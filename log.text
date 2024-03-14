@@ -1,0 +1,91 @@
+# Version 1.0 published on 02 May 2022
+* Initial Release.
+
+# Version 2.0 Published on 05th June 2022
+* Added - POS Sale Module Added.
+* Added - Date Range Picker Added.
+* Added - Table Per Page View Select Added.
+* Added - Balance Adjustment Module Added.
+* Added - New Language Added.
+* Fixed - Invoice Return Edit Fixed.
+* Fixed - Other issues.
+
+# Version 2.1 Published on 08th August 2022
+* Added - Default Client added in general settings.
+* Added - Default Account in general settings.
+* Added - Default Vat Rate in general settings.
+* Update - Default settings updated in POS.
+* Update - POS sale created by Enter button press.
+* Fixed - POS product search issue fixed.
+* Fixed - Other issues.
+
+# Version 2.2 Published on 10th October 2022
+* Added - Import clients via CSV file.
+* Added - Import suppliers via CSV file.
+* Added - Import products via CSV file.
+* Update - Default settings updated in POS.
+* Fixed - Paginate Issue in POS Search.
+* Fixed - Other issues.
+
+# Version 2.3 published on 3rd November 2022
+* Fixed - Invoice edit issue fixed.
+* Fixed - Invoice return issue fixed.
+* Fixed - Inventory Adjustment issue fixed.
+* Fixed - Installer issue fixed.
+* Fixed - Other issues.
+
+# Version 2.4 published on 12th December 2022
+* Added - Khmer Language added.
+* Fixed - Dashboard page invoice table.
+* Fixed - VAT Rate numeric number input.
+* Fixed - Profile update.
+* Fixed - Installer issue fixed.
+* Fixed - Others minor issues.
+
+# Version 2.5 published on 27th December 2022
+* Fixed - Installer issue fixed.
+* Fixed - Others minor issues.
+
+# Latest Version 3.0.0 published on 24th January 2023
+* Added - Add client from POS page.
+* Added - Add product from POS page.
+* Added - Add client from invoice create page.
+* Added - Add supplier from purchase create page.
+* Added - Product price added in barcode.
+* Fixed - Installer issue fixed.
+* Fixed - Others minor issues.
+
+# Latest Version 4.0.0 published on 24th January 2023
+* Added - Client Ledger
+* Added - Supplier Ledger
+* Added - Account Ledger
+* Added - Client Welcome Email & SMS Notification
+* Added - Supplier Welcome Email & SMS Notification
+* Added - Invoice Email & SMS Notification
+* Added - Purchase Email & SMS Notification
+* Added - Quotation Email & SMS Notification
+* Added - Invoice Payment Email & SMS Notification
+* Added - Purchase Payment Email & SMS Notification
+* Added - Add Invoice Payment From Invoices Page
+* Added - Add Purchase Payment From Purchases Page
+* Added - Add Supplier From Purchase Create Page
+* Added - Add Product From Purchase Create Page
+* Added - Albanian Language Added
+* Added - Sidebar Resource Menu
+* Added - Non Zero Inventory List
+* Update - UX/UI Design Update
+* Update - Table Design update
+* Update - Invoice Show Page design update
+* Update - Purchase Show Page design update
+* Update - Quotation Show Page design update
+* Update - Performance Update
+* Update - Security Update
+* Fixed - Inventory Adjustment Issue
+* Fixed - Inventory PDF Export Issue
+* Fixed - Inventory Product Search Export Issue
+* Fixed - Purchase Payment Issue
+* Fixed - Quotation create and edit input double number issue fixed
+* Fixed - POS page VAT select overflow issue fixed.
+* Fixed - PDF issue fixed.
+* Fixed - Reports issue fixed.
+
