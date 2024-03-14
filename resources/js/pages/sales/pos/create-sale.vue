@@ -605,10 +605,10 @@
                 let price = 0;
                 if (this.tax_included) {
                     price = this.setTaxInclusivePrice();
-                    return price - this.foodItemDiscount + this.foodItemTax;
+                    return price - this.foodItemDiscount + this.foodItemTax * 2;
                 } else {
                     price = this.foodItemSubTotal;
-                    return price - this.foodItemDiscount + this.foodItemTax;
+                    return price - this.foodItemDiscount + this.foodItemTax * 2;
                 }
                 
             },
