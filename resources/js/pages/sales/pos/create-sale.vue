@@ -48,8 +48,8 @@
                                             </div>
                                         </div>
                                         <div class="pos-box-content">
-                                            <p class="pos-box-text">{{ product.name }}</p>
-                                            <span class="text-bold text-lg">{{ product.price | withCurrency }}</span>
+                                            <p class="pos-box-text">{{ product.label }}</p>
+                                            <span class="text-bold text-lg">{{ product.sellingPrice | withCurrency }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -113,21 +113,20 @@
                                     </tr>
                                 </thead>
                                 <tbody v-if="selectedItemList && selectedItemList.length > 0">
-                                    <tr v-for="(product, i) in selectedItemList" :key="i">
+                                    <tr v-for="(singleItem, i) in selectedItemList" :key="i">
                                         <td>
-                                            {{ product.name }}
-                                            <span v-if="product.addonString != ''" style="font-size: 11px;"><br />{{
-                                                product.addonString }}</span>
+                                            {{ singleItem.name }}
+                                            <span v-if="singleItem.addonString != ''" style="font-size: 11px;"><br />{{
+                                                singleItem.addonString }}</span>
                                         </td>
-                                        <td>{{ parseFloat(product.variant?.price) + parseFloat(product.addonAmount) |
-                                            withCurrency }}
-                                        </td>
+                                        <!-- <td>{{ parseFloat(product.variant?.price) + parseFloat(product.addonAmount) | withCurrency }}</td> -->
+                                        <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td>
                                         <td>
                                             <div class="d-flex custom-qty-input">
                                                 <input type="button" value="-"
                                                     class="button-minus icon-shape icon-sm btn-danger" data-field="quantity"
                                                     @click="adjustQuantity($event, i, 'decrement')" />
-                                                <input type="number" step="any" :id="`Qty-${i}`" :value="product.quantity"
+                                                <input type="number" step="any" :id="`Qty-${i}`" :value="singleItem.quantity"
                                                     name="quantity" class="quantity-field border-0 incrementor" required
                                                     @input="adjustQuantity($event, i)" @change="preventZeroValue($event, i)"
                                                     placeholder="Quantity" />
@@ -136,7 +135,7 @@
                                                     @click="adjustQuantity($event, i, 'increment')" />
                                             </div>
                                         </td>
-                                        <td class="text-right">{{ itemSubtotal(product) | withCurrency }}</td>
+                                        <td class="text-right">{{ itemSubtotal(singleItem) | withCurrency }}</td>
                                         <td class="text-right">
                                             <button type="button" class="btn btn-danger" @click="removeItem(i)">
                                                 <i class="fas fa-times"></i>
@@ -725,19 +724,20 @@
             openProductModal(product) {
                 toast.fire({ type: "success", title: "Order Added Successfully" });
                 this.currentProduct = product;
-                this.currentVariant = product.variants[0]
-                if (product.optionalItems.length <= 0 && product.variants.length <= 1) {
+                console.log(product)
+                // this.currentVariant = product.variants[0]
+                // if (product.optionalItems.length <= 0 && product.variants.length <= 1) {
                     return this.addItemInList();
-                }
-                this.showProductModal = true;
+                // }
+                // this.showProductModal = true;
             },
             addItemInList() {
-                if (!this.currentVariant || this.currentVariant.length <= 0) {
-                    return toast.fire({
-                        type: "error",
-                        title: 'Select at-least one variant',
-                    });
-                }
+                // if (!this.currentVariant || this.currentVariant.length <= 0) {
+                //     return toast.fire({
+                //         type: "error",
+                //         title: 'Select at-least one variant',
+                //     });
+                // }
                 let alreadyAddedItem = _.findIndex(this.selectedItemList, (item) => {
                     return item.id == this.currentProduct.id && item.variant == this.currentVariant
                 })
@@ -748,25 +748,29 @@
                 
                 if (alreadyAddedItem >= 0) {
                     this.selectedItemList[alreadyAddedItem] = {
-                        name: `${this.currentProduct?.name} (${this.currentVariant?.name})`,
+                        name: `${this.currentProduct?.name}`,
                         id: this.currentProduct.id,
-                        variant: this.currentVariant,
+                        // variant: this.currentVariant,
                         addon: this.currentAddon,
-                        addonAmount: this.currentAddonAmount,
+                        // addonAmount: this.currentAddonAmount,
                         addonString:addonString,
                         quantity: 1,
-                        total: parseFloat(this.currentVariant?.price || 0) + this.currentAddonAmount
+                        // total: parseFloat(this.currentProduct?.sellingPrice || 0) + this.currentAddonAmount
+                        price: parseFloat(this.currentProduct?.regularPrice || 0),
+                        total: parseFloat(this.currentProduct?.regularPrice || 0)
                     }
                 } else {
                     this.selectedItemList.push({
-                        name: `${this.currentProduct?.name} (${this.currentVariant?.name})`,
+                        name: `${this.currentProduct?.name}`,
                         id: this.currentProduct.id,
-                        variant: this.currentVariant,
+                        // variant: this.currentVariant,
                         addon: this.currentAddon,
-                        addonAmount: this.currentAddonAmount,
+                        // addonAmount: this.currentAddonAmount,
                         addonString:addonString,
                         quantity: 1,
-                        total: parseFloat(this.currentVariant?.price || 0) + this.currentAddonAmount
+                        // total: parseFloat(this.currentProduct?.sellingPrice || 0) + this.currentAddonAmount
+                        price: parseFloat(this.currentProduct?.regularPrice || 0),
+                        total: parseFloat(this.currentProduct?.regularPrice || 0)
                     })
                 }
                 this.currentVariant = null;
@@ -776,13 +780,14 @@
                 console.log(this.selectedItemList, 'list')
             },
             itemSubtotal(item) {
-                let addonTotal = 0;
-                if (item.addon?.length > 0) {
-                    item.addon?.forEach(add => {
-                        addonTotal += parseFloat(add.price);
-                    })
-                }
-                return parseFloat(item.quantity * (parseFloat(item.variant?.price) + parseFloat(addonTotal)) || 0);
+                // let addonTotal = 0;
+                // if (item.addon?.length > 0) {
+                //     item.addon?.forEach(add => {
+                //         addonTotal += parseFloat(add.price);
+                //     })
+                // }
+                // return parseFloat(item.quantity * (parseFloat(item.variant?.price) + parseFloat(addonTotal)) || 0); 
+                return parseFloat(item.quantity * parseFloat(item?.price));
             },
             addonPrice(item) {
                 let addonTotal = 0;
@@ -847,14 +852,12 @@
                 let currentPage = this.pagination ? this.pagination.current_page : 1;
                 const { data } = await this.form.get(
                     window.location.origin +
-                    "/api/food/item/list/pos?page=" +
+                    "/api/products?page=" +
                     currentPage
                 );
                 
                 this.taxRate = data.data?.length > 0 ? data.data[0].taxRate : 0;
-                this.products = data.data;
-                console.log(this.products);
-                console.log(this.products[0].status);
+                this.products = data.data; 
                 this.pagination = data.meta;
                 this.loading = false;
             },
