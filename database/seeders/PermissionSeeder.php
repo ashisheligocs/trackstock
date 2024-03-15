@@ -21,23 +21,23 @@ class PermissionSeeder extends Seeder
 
                 [
                     'name' => 'Create',
-                    'guard_name' => 'Shop Management',
-                    'slug' => 'shop-create',
+                    'guard_name' => 'hotel Management',
+                    'slug' => 'hotel-create',
                 ],
                 [
                     'name' => 'List',
-                    'guard_name' => 'Shop Management',
-                    'slug' => 'shop-list',
+                    'guard_name' => 'hotel Management',
+                    'slug' => 'hotel-list',
                 ],
                 [
                     'name' => 'Edit',
-                    'guard_name' => 'Shop Management',
-                    'slug' => 'shop-edit',
+                    'guard_name' => 'hotel Management',
+                    'slug' => 'hotel-edit',
                 ],
                 [
                     'name' => 'Delete',
-                    'guard_name' => 'Shop Management',
-                    'slug' => 'shop-delete',
+                    'guard_name' => 'hotel Management',
+                    'slug' => 'hotel-delete',
                 ],
 
                 // Hotel booking permission
