@@ -10,9 +10,9 @@ use App\Models\Invoice;
 use App\Models\Account;
 use App\Models\Product;
 use App\Models\Purchase;
-use Modules\Hotel\Entities\MealPlan;
+use Modules\Shops\Entities\MealPlan;
 use App\Models\LoanPayment;
-use Modules\Hotel\Entities\HotelMealPlan;
+use Modules\Shops\Entities\HotelMealPlan;
 use Illuminate\Http\Request;
 use App\Models\InvoiceReturn;
 use App\Models\BalanceTansfer;
@@ -32,12 +32,12 @@ use App\Http\Resources\InvoiceListResource;
 use App\Http\Resources\PurchaseListResource;
 use App\Http\Resources\ProductListingResource;
 use App\Http\Resources\AccountTransactionResource;
-use Modules\Hotel\Transformers\CommonResource;
+use Modules\Shops\Transformers\CommonResource;
 use Modules\Accounts\Entities\Ledger;
 use Modules\Accounts\Entities\LedgerAccount;
-use Modules\Hotel\Entities\BookingDetails;
-use Modules\Hotel\Entities\Roomcategory;
-use Modules\Hotel\Entities\Room;
+use Modules\Shops\Entities\BookingDetails;
+use Modules\Shops\Entities\Roomcategory;
+use Modules\Shops\Entities\Room;
 
 class DashboardController extends Controller
 {

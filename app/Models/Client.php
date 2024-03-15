@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\Hotel\Entities\Hotel;
+use Modules\Shops\Entities\Hotel;
 use App\Models\Scopes\selectedHotelResource;
 use App\Models\User;
 

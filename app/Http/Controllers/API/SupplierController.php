@@ -15,7 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PurchaseResource;
 use App\Http\Resources\SupplierResource;
 use Illuminate\Support\Facades\Validator;
-use Modules\Hotel\Transformers\CommonResource;
+use Modules\Shops\Transformers\CommonResource;
 use Spatie\SimpleExcel\SimpleExcelReader;
 use App\Notifications\WelcomeNotification;
 use App\Http\Requests\SupplierStoreRequest;

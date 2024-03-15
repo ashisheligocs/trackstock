@@ -7,8 +7,8 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Accounts\Entities\LedgerAccount;
-use Modules\Hotel\Entities\Booking;
-use Modules\Hotel\Entities\Hotel;
+use Modules\Shops\Entities\Booking;
+use Modules\Shops\Entities\Hotel;
 use App\Models\Client;
 
 class AccountTransaction extends Model

@@ -28,15 +28,15 @@
             </router-link>
           </li> 
           <!-------------Hotel----------------->
-          <li class="nav-header text-uppercase text-bold" v-if="$can('hotel-create') ||
-            $can('hotel-list') ||
-            $can('hotel-edit') ||
-            $can('hotel-delete') ||
+          <li class="nav-header text-uppercase text-bold" v-if="$can('shops-create') ||
+            $can('shops-list') ||
+            $can('shops-edit') ||
+            $can('shops-delete') ||
             $can('hotel-booking-create') ||
             $can('hotel-booking-list') ||
             $can('hotel-booking-edit') ||
             $can('hotel-booking-delete')
-            ">{{ $t('sidebar.hotel') }}</li>
+            ">{{ $t('sidebar.shops') }}</li>
           <!-- <li class="nav-item">
             <router-link :to="{ name: 'hotel' }" class="nav-link">
               <i class="fas fa-hotel nav-icon" />

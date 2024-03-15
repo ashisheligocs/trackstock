@@ -6,10 +6,8 @@
 <h4 class="m-3">Create Sale</h4>
 </div>
 <div>
-    <a @click="activetab = 1" :class="[activetab === 1 ? 'active' : '']" class="outline_btn">Create
-                        Orders</a>
-    <a @click="activetab = 2" :class="[activetab === 2 ? 'active' : '']" class="outline_btn">Restaurant
-                        Orders</a>
+    <a @click="activetab = 1" :class="[activetab === 1 ? 'active' : '']" class="outline_btn">Create Orders</a>
+    <a @click="activetab = 2" :class="[activetab === 2 ? 'active' : '']" class="outline_btn">Orders</a>
 </div>
             </div>
             <div v-if="activetab" class="tabcontent">

@@ -45,7 +45,7 @@ use App\Models\SalaryIncrement;
 use Barryvdh\DomPDF\Facade\Pdf;
 use spatie\SimpleExcel\SimpleExcelWriter;
 use App\Http\Resources\PurchaseReturnListResource;
-use Modules\Hotel\Entities\Hotel;
+use Modules\Shops\Entities\Hotel;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\HotelExport;
 use App\Exports\ClientExport;
@@ -72,7 +72,7 @@ use App\Models\ExpenseSubCategory;
 use App\Models\NonPurchasePayment;
 use App\Models\ProductSubCategory;
 use App\Models\InventoryAdjustment;
-use Modules\Hotel\Entities\Booking;
+use Modules\Shops\Entities\Booking;
 use App\Http\Resources\AdjustmentListResource;
 use App\Exports\AdjustInventryList;
 
@@ -755,7 +755,7 @@ class TableExportController extends Controller
             $allnewdata = [];
             if ($data->isNotEmpty()) {
                 // Create a new Excel file
-                $excelFileName = 'hotel-list.xlsx';
+                $excelFileName = 'shops-list.xlsx';
                 foreach ($data as $det) {
                     $newdata['image'] = !empty($det->image_path) ? 'images/hotel/' . $det->image_path : '';
                     $newdata['name'] = $det->hotel_name ?? '';

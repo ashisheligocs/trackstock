@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Hotel\Transformers\CheckOutRoomResource;
+use Modules\Shops\Transformers\CheckOutRoomResource;
 use Modules\Restaurant\Http\RestaurantHelper;
 
 class InvoiceResource extends JsonResource

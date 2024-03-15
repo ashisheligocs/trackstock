@@ -4,7 +4,7 @@ namespace Modules\Restaurant\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Hotel\Transformers\CommonResource;
+use Modules\Shops\Transformers\CommonResource;
 use Modules\Restaurant\Entities\OptionalItem;
 use Modules\Restaurant\Entities\OptionalItemPrice;
 
