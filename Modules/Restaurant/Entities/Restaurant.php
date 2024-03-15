@@ -16,7 +16,7 @@ class Restaurant extends Model
 
     public function hotel() : BelongsTo
     {
-        return $this->belongsTo(\Modules\Hotel\Entities\Hotel::class, 'hotel_id');
+        return $this->belongsTo(\Modules\Shops\Entities\Hotel::class, 'hotel_id');
     }
 
     public function price(): HasMany

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Hotel\Traits;
+namespace Modules\Shops\Traits;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

@@ -224,11 +224,11 @@
               </li> -->
 
           <!-----------------------------Hotel---------------------------------->
-          <li v-if="$can('hotel-create') ||
-            $can('hotel-list') ||
-            $can('hotel-edit') ||
-            $can('hotel-delete')
-            " class="nav-item has-treeview" :class="menuOpen('booking-type') || menuOpen('hotel')
+          <li v-if="$can('shop-create') ||
+            $can('shop-list') ||
+            $can('shop-edit') ||
+            $can('shop-delete')
+            " class="nav-item has-treeview" :class="menuOpen('booking-type') || menuOpen('shops')
     || menuOpen('floor') || menuOpen('room')
     || menuOpen('meals') || menuOpen('bed-type')
     ? 'menu-is-opening menu-open'
@@ -237,11 +237,11 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-hotel" />
               <p>
-                Hotel
+                Shops
                 <i class="right fas fa-angle-left" />
               </p>
             </a>
-            <ul class="nav nav-treeview" :style="menuOpen('booking-type') || menuOpen('hotel')
+            <ul class="nav nav-treeview" :style="menuOpen('booking-type') || menuOpen('shops')
               || menuOpen('floor') || menuOpen('room')
               || menuOpen('meals') || menuOpen('bed-type')
               ? 'display: block'
@@ -255,15 +255,15 @@
               <!--                  </li>-->
 
               <li class="nav-item">
-                <router-link :to="{ name: 'hotel' }" class="nav-link">
+                <router-link :to="{ name: 'shops' }" class="nav-link">
                   <i class="fas fa-hotel nav-icon" />
-                  <p>{{ $t('sidebar.hotel') }}</p>
+                  <p>{{ $t('common.shops') }}</p>
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link @click.native="closeSideBarControl" :to="{ name: 'hotel.category' }" class="nav-link">
+                <router-link @click.native="closeSideBarControl" :to="{ name: 'shop.category' }" class="nav-link">
                   <i class="nav-icon fas fa-solid fa-bars" />
-                  <p>{{ $t('sidebar.hotel_cat_lsit') }}</p>
+                  <p>{{ $t('sidebar.shop_cat_lsit') }}</p>
                 </router-link>
               </li>
               <li class="nav-item">

@@ -4,9 +4,9 @@ namespace Modules\Restaurant\Http\Controllers\Api;
 
 use Illuminate\Contracts\Support\Renderable;
 use App\Http\Controllers\Controller as Controller;
-use Modules\Hotel\Transformers\CommonResource;
+use Modules\Shops\Transformers\CommonResource;
 use Illuminate\Http\Request;
-use Modules\Hotel\Traits\ApiResponse;
+use Modules\Shops\Traits\ApiResponse;
 use Exception;
 use Modules\Restaurant\Entities\FoodCategory;
 

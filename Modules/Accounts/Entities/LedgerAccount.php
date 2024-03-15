@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use \App\Models\Account;
 use \App\Models\AccountTransaction;
-use Modules\Hotel\Entities\Hotel;
+use Modules\Shops\Entities\Hotel;
 class LedgerAccount extends Model
 {
     use HasFactory;

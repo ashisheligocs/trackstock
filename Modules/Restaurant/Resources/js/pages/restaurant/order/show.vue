@@ -298,7 +298,7 @@
     export default {
         middleware: ["auth"],
         metaInfo() {
-            return { title: 'Restaurant Orders' };
+            return { title: 'Orders' };
         },
         data: () => ({
             allData: "",
@@ -370,7 +370,7 @@
                 // Options for PDF generation
                 const options = {
                     margin: 5,
-                    filename: "Restaurant order-" + this.$route.params.slug + ".pdf",
+                    filename: "order-" + this.$route.params.slug + ".pdf",
                     image: { type: "jpeg", quality: 0.98 },
                     pagebreak: { mode: "avoid-all", before: "#page-break" },
                     html2canvas: { scale: 2 },

@@ -308,7 +308,7 @@
                   </tr>
                   <tr v-if="allData?.bookingRestOrders">
                     <td>{{ bookingProducts.length + 1 }}</td>
-                    <td>Restaurant order</td>
+                    <td>Order</td>
                     <td></td>
                     <td class="text-right">{{ (allData?.bookingRestOrders?.total || 0) -
       (allData?.bookingRestOrders?.tax

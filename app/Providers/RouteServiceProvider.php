@@ -18,7 +18,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     public const HOME = '/home';
-    protected $moduleNamespace = 'Modules\Hotel\Http\Controllers';
+    protected $moduleNamespace = 'Modules\Shops\Http\Controllers';
     protected $restaurantmoduleNamespace = 'Modules\Restaurant\Http\Controllers';
     protected $accountsmoduleNamespace = 'Modules\Accounts\Http\Controllers';
 
@@ -52,11 +52,11 @@ class RouteServiceProvider extends ServiceProvider
             Route::prefix('api')
                 ->middleware('api')
                 ->namespace($this->moduleNamespace)
-                ->group(module_path('Hotel', '/Routes/api.php'));
+                ->group(module_path('Shops', '/Routes/api.php'));
 
             Route::middleware('web')
                 ->namespace($this->moduleNamespace)
-                ->group(module_path('Hotel', '/Routes/web.php'));
+                ->group(module_path('Shops', '/Routes/web.php'));
 
             /*--------------------- Restaurant module -------------*/
 

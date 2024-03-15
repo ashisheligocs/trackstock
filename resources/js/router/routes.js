@@ -16,9 +16,9 @@ function accountPath(path) {
             m => m.default || m
         );
 }
-function hotelPath(path) {
+function shopPath(path) {
     return () =>
-        import(/* webpackChunkName: '' */ `../../../Modules/Hotel/Resources/js/pages/${path}`).then(
+        import(/* webpackChunkName: '' */ `../../../Modules/Shops/Resources/js/pages/${path}`).then(
             m => m.default || m
         );
 }
@@ -1148,66 +1148,66 @@ export default [
         component: page("errors/404.vue")
     },/***hotel routes  *****/
     {
-        path: "/hotel-category",
-        name: "hotel.category",
-        component: hotelPath("hotel/hotel_categories/index.vue"),
+        path: "/shop-category",
+        name: "shop.category",
+        component: shopPath("shops/hotel_categories/index.vue"),
     },
     {
-        path: "/hotel/create",
-        name: "hotel.category.create",
-        component: hotelPath("hotel/hotel_categories/create.vue"),
+        path: "/shop/create",
+        name: "shop.category.create",
+        component: shopPath("shops/hotel_categories/create.vue"),
     },
     {
-        path: "/hotel-category/edit/:slug",
-        name: "hotel.category.edit",
-        component: hotelPath("hotel/hotel_categories/edit.vue"),
+        path: "/shop-category/edit/:slug",
+        name: "shop.category.edit",
+        component: shopPath("shops/hotel_categories/edit.vue"),
     },
     {
         path: "/facility",
         name: "facility",
-        component: hotelPath("hotel/facility/index.vue"),
+        component: shopPath("shops/facility/index.vue"),
     },
     {
         path: "/facility/create",
         name: "facility.create",
-        component: hotelPath("hotel/facility/create.vue"),
+        component: shopPath("shops/facility/create.vue"),
     },
     {
         path: "/facility/edit/:slug",
         name: "facility.edit",
-        component: hotelPath("hotel/facility/edit.vue"),
+        component: shopPath("shops/facility/edit.vue"),
     },
     {
-        path: "/hotel",
-        name: "hotel",
-        component: hotelPath("hotel/index.vue"),
+        path: "/shops",
+        name: "shops",
+        component: shopPath("shops/index.vue"),
     },
     {
-        path: "/hotel/add",
-        name: "hotel.create",
-        component: hotelPath("hotel/create.vue"),
+        path: "/shops/add",
+        name: "shop.create",
+        component: shopPath("shops/create.vue"),
     },
     {
-        path: "/hotel/edit/:slug",
-        name: "hotel.edit",
-        component: hotelPath("hotel/edit.vue"),
+        path: "/shops/edit/:slug",
+        name: "shops.edit",
+        component: shopPath("shops/edit.vue"),
     },
 
     /*** room category  */
     {
         path: "/room",
         name: "room",
-        component: hotelPath("rooms/index.vue"),
+        component: shopPath("rooms/index.vue"),
     },
     {
         path: "/room/create",
         name: "room.create",
-        component: hotelPath("rooms/create.vue"),
+        component: shopPath("rooms/create.vue"),
     },
     {
         path: "/room/edit/:slug",
         name: "room.edit",
-        component: hotelPath("rooms/edit.vue"),
+        component: shopPath("rooms/edit.vue"),
     },
 
 
@@ -1215,158 +1215,158 @@ export default [
     {
         path: "/rooms/category",
         name: "room.category",
-        component: hotelPath("rooms/categories/index.vue"),
+        component: shopPath("rooms/categories/index.vue"),
     },
     {
         path: "/rooms/category/create",
         name: "room.category.create",
-        component: hotelPath("rooms/categories/create.vue"),
+        component: shopPath("rooms/categories/create.vue"),
     },
     {
         path: "/rooms/category/edit/:slug",
         name: "room.category.edit",
-        component: hotelPath("rooms/categories/edit.vue"),
+        component: shopPath("rooms/categories/edit.vue"),
     },
 
     /*** room facility  */
     {
         path: "/rooms/facility",
         name: "room.facility",
-        component: hotelPath("rooms/facility/index.vue"),
+        component: shopPath("rooms/facility/index.vue"),
     },
     {
         path: "/rooms/facility/create",
         name: "room.facility.create",
-        component: hotelPath("rooms/facility/create.vue"),
+        component: shopPath("rooms/facility/create.vue"),
     },
     {
         path: "/rooms/facility/edit/:slug",
         name: "room.facility.edit",
-        component: hotelPath("rooms/facility/edit.vue"),
+        component: shopPath("rooms/facility/edit.vue"),
     },
 
     /*** meals  */
     {
         path: "/meals",
         name: "meals",
-        component: hotelPath("meals/index.vue"),
+        component: shopPath("meals/index.vue"),
     },
     {
         path: "/meals/create",
         name: "meals.create",
-        component: hotelPath("meals/create.vue"),
+        component: shopPath("meals/create.vue"),
     },
     {
         path: "/meals/edit/:slug",
         name: "meals.edit",
-        component: hotelPath("meals/edit.vue"),
+        component: shopPath("meals/edit.vue"),
     },
 
     /*** floor  */
     {
         path: "/floor",
         name: "floor",
-        component: hotelPath("floor/index.vue"),
+        component: shopPath("floor/index.vue"),
     },
     {
         path: "/floor/create",
         name: "floor.create",
-        component: hotelPath("floor/create.vue"),
+        component: shopPath("floor/create.vue"),
     },
     {
         path: "/floor/edit/:slug",
         name: "floor.edit",
-        component: hotelPath("floor/edit.vue"),
+        component: shopPath("floor/edit.vue"),
     },
 
     /*** bed-type  */
     {
         path: "/bed-type",
         name: "bed-type",
-        component: hotelPath("bed-type/index.vue"),
+        component: shopPath("bed-type/index.vue"),
     },
     {
         path: "/bed-type/create",
         name: "bed-type.create",
-        component: hotelPath("bed-type/create.vue"),
+        component: shopPath("bed-type/create.vue"),
     },
     {
         path: "/bed-type/edit/:slug",
         name: "bed-type.edit",
-        component: hotelPath("bed-type/edit.vue"),
+        component: shopPath("bed-type/edit.vue"),
     },
 
     /*** booking-type  */
     {
         path: "/booking-type",
         name: "booking-type",
-        component: hotelPath("booking-type/index.vue"),
+        component: shopPath("booking-type/index.vue"),
     },
     {
         path: "/booking-type/create",
         name: "booking-type.create",
-        component: hotelPath("booking-type/create.vue"),
+        component: shopPath("booking-type/create.vue"),
     },
     {
         path: "/booking-type/edit/:slug",
         name: "booking-type.edit",
-        component: hotelPath("booking-type/edit.vue"),
+        component: shopPath("booking-type/edit.vue"),
     },
     // {
     //     path: "/past-booking",
     //     name: "past-booking",
-    //     component: hotelPath("booking-type/index.vue"),
+    //     component: shopPath("booking-type/index.vue"),
     // },
 
     /*** booking  */
     {
         path: "/booking",
         name: "booking",
-        component: hotelPath("booking/index.vue"),
+        component: shopPath("booking/index.vue"),
     },
     {
         path: "/past-bookings/:slug",
         name: "past-bookings",
-        component: hotelPath("booking/index.vue"),
+        component: shopPath("booking/index.vue"),
     },
     {
         path: "/booking/create",
         name: "booking.create",
-        component: hotelPath("booking/create.vue"),
+        component: shopPath("booking/create.vue"),
     },
     // {
     //     path: "/booking/create/:instant",
     //     name: "booking.create.instant",
-    //     component: hotelPath("booking/create.vue"),
+    //     component: shopPath("booking/create.vue"),
     // },
     {
         path: "/booking/create/:slug",
         name: "booking.create.check-in",
-        component: hotelPath("booking/create.vue"),
+        component: shopPath("booking/create.vue"),
     },
     {
         path: "/booking/edit/:slug",
         name: "booking.edit",
-        component: hotelPath("booking/edit.vue"),
+        component: shopPath("booking/edit.vue"),
     },
     {
         path: "/booking/view/:slug",
         name: "booking.show",
-        component: hotelPath("booking/show.vue"),
+        component: shopPath("booking/show.vue"),
     },
 
     /*** check -in */
     {
         path: "/check-in",
         name: "check-in",
-        component: hotelPath("check-in/index.vue"),
+        component: shopPath("check-in/index.vue"),
     },
 
     /*** check - out */
     {
         path: "/check-out/:slug",
         name: "check-out",
-        component: hotelPath("check-out/index.vue"),
+        component: shopPath("check-out/index.vue"),
     },
 
     /*** variant  */

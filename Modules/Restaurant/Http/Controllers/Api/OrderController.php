@@ -12,16 +12,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Modules\Accounts\Entities\LedgerAccount;
-use Modules\Hotel\Entities\Booking;
-use Modules\Hotel\Entities\BookingDetails;
-use Modules\Hotel\Transformers\CommonResource;
+use Modules\Shops\Entities\Booking;
+use Modules\Shops\Entities\BookingDetails;
+use Modules\Shops\Transformers\CommonResource;
 use Modules\Restaurant\Entities\RestroInvoice;
 use Modules\Restaurant\Entities\RestroItem;
 use Modules\Restaurant\Entities\Restroorder;
 use Modules\Restaurant\Transformers\RestaurantOrderResource;
 use Modules\Restaurant\Transformers\RestaurantOrderShowResource;
 use Modules\Accounts\Entities\PlutusEntries;
-use Modules\Hotel\Entities\Hotel;
+use Modules\Shops\Entities\Hotel;
 
 class OrderController extends Controller
 {
@@ -163,7 +163,7 @@ class OrderController extends Controller
 
         /*Create Plutus Entry ABhi(11-12-23)*/
 
-        $note = '[' . $orderId . '] Restaurant order payment';
+        $note = '[' . $orderId . '] Order payment';
         $plutusId = $this->createPlutusEntry($hotelId,$note,now(),floatval($request->paidAmount ?? 0));
         
         if (floatval($request->paidAmount ?? 0)) {
@@ -230,7 +230,7 @@ class OrderController extends Controller
                     'created_by' => $userId,
                     'status' => 1,
                     'order_id' => @$input['invoice_id'],
-                    'reference' => 'restaurant order',
+                    'reference' => 'order',
                     'hotel_id' => $hotelId,
                     'customer_id' => @$input['client'] ? @$input['client']['id'] : null,
                     'plutus_entries_id' => $plutusId,
@@ -320,7 +320,7 @@ class OrderController extends Controller
                 'type' => 0,
                 'transaction_id' => null,
                 'date' => Carbon::now(),
-                'note' => '[' . $order->order_id_uniq . '] Restaurant order due',
+                'note' => '[' . $order->order_id_uniq . '] order due',
                 'status' => 1,
                 'created_by' => auth()->user()->id,
                 'order_id' => $order->id,

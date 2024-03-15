@@ -5,8 +5,8 @@ namespace Modules\Accounts\Http\Controllers\Api;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
-use Modules\Hotel\Transformers\CommonResource;
-use Modules\Hotel\Traits\ApiResponse;
+use Modules\Shops\Transformers\CommonResource;
+use Modules\Shops\Traits\ApiResponse;
 use Exception;
 // use Modules\Accounts\Entities\Ledger;
 use Modules\Accounts\Entities\{

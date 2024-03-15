@@ -5,9 +5,9 @@ namespace App\Models;
 use App\Models\Scopes\selectedHotelResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Hotel\Entities\Booking;
-use Modules\Hotel\Entities\BookingDetails;
-use Modules\Hotel\Entities\Hotel;
+use Modules\Shops\Entities\Booking;
+use Modules\Shops\Entities\BookingDetails;
+use Modules\Shops\Entities\Hotel;
 use Modules\Restaurant\Entities\Restroorder;
 
 class Invoice extends Model
