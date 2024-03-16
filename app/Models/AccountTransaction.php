@@ -10,6 +10,7 @@ use Modules\Accounts\Entities\LedgerAccount;
 use Modules\Shops\Entities\Booking;
 use Modules\Shops\Entities\Hotel;
 use App\Models\Client;
+use Modules\Shops\Entities\Shop;
 
 class AccountTransaction extends Model
 {
@@ -22,7 +23,7 @@ class AccountTransaction extends Model
      */
     protected $fillable = [
         'account_id', 'reason', 'amount', 'order_id','type', 'transaction_date', 'cheque_no', 'receipt_no','invoice_id', 'created_by', 'note', 'status', 'booking_id',
-        'purchase_id', 'hotel_id','journal_entry_id','customer_id','plutus_entries_id','bank_charges','payroll_id',
+        'purchase_id', 'shop_id','journal_entry_id','customer_id','plutus_entries_id','bank_charges','payroll_id',
     ];
 
 //    protected $appends = ['account_type'];
@@ -51,9 +52,9 @@ class AccountTransaction extends Model
         return $this->belongsTo(Booking::class, 'booking_id');
     }
 
-    public function hotel()
+    public function shop()
     {
-        return $this->belongsTo(Hotel::class);
+        return $this->belongsTo(Shop::class);
     }
 
     public function invoice()
@@ -147,7 +148,7 @@ class AccountTransaction extends Model
     }
 
     public function scopeHotel($query, $hotelId){
-        return $query->where('hotel_id', $hotelId)->orWhereNull('hotel_id');
+        return $query->where('shop_id', $hotelId)->orWhereNull('shop_id');
     }
 
     protected static function boot()

@@ -41,9 +41,6 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // $ab = Product::with('proSubCategory.category', 'productUnit', 'productTax','productTaxRate',
-        // 'productBrand')->latest()->paginate($request->perPage);
-        
         return ProductListingResource::collection(Product::with('proSubCategory.category', 'productUnit', 'productTax','productTaxRate',
             'productBrand')->latest()->paginate($request->perPage));
     }

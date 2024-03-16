@@ -176,7 +176,7 @@ class AccountController extends Controller
         $accounts = Account::where('status', 1)
             ->with(['balanceTransactions' => function ($query) use ($hotelId) {
                 if ($hotelId) {
-                    $query->hotel($hotelId);
+                    $query->shop($hotelId);
                 }
             }])
             ->whereHas('ledgerAccount', function ($query) {

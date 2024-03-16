@@ -11,7 +11,7 @@
                     <div class="pos-r-head bg-white">
                         <div class="row">
                             <div v-if="hotelItems.length" class="form-group col-md-6">
-                                <v-select class="flex-grow-1" v-model="hotel" :options="hotelItems" label="hotel_name"
+                                <v-select class="flex-grow-1" v-model="hotel" :options="hotelItems" label="shop_name"
                                     name="hotel" placeholder="Select a hotel" :clearable="false" />
                                 <has-error :form="form" field="category" />
                             </div>
@@ -636,7 +636,6 @@
             await this.getProducts();
             await this.getFoodCategoryData();
             await this.getClients();
-            await this.getOccupiedRooms();
             await this.getAccounts();
             this.audio = new Audio(sound);
             this.productPrefix = this.appInfo.productPrefix;
@@ -665,7 +664,6 @@
                 await this.getProducts();
                 await this.getFoodCategoryData();
                 await this.getClients();
-                await this.getOccupiedRooms();
                 await this.getAccounts();
             },
             // tax_included: {
@@ -705,7 +703,6 @@
                 this.selectedItemList = [];
                 this.form.category = null;
                 await this.getProducts();
-                await this.getOccupiedRooms();
             },
             async getFoodCategoryData() {
                 const { data } = await axios.get(
@@ -715,7 +712,7 @@
             },
             async getHotelDataList() {
                 await this.$store.dispatch('operations/getHotelData', {
-                    path: '/api/hotel',
+                    path: '/api/shop',
                 });
             },
             doThis() {
@@ -799,14 +796,7 @@
 
                 return addonTotal;
             },
-            async getOccupiedRooms() {
-                this.form.hotel_id = this.hotel?.id || 1;
-                const { data } = await this.form.get(
-                    window.location.origin +
-                    "/api/room/roomcheckin"
-                );
-                this.occupiedRooms = data.data;
-            },
+           
             // get all clients
             async getClients(id = null) {
                 await axios
