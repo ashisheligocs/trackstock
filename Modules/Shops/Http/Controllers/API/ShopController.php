@@ -59,7 +59,7 @@ class ShopController extends Controller
      */
     public function store(Request $request)
     {
-        if (!empty($request->hotel_id)) {
+        if (!empty($request->shop_id)) {
             $this->validate($request, [
                 "shop_name" => "required",
                 "shop_address" => "required",
@@ -69,6 +69,10 @@ class ShopController extends Controller
                 "contact_phone" => 'nullable|numeric|digits:10|min:1',
             ]);
             try {
+
+                if (!file_exists(public_path('images/shop/'))) {
+                    mkdir(public_path('images/shop/'), 666, true);
+                } 
 
                 $imageName = null;
                 if ($request->images && !empty($request->images)) {
@@ -117,6 +121,11 @@ class ShopController extends Controller
             ]);
 
             try {
+
+                if (!file_exists(public_path('images/shop/'))) {
+                    mkdir(public_path('images/shop/'), 666, true);
+                }
+
                 $imageName = null;
                 if ($request->images && !empty($request->images)) {
                     $imageName = [];

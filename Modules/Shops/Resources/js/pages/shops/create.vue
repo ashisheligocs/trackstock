@@ -10,7 +10,7 @@
                         <h3 class="card-title">
                             {{ $t('shop.shopAdd.create.form_title') }}
                         </h3>
-                        <router-link :to="{ name: 'facility' }" class="btn btn-secondary float-right">
+                        <router-link :to="{ name: 'shops' }" class="btn btn-secondary float-right">
                             <i class="fas fa-long-arrow-alt-left" /> {{ $t('common.back') }}
                         </router-link>
                     </div>
@@ -266,7 +266,7 @@ export default {
                         type: 'success',
                         title: this.$t('shop.shopAdd.create.success_msg'),
                     })
-                    this.$router.push({ name: 'shop' })
+                    this.$router.push({ name: 'shops' })
                 })
                 .catch((err) => {
                     let message = err.response?.data?.message || this.$t('common.error_msg');

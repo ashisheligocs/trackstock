@@ -70,13 +70,13 @@
                                         </td>
                                         <td>{{ data.shop_name }}</td>
                                         <td>{{ data.shop_email }}</td>
-                                        <td>{{ data.contact_phone }}</td>
+                                        <td>{{ data.shop_phone }}</td>
                                         <td v-if="$can('shop-edit') ||
                                             $can('shop-delete')
                                             " class="text-right no-print">
                                             <div class="btn-group">
                                                 <router-link v-if="$can('shop-edit')" v-tooltip="$t('common.edit')" :to="{
-                                                    name: 'shop.edit',
+                                                    name: 'shops.edit',
                                                     params: { slug: data.id },
                                                 }" class="btn btn-info btn-sm">
                                                     <i class="fas fa-edit" />

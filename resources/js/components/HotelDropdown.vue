@@ -18,6 +18,7 @@
             >
                 All
             </a>
+            
             <a
                     v-for="(value, key) in shops"
                     :key="key"
@@ -26,7 +27,7 @@
                     href="#"
                     @click.prevent="setHotel(value)"
             >
-                {{value.shope_name}}
+                {{value.shop_name}}
             </a>
         </div>
     </li>
