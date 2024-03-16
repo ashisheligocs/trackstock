@@ -24,5 +24,4 @@ Route::prefix('shop')->group(function () {
     Route::get('/view/{id?}', 'API\ShopController@show');
     Route::get('/list', 'API\ShopController@list');
     Route::post('/delete/{id?}', 'API\ShopController@destroy');
-
 });
