@@ -625,6 +625,7 @@
             }
         },
         async created() {
+            
             await this.getHotelDataList();
             
             if (this.selectedHotel && this.selectedHotel !== 'all') {
@@ -854,8 +855,9 @@
                     window.location.origin +
                     "/api/products?page=" +
                     currentPage
-                );
-                
+                    );
+                    
+                    alert(data)
                 this.taxRate = data.data?.length > 0 ? data.data[0].taxRate : 0;
                 this.products = data.data; 
                 this.pagination = data.meta;
@@ -866,6 +868,7 @@
             async paginate(page) {
                 this.pagination.current_page = page
                 let catSlug = this.form.category?.slug;
+                
                 if (this.query === "") {
                     await this.getProducts();
                 } else {
