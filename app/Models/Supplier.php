@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Shops\Entities\BookingType;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 use App\Models\Scopes\selectedHotelResource;
 
 class Supplier extends Model

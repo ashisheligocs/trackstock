@@ -7,7 +7,7 @@ use App\Models\Scopes\SelectedHotel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Scopes\selectedHotelResource;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 
 class PlutusEntries extends Model
 {

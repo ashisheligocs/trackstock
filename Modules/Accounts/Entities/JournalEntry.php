@@ -5,7 +5,7 @@ namespace Modules\Accounts\Entities;
 use App\Models\Scopes\selectedHotelResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 use \App\Models\AccountTransaction;
 use Modules\Accounts\Entities\LedgerAccount;
 

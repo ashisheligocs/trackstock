@@ -45,7 +45,7 @@ use App\Models\SalaryIncrement;
 use Barryvdh\DomPDF\Facade\Pdf;
 use spatie\SimpleExcel\SimpleExcelWriter;
 use App\Http\Resources\PurchaseReturnListResource;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\HotelExport;
 use App\Exports\ClientExport;

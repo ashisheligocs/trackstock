@@ -4,7 +4,7 @@ namespace App\Models;
 use App\Models\Scopes\selectedHotelResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 
 class CouponsHotel extends Model
 {

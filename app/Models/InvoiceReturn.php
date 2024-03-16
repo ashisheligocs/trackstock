@@ -4,7 +4,7 @@ namespace App\Models;
 // use App\Models\Scopes\selectedHotelResource;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 use Illuminate\Database\Eloquent\Model;
 
 class InvoiceReturn extends Model

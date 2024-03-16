@@ -21,7 +21,7 @@ use Modules\Restaurant\Entities\Restroorder;
 use Modules\Restaurant\Transformers\RestaurantOrderResource;
 use Modules\Restaurant\Transformers\RestaurantOrderShowResource;
 use Modules\Accounts\Entities\PlutusEntries;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 use App\Models\Product;
 
 class OrderController extends Controller
