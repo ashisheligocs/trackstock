@@ -15,8 +15,8 @@ use Illuminate\Http\Request;
 /****** hotel api ******/
 Route::prefix('hotel')->group(function () {
 
-    Route::get('/all', 'API\HotelController@lists');
-    Route::get('/list-all', 'API\HotelController@listWithoutScope');
+    Route::get('/all', 'API\ShopController@lists');
+    Route::get('/list-all', 'API\ShopController@listWithoutScope');
     Route::prefix('category')->group(function () {
         Route::get('/', 'API\HotelCategoryController@index');
         Route::post('/add', 'API\HotelCategoryController@store');
