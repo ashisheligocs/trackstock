@@ -21,51 +21,23 @@ class PermissionSeeder extends Seeder
 
                 [
                     'name' => 'Create',
-                    'guard_name' => 'hotel Management',
-                    'slug' => 'hotel-create',
+                    'guard_name' => 'shop Management',
+                    'slug' => 'shop-create',
                 ],
                 [
                     'name' => 'List',
-                    'guard_name' => 'hotel Management',
-                    'slug' => 'hotel-list',
+                    'guard_name' => 'shop Management',
+                    'slug' => 'shop-list',
                 ],
                 [
                     'name' => 'Edit',
-                    'guard_name' => 'hotel Management',
-                    'slug' => 'hotel-edit',
+                    'guard_name' => 'shop Management',
+                    'slug' => 'shop-edit',
                 ],
                 [
                     'name' => 'Delete',
-                    'guard_name' => 'hotel Management',
-                    'slug' => 'hotel-delete',
-                ],
-
-                // Hotel booking permission
-
-                [
-                    'name' => 'Create',
-                    'guard_name' => 'Hotel Booking Management',
-                    'slug' => 'hotel-booking-create',
-                ],
-                [
-                    'name' => 'View',
-                    'guard_name' => 'Hotel Booking Management',
-                    'slug' => 'hotel-booking-view',
-                ],
-                [
-                    'name' => 'List',
-                    'guard_name' => 'Hotel Booking Management',
-                    'slug' => 'hotel-booking-list',
-                ],
-                [
-                    'name' => 'Edit',
-                    'guard_name' => 'Hotel Booking Management',
-                    'slug' => 'hotel-booking-edit',
-                ],
-                [
-                    'name' => 'Delete',
-                    'guard_name' => 'Hotel Booking Management',
-                    'slug' => 'hotel-booking-delete',
+                    'guard_name' => 'shop Management',
+                    'slug' => 'shop-delete',
                 ],
 
                 // Restaurant booking permission
