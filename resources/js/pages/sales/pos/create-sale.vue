@@ -48,7 +48,7 @@
                                             </div>
                                         </div>
                                         <div class="pos-box-content">
-                                            <p class="pos-box-text">{{ product.label }}</p>
+                                            <p class="pos-box-text">{{ product.name }}  ({{product.inventoryCount}} In stock)</p>
                                             <span class="text-bold text-lg">{{ product.regularPrice | withCurrency }}</span>
                                         </div>
                                     </div>

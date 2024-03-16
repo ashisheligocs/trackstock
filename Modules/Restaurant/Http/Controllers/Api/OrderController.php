@@ -22,6 +22,7 @@ use Modules\Restaurant\Transformers\RestaurantOrderResource;
 use Modules\Restaurant\Transformers\RestaurantOrderShowResource;
 use Modules\Accounts\Entities\PlutusEntries;
 use Modules\Shops\Entities\Hotel;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
@@ -38,9 +39,9 @@ class OrderController extends Controller
     public function show($id)
     {
         try {
-            $orderDetails = Restroorder::where('id', $id)->with('items', 'items.restaurantItem','items.restaurantItem.variant','booking.customer', 'room')->first();
+            $orderDetails = Restroorder::where('id', $id)->with('booking.customer')->first();
             
-            if (@$orderDetails) {
+            if (@$orderDetails) { 
                 return new RestaurantOrderShowResource($orderDetails);
             } else {
                 return $this->responseWithError('Sorry your request can\'t Process!');
@@ -109,20 +110,20 @@ class OrderController extends Controller
             $previousBookingId = "RO-00000";
         }
 
-        $room = @$data['room'] ?? null;
-        $booking = null;
-        if ($room) {
-            $bookingDetail = BookingDetails::where('room_id', $room['id'])->whereNotIn('booking_status',
-                [1, 4])->whereHas('booking', function ($bookingQuery) {
-                    $bookingQuery->whereDate('check_out_date', '>=', Carbon::now())->where('booking_status_main', Booking::CHECKIN);
-            })->first();
-            if ($bookingDetail) {
-                $booking = $bookingDetail->booking;
-                $booking->paid_amount = floatval($booking->paid_amount) + floatval(@$data['netTotal'] ?? 0);
-                $booking->total_price = floatval($booking->total_price) + floatval(@$data['netTotal'] ?? 0);
-                $booking->save();
-            }
-        }
+        // $room = @$data['room'] ?? null;
+        // $booking = null;
+        // if ($room) {
+        //     $bookingDetail = BookingDetails::where('room_id', $room['id'])->whereNotIn('booking_status',
+        //         [1, 4])->whereHas('booking', function ($bookingQuery) {
+        //             $bookingQuery->whereDate('check_out_date', '>=', Carbon::now())->where('booking_status_main', Booking::CHECKIN);
+        //     })->first();
+        //     if ($bookingDetail) {
+        //         $booking = $bookingDetail->booking;
+        //         $booking->paid_amount = floatval($booking->paid_amount) + floatval(@$data['netTotal'] ?? 0);
+        //         $booking->total_price = floatval($booking->total_price) + floatval(@$data['netTotal'] ?? 0);
+        //         $booking->save();
+        //     }
+        // }
 
         $order = Restroorder::create([
             'order_id_uniq' => $this->generateBookingId($previousBookingId,$hotelId),
@@ -144,7 +145,7 @@ class OrderController extends Controller
                 $optionalItems = @$item['addon'] ? Arr::pluck($item['addon'], 'id') : [];
                 RestroItem::create([
                     'order_id'           => $order->id,
-                    'restaurant_item_id' => $item['variant']['id'],
+                    'restaurant_item_id' => $item['id'],
                     'optional_item_ids'  => $optionalItems,
                     'qty'                => $item['quantity'],
                 ]);

@@ -18,9 +18,9 @@ class Restroorder extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['id', 'order_id_uniq','invoice_id', 'customer_id', 'order_date', 'order_status', 'total_amount', 'discount', 'tax', 'room_id', 'booking_id', 'hotel_id'];
     protected $appends = ['type'];
-    public function items(){
-        return $this->hasMany(RestroItem::class,'order_id');
-    }
+    // public function items(){
+    //     return $this->hasMany(RestroItem::class,'order_id');
+    // }
 
     public function hotel(){
         return $this->belongsTo(Hotel::class);
