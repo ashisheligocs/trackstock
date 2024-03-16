@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('plutus_entries', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('hotel_id')->unsigned()->index();
-            $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('cascade');
+            $table->bigInteger('shop_id')->unsigned()->index();
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
             $table->dateTime('date',0);
             $table->text('note');
             $table->double('amount', 12, 2);

@@ -22,17 +22,17 @@ class selectedHotelResource implements Scope
         
         $setting = GeneralSetting::where('key', 'selected_hotel')->first();
         if ($setting && $setting->value && $setting->value !== 'all') {
-            $builder->where($table.'.hotel_id', $setting->value)
-                ->orWhereNull($table.'.hotel_id')
-                ->orWhere($table.'.hotel_id', '');
-        } elseif (\Auth::hasUser() && \Auth::user()->hotels) {
-            // && count(\Auth::user()->hotels)
+            $builder->where($table.'.shop_id', $setting->value)
+                ->orWhereNull($table.'.shop_id')
+                ->orWhere($table.'.shop_id', '');
+        } elseif (\Auth::hasUser() && \Auth::user()->shops) {
+            // && count(\Auth::user()->shops)
             $user = \Auth::user();
-            if ($user->hotels()->count() > 0) {
-                $hotelIds = \Auth::user()->hotels()->pluck('hotels.id')->toArray();
-                $builder->whereIn($table.'.hotel_id', $hotelIds)
-                    ->orWhereNull($table.'.hotel_id')
-                    ->orWhere($table.'.hotel_id', '');
+            if ($user->shops()->count() > 0) {
+                $shopIds = \Auth::user()->shops()->pluck('shops.id')->toArray();
+                $builder->whereIn($table.'.shop_id', $shopIds)
+                    ->orWhereNull($table.'.shop_id')
+                    ->orWhere($table.'.shop_id', '');
             }
             
         }

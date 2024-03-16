@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('journal_entry', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('hotel_id')->unsigned()->index();
-            $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('cascade');
+            $table->bigInteger('shop_id')->unsigned()->index();
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
             $table->date('date');
             $table->text('note');
             $table->double('amount', 12, 2);

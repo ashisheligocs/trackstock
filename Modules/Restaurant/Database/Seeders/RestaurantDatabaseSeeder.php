@@ -368,39 +368,5 @@ class RestaurantDatabaseSeeder extends Seeder
             ]);
         }
 
-        //Set Item Price
-        if (DB::table('restaurants_item')->count() == 0) {
-            $getItems = DB::table('items')->get();
-            if(!empty($getItems)){
-                $i = 0;
-                foreach ($getItems as $getItem) {
-                    DB::table('restaurants_item')->insert([
-                        'restaurant_id' => 1,
-                        'item_id' => $getItem->id,
-                        'varient_id' => 1,
-                        'price' => 50 + $i,
-                        'active' => 1 
-                    ]);
-
-                    if($i > 300){
-                        $i = 0;
-                    } else {
-                        $i = $i + 10;
-                    }                    
-                }
-            }
-        }
-
-        // Set Default Tax For Restaurant
-        
-        $taxes = VatRate::whereIn('slug', ['cgst-2-5', 'sgst-2-5'])->get();
-        foreach ($taxes as $tax) {
-            ItemTax::create([
-                'restaurant_id' => 1,
-                'tax_id' => $tax->id
-            ]);
-        }
-        
-        // $this->call("OthersTableSeeder");
     }
 }

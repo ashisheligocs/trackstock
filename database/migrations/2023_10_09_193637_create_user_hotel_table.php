@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_hotel', function (Blueprint $table) {
+        Schema::create('user_shop', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('hotel_id');
+            $table->unsignedBigInteger('shop_id');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('no action');
-            $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('cascade')->onUpdate('no action');
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('no action');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_hotel');
+        Schema::dropIfExists('user_shop');
     }
 };

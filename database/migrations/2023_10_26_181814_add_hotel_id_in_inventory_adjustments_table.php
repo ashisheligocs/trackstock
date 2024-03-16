@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('inventory_adjustments', function (Blueprint $table) {
-            $table->unsignedBigInteger('hotel_id')->nullable();
-            $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('cascade')->onUpdate('no action');
+            $table->unsignedBigInteger('shop_id')->nullable();
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('no action');
         });
     }
 
@@ -27,8 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('inventory_adjustments', function (Blueprint $table) {
-            $table->dropForeign('inventory_adjustments_hotel_id_foreign');
-            $table->dropColumn('hotel_id');
+            $table->dropForeign('inventory_adjustments_shop_id_foreign');
+            $table->dropColumn('shop_id');
         });
     }
 };

@@ -10,12 +10,12 @@ class ShopServiceProvider extends ServiceProvider
     /**
      * @var string $moduleName
      */
-    protected $moduleName = 'Hotel';
+    protected $moduleName = 'Shops';
 
     /**
      * @var string $moduleNameLower
      */
-    protected $moduleNameLower = 'hotel';
+    protected $moduleNameLower = 'shops';
 
     /**
      * Boot the application events.

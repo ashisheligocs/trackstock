@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('purchases', function (Blueprint $table) {
-            $table->string('tax_amount')->after("hotel_id");
+            $table->string('tax_amount')->after("shop_id");
         });
     }
 

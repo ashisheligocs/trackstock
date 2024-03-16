@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('coupons_hotels', function (Blueprint $table) {
+        Schema::create('coupons_shops', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('hotel_id');
-            $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('cascade')->onUpdate('no action');
+            $table->unsignedBigInteger('shop_id');
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('no action');
             $table->unsignedBigInteger('coupon_id');
             $table->foreign('coupon_id')->references('id')->on('coupons')->onDelete('cascade')->onUpdate('no action');
             $table->timestamps();
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coupons_hotels');
+        Schema::dropIfExists('coupons_shops');
     }
 };
