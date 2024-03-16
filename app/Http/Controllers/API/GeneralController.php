@@ -280,7 +280,7 @@ class GeneralController extends Controller
         return 'Env file updated successfully!';
     }
 
-    public function getSelectedHotel()
+    public function getSelectedShop()
     {
         $setting = GeneralSetting::where('key', 'selected_hotel', 'display_name')->first();
 
@@ -288,7 +288,7 @@ class GeneralController extends Controller
         return $setting ? $setting->value : 'all';
     }
 
-    public function setSelectedHotel(Request $request)
+    public function setSelectedShop(Request $request)
     {
         return GeneralSetting::updateOrCreate([
             'key' => 'selected_hotel'

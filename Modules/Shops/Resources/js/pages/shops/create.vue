@@ -8,9 +8,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
-                            {{ $t('hotel.hotelAdd.create.form_title') }}
+                            {{ $t('shop.shopAdd.create.form_title') }}
                         </h3>
-                        <router-link :to="{ name: 'facility' }" class="btn btn-secondary float-right">
+                        <router-link :to="{ name: 'shops' }" class="btn btn-secondary float-right">
                             <i class="fas fa-long-arrow-alt-left" /> {{ $t('common.back') }}
                         </router-link>
                     </div>
@@ -21,23 +21,14 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="hotel_name">{{ $t('hotel.common.name') }}
+                                    <label for="shop_name">{{ $t('shop.common.name') }}
                                         <span class="required">*</span></label>
-                                    <input id="hotel_name" v-model="form.hotel_name" type="text" class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('hotel_name') }" name="hotel_name"
+                                    <input id="shop_name" v-model="form.shop_name" type="text" class="form-control"
+                                        :class="{ 'is-invalid': form.errors.has('shop_name') }" name="shop_name"
                                         :placeholder="$t('common.name_placeholder')" />
-                                    <has-error :form="form" field="hotel_name" />
+                                    <has-error :form="form" field="shop_name" />
                                 </div>
-                                <div v-if="hotelCategoryItems" class="form-group col-md-6">
-                                    <label for="hotelcategory_id">{{ $t('hotel.common.hotelcategory') }}
-                                        <span class="required">*</span></label>
-                                    <multiselect v-model="hotel_category_id" :options="hotelCategoryItems"
-                                        :show-labels="false" tag-placeholder="Add this as new tag"
-                                        placeholder="Search a hotel category" class="form-control" label="category_name"
-                                        track-by="category_name"
-                                        :class="{ 'is-invalid': form.errors.has('hotelcategory_id') }"></multiselect>
-                                    <has-error :form="form" field="hotelcategory_id" />
-                                </div>
+                                
                                 <div class="form-group col-md-6">
                                     <label for="state">{{
             $t("common.state")
@@ -57,91 +48,44 @@
                                     <has-error :form="form" field="city" />
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="hotel_phone">{{ $t('hotel.common.hotel_phone') }}
+                                    <label for="shop_phone">{{ $t('shop.common.hotel_phone') }}
                                         <span class="required">*</span></label>
-                                    <input id="hotel_phone" v-model="form.hotel_phone" type="tel" class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('hotel_phone') }" name="hotel_phone"
-                                        :placeholder="$t('hotel.common.number_placeholder')" pattern="[0-9]{10}" />
-                                    <has-error :form="form" field="hotel_phone" />
+                                    <input id="shop_phone" v-model="form.shop_phone" type="tel" class="form-control"
+                                        :class="{ 'is-invalid': form.errors.has('shop_phone') }" name="shop_phone"
+                                        :placeholder="$t('shop.common.number_placeholder')" pattern="[0-9]{10}" />
+                                    <has-error :form="form" field="shop_phone" />
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="hotel_email">{{ $t('hotel.common.hotel_email') }}
+                                    <label for="shop_email">{{ $t('shop.common.hotel_email') }}
                                         <span class="required">*</span></label>
-                                    <input id="hotel_email" v-model="form.hotel_email" type="text" class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('hotel_email') }" name="hotel_email"
-                                        :placeholder="$t('hotel.common.hotel_email')" />
-                                    <has-error :form="form" field="hotel_email" />
+                                    <input id="shop_email" v-model="form.shop_email" type="text" class="form-control"
+                                        :class="{ 'is-invalid': form.errors.has('shop_email') }" name="shop_email"
+                                        :placeholder="$t('shop.common.hotel_email')" />
+                                    <has-error :form="form" field="shop_email" />
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="hotel_prefix">{{ $t('hotel.common.hotel_head') }}
+                                    <label for="shop_prefix">{{ $t('shop.common.hotel_head') }}
                                         <span class="required">*</span></label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">INV</span>
                                         </div>
-                                        <input id="hotel_prefix" v-model="form.hotel_prefix" type="text"
+                                        <input id="shop_prefix" v-model="form.shop_prefix" type="text"
                                             class="form-control"
-                                            :class="{ 'is-invalid': form.errors.has('hotel_prefix') }"
-                                            name="hotel_prefix" :placeholder="$t('hotel.common.hotel_prefix')" />
-                                        <has-error :form="form" field="hotel_prefix" />
+                                            :class="{ 'is-invalid': form.errors.has('shop_prefix') }"
+                                            name="shop_prefix" :placeholder="$t('shop.common.hotel_prefix')" />
+                                        <has-error :form="form" field="shop_prefix" />
 
                                     </div>
                                 </div>
-                                <!--                                <div class="form-group col-md-6">-->
-                                <!--                                    <label for="hotel_phone1">{{ $t('hotel.common.hotel_phone1') }} </label>-->
-                                <!--                                    <input id="hotel_phone1" v-model="form.hotel_phone1" type="tel" class="form-control"-->
-                                <!--                                        :class="{ 'is-invalid': form.errors.has('hotel_phone1') }" name="hotel_phone1"-->
-                                <!--                                        :placeholder="$t('hotel.common.number_placeholder')" pattern="[0-9]{10}" />-->
-                                <!--                                    <has-error :form="form" field="hotel_phone1" />-->
-                                <!--                                </div>-->
-                                <!--                                <div class="form-group col-md-6">-->
-                                <!--                                    <label for="total_no_of_rooms">{{ $t('hotel.common.total_no_of_rooms') }}-->
-                                <!--                                        <span class="required">*</span></label>-->
-                                <!--                                    <input id="total_no_of_rooms" v-model="form.total_no_of_rooms" type="text"-->
-                                <!--                                        class="form-control" :class="{ 'is-invalid': form.errors.has('total_no_of_rooms') }"-->
-                                <!--                                        name="total_no_of_rooms" :placeholder="$t('hotel.common.total_no_of_rooms')" />-->
-                                <!--                                    <has-error :form="form" field="total_no_of_rooms" />-->
-                                <!--                                </div>-->
-                                <!--                                <div class="form-group col-md-6">-->
-                                <!--                                    <label for="no_of_floor">{{ $t('hotel.common.no_of_floor') }}-->
-                                <!--                                        <span class="required">*</span></label>-->
-                                <!--                                    <input id="no_of_floor" v-model="form.no_of_floor" type="number" class="form-control"-->
-                                <!--                                        :class="{ 'is-invalid': form.errors.has('no_of_floor') }" name="no_of_floor" min="1"-->
-                                <!--                                        :placeholder="$t('hotel.common.no_of_floor')" />-->
-                                <!--                                    <has-error :form="form" field="no_of_floor" />-->
-                                <!--                                </div>-->
-                                <!-- <div class="form-group col-md-6">
-                                    <label for="hotel_facility_ids">{{ $t('hotel.common.hotel_facility_ids') }}</label>
-                                    <multiselect v-model="hotel_facility_id" :options="facilityItems" :multiple="true"
-                                        :close-on-select="false" :clear-on-select="false" :preserve-search="true"
-                                        tag-placeholder="Add this as new tag" placeholder="Search a hotel facility"
-                                        label="facility_title" track-by="facility_title" :preselect-first="false" :class="{ 'is-invalid': form.errors.has('hotel_facility_ids') }" class="form-control"></multiselect>
-                                    <has-error :form="form" field="hotel_facility_ids" />
-                                </div> -->
-                                <!-- <div class="form-group col-md-6">
-                                    <label for="contact_phone">{{ $t('hotel.common.contact_phone') }}
-                                    </label>
-                                    <input id="contact_phone" v-model="form.contact_phone" type="tel"
-                                        class="form-control" :class="{ 'is-invalid': form.errors.has('contact_phone') }"
-                                        name="contact_phone" :placeholder="$t('hotel.common.contact_phone')"
-                                        pattern="[0-9]{10}" />
-                                    <has-error :form="form" field="contact_phone" />
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="contact_name">{{ $t('hotel.common.contact_name') }}
-                                    </label>
-                                    <input id="contact_name" v-model="form.contact_name" type="text"
-                                        class="form-control" :class="{ 'is-invalid': form.errors.has('contact_name') }"
-                                        name="contact_name" :placeholder="$t('hotel.common.contact_name')" />
-                                    <has-error :form="form" field="contact_name" />
-                                </div> -->
+                                
                                 <div class="form-group col-md-12">
-                                    <label for="hotel_address">{{ $t('hotel.common.hotel_address') }} <span
+                                    <label for="hotel_address">{{ $t('shop.common.hotel_address') }} <span
                                             class="required">*</span></label>
-                                    <textarea id="hotel_address" v-model="form.hotel_address" class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('hotel_address') }"
-                                        :placeholder="$t('hotel.common.hotel_address')" />
-                                    <has-error :form="form" field="hotel_address" />
+                                    <textarea id="shop_address" v-model="form.shop_address" class="form-control"
+                                        :class="{ 'is-invalid': form.errors.has('shop_address') }"
+                                        :placeholder="$t('shop.common.hotel_address')" />
+                                    <has-error :form="form" field="shop_address" />
                                 </div>
                                 <div class="form-group col-md-12">
                                   
@@ -183,14 +127,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import Form from 'vform'
-import Multiselect from 'vue-multiselect'
 export default {
     // middleware: ['auth', 'check-permissions'],
     metaInfo() {
-        return { title: this.$t('hotel.hotelAdd.create.page_title') }
-    },
-    components: {
-        Multiselect
+        return { title: this.$t('shop.shopAdd.create.page_title') }
     },
     data: () => ({
         states: [
@@ -233,52 +173,42 @@ export default {
             { value: "WB", label: "West Bengal" },
         ],
         value: null,
-        breadcrumbsCurrent: 'hotel.hotelAdd.create.breadcrumbs_current',
+        breadcrumbsCurrent: 'shop.shopAdd.create.breadcrumbs_current',
         breadcrumbs: [
             {
-                name: 'hotel.hotelAdd.create.breadcrumbs_first',
+                name: 'shop.shopAdd.create.breadcrumbs_first',
                 url: 'home',
             },
             {
-                name: 'hotel.hotelAdd.create.breadcrumbs_second',
-                url: 'hotel.category',
+                name: 'shop.shopAdd.create.breadcrumbs_second',
+                url: 'shop.category',
             },
             {
-                name: 'hotel.hotelAdd.create.breadcrumbs_active',
+                name: 'shop.shopAdd.create.breadcrumbs_active',
                 url: '',
             },
         ],
         form: new Form({
-            hotel_name: '',
-            hotelcategory_id: '',
-            hotel_phone: '',
-            hotel_email: '',
-            hotel_phone1: '',
-            total_no_of_rooms: '',
-            no_of_floor: '',
+            shop_name: '',
+            shop_phone: '',
+            shop_email: '',
+            shop_phone1: '',
             images: [],
-            // hotel_facility_ids: '',
-            hotel_address: '',
+            shop_address: '',
             contact_phone: '',
             contact_name: '',
             state: '',
             city: '',
         }),
         loading: true,
-        // hotel_facility_id: '',
         showModal: false,
         images: [],
         hotel_category_id: '',
-        hotel_facility_array: [],
     }),
     computed: {
         ...mapGetters('operations', ['items', 'facilityItems', 'hotelCategoryItems']),
     },
-    created() {
-        this.getSubCatgories()
-        // this.getFacilityItems()
-        this.getHotelCategoryItems()
-    },
+    
     methods: {
         handleFileUpload(event) {
             const files = event.target.files;
@@ -311,12 +241,7 @@ export default {
             }
             if (error) this.images = [];
         },
-        // get all expense categories
-        async getSubCatgories() {
-            await this.$store.dispatch('operations/allData', {
-                path: '/api/all-expense-sub-categories',
-            })
-        },
+       
 
         removeImage(index) {
             this.images.splice(index, 1);
@@ -333,45 +258,25 @@ export default {
         async saveFacility() {
             this.form.images = [];
             this.form.images = this.images && this.images.length ? _.map(this.images, 'file') : [];
-            this.form.hotelcategory_id = this.hotel_category_id.id
-            // if (this.hotel_facility_id) {
-            //     this.hotel_facility_id.forEach((el) => {
-            //         if (!this.hotel_facility_array.includes(el.id)) {
-            //             this.hotel_facility_array.push(el.id)
-            //         }
-            //     });
-            // }
-            // this.form.hotel_facility_ids = this.hotel_facility_array.toString()
+          
             await this.form
-                .post(window.location.origin + '/api/hotel/add')
+                .post(window.location.origin + '/api/shop/add')
                 .then(() => {
                     toast.fire({
                         type: 'success',
-                        title: this.$t('hotel.hotelAdd.create.success_msg'),
+                        title: this.$t('shop.shopAdd.create.success_msg'),
                     })
-                    this.$router.push({ name: 'hotel' })
+                    this.$router.push({ name: 'shops' })
                 })
                 .catch((err) => {
                     let message = err.response?.data?.message || this.$t('common.error_msg');
                     toast.fire({ type: 'error', title: message })
                 })
         },
-        // async getFacilityItems() {
-        //     await this.$store.dispatch('operations/getFacilityData', {
-        //         path: '/api/hotel/facility'
-        //     })
-        // },
-
-        async getHotelCategoryItems() {
-            await this.$store.dispatch("operations/getHotelCategoryData", {
-                path: "/api/hotel/category",
-            });
-        },
+       
     },
 }
 </script>
-
-<style src="../../../../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style scoped>
 input[type="file"] {
@@ -393,29 +298,6 @@ input[type="file"] {
     display: flex;
     flex-wrap: wrap;
     margin-top: 20px;
-}
-
-:deep(.multiselect__tags) {
-    min-height: 38px !important;
-    border: none !important;
-    padding: 4px 40px 0 4px !important;
-}
-
-:deep(.multiselect__placeholder) {
-    margin-bottom: 4px !important;
-    padding-top: 4px !important;
-}
-
-:deep(.multiselect__single) {
-    margin-bottom: 0px !important;
-    margin-top: 4px !important;
-}
-
-:deep(.multiselect) {
-    width: auto;
-    padding-bottom: 0px !important;
-    padding-top: 0px !important;
-    min-height: 38px !important;
 }
 
 .profile-pic {

@@ -644,10 +644,9 @@
       }
     }
   },
-  "hotel": {
+  "shop": {
     "common": {
-      "name": "Hotel Name",
-      "hotelcategory": "Hotel Category",
+      "name": "Shop Name",
       "hotel_phone": "Phone Number",
       "hotel_email": "Email Address",
       "hotel_head": "Hotel Invoice Prefix",
@@ -655,96 +654,38 @@
       "number_placeholder": "Enter 10 digit number",
       "hotel_phone1": "Phone Number 1",
       "hotel_address": "Address",
-      "total_no_of_rooms": "No Of Rooms",
-      "no_of_floor": "Total No of Floor",
-      "hotel_facility_ids": "Hotel facility",
       "contact_phone": "Primary Contact",
       "contact_name": "Secondary Contact"
     },
-    "hotelAdd": {
+    "shopAdd": {
       "index": {
-        "page_title": "Hotel",
-        "breadcrumbs_current": "Hotel",
+        "page_title": "Shop",
+        "breadcrumbs_current": "Shop",
         "breadcrumbs_first": "Dashboard",
         "breadcrumbs_second": "Expenses",
-        "breadcrumbs_active": "Hotel",
+        "breadcrumbs_active": "Shop",
         "delete_warning": "All subcategories for this category will be deleted!"
       },
       "create": {
-        "page_title": "Create Hotel",
-        "form_title": "Create  Hotel",
-        "breadcrumbs_current": "Create Hotel",
+        "page_title": "Create Shop",
+        "form_title": "Create  Shop",
+        "breadcrumbs_current": "Create Shop",
         "breadcrumbs_first": "Dashboard",
-        "breadcrumbs_second": "Hotel",
+        "breadcrumbs_second": "Shop",
         "breadcrumbs_active": "Create",
-        "success_msg": "Hotel added successfully 👍"
+        "success_msg": "Shop added successfully 👍"
       },
       "edit": {
-        "page_title": "Edit Hotel",
-        "form_title": "Edit Hotel",
-        "breadcrumbs_current": "Edit Hotel",
+        "page_title": "Edit Shop",
+        "form_title": "Edit Shop",
+        "breadcrumbs_current": "Edit Shop",
         "breadcrumbs_first": "Dashboard",
-        "breadcrumbs_second": "Hotel",
+        "breadcrumbs_second": "Shop",
         "breadcrumbs_active": "Edit",
-        "success_msg": "Hotel updated successfully 👍"
+        "success_msg": "Shop updated successfully 👍"
       }
     },
-    "categories": {
-      "index": {
-        "page_title": "Hotel Categories",
-        "breadcrumbs_current": "Hotel Categories",
-        "breadcrumbs_first": "Dashboard",
-        "breadcrumbs_second": "Expenses",
-        "breadcrumbs_active": "Categories",
-        "delete_warning": "All subcategories for this category will be deleted!"
-      },
-      "create": {
-        "page_title": "Create Hotel Category",
-        "form_title": "Create an Hotel  category",
-        "breadcrumbs_current": "Create Hotel Category",
-        "breadcrumbs_first": "Dashboard",
-        "breadcrumbs_second": "Categories",
-        "breadcrumbs_active": "Create",
-        "success_msg": "Category added successfully 👍"
-      },
-      "edit": {
-        "page_title": "Edit Hotel Category",
-        "form_title": "Edit category",
-        "breadcrumbs_current": "Edit Hotel Category",
-        "breadcrumbs_first": "Dashboard",
-        "breadcrumbs_second": "Categories",
-        "breadcrumbs_active": "Edit",
-        "success_msg": "Category updated successfully 👍"
-      }
-    },
-    "facility": {
-      "index": {
-        "page_title": "Facility",
-        "breadcrumbs_current": "Facility",
-        "breadcrumbs_first": "Dashboard",
-        "breadcrumbs_second": "Facility",
-        "breadcrumbs_active": "Facility",
-        "delete_warning": "All Facility for this category will be deleted!"
-      },
-      "create": {
-        "page_title": "Create Facility",
-        "form_title": "Create an Facility ",
-        "breadcrumbs_current": "Create Facility",
-        "breadcrumbs_first": "Dashboard",
-        "breadcrumbs_second": "Facility",
-        "breadcrumbs_active": "Create",
-        "success_msg": "Facility added successfully 👍"
-      },
-      "edit": {
-        "page_title": "Edit Expense Sub Category",
-        "form_title": "Edit expense sub category",
-        "breadcrumbs_current": "Edit Expense Sub Category",
-        "breadcrumbs_first": "Dashboard",
-        "breadcrumbs_second": "Sub Categories",
-        "breadcrumbs_active": "Edit",
-        "success_msg": "Sub category updated successfully 👍"
-      }
-    },
+    
     "list": {
       "common": {
         "expense_reason": "Expense Reason",

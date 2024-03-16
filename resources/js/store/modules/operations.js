@@ -189,7 +189,7 @@ export const actions = {
 
     async setHotel ({ commit }, { hotel }) {
         let hotelId = hotel.id || hotel;
-        await axios.post(window.location.origin + '/api/set-hotel', {hotel: hotelId})
+        await axios.post(window.location.origin + '/api/set-shop', {hotel: hotelId})
         commit(types.SET_HOTEL, { hotel: hotelId })
         Cookies.set('selectedHotel', hotelId, { expires: 365 })
     }
