@@ -154,146 +154,25 @@
             </ul>
           </li>
 
-          <!-----------------------------Asset Management------------------------>
-          <!-- <li
-                v-if="
-              $can('asset-type-list') ||
-              $can('asset-type-create') ||
-              $can('asset-type-edit') ||
-              $can('asset-type-delete') ||
-              $can('asset-list') ||
-              $can('asset-create') ||
-              $can('asset-view') ||
-              $can('asset-edit') ||
-              $can('asset-delete')
-            "
-                class="nav-item has-treeview"
-                :class="
-              menuOpen('assetTypes') || menuOpen('assets')
-                ? 'menu-is-opening menu-open'
-                : ''"
-              >
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-couch"/>
-                  <p>
-                    {{ $t("sidebar.asset_management") }}
-                    <i class="right fas fa-angle-left"/>
-                  </p>
-                </a>
-                <ul
-                  class="nav nav-treeview"
-                  :style="
-                menuOpen('assetTypes') || menuOpen('assets')
-                  ? 'display: block'
-                  : 'display: none'
-              "
-                >
-                  <li
-                    v-if="
-                  $can('asset-type-list') ||
-                  $can('asset-type-create') ||
-                  $can('asset-type-edit') ||
-                  $can('asset-type-delete')
-                "
-                    class="nav-item"
-                  >
-                    <router-link @click.native="closeSideBarControl"
-                      :to="{ name: 'assetTypes.index' }"
-                      class="nav-link"
-                    >
-                      <i class="fas fa-tags nav-icon"/>
-                      <p>{{ $t("sidebar.types") }}</p>
-                    </router-link>
-                  </li>
-                  <li
-                    v-if="
-                  $can('asset-list') ||
-                  $can('asset-create') ||
-                  $can('asset-view') ||
-                  $can('asset-edit') ||
-                  $can('asset-delete')
-                "
-                    class="nav-item"
-                  >
-                    <router-link @click.native="closeSideBarControl" :to="{ name: 'assets.index' }" class="nav-link">
-                      <i class="fas fa-list-ul nav-icon"/>
-                      <p>{{ $t("sidebar.assets") }}</p>
-                    </router-link>
-                  </li>
-                </ul>
-              </li> -->
-
-          <!-----------------------------Hotel---------------------------------->
-          <li v-if="$can('hotel-create') ||
-            $can('hotel-list') ||
-            $can('hotel-edit') ||
-            $can('hotel-delete')
-            " class="nav-item has-treeview" :class="menuOpen('booking-type') || menuOpen('hotels')
-    || menuOpen('floor') || menuOpen('room')
-    || menuOpen('meals') || menuOpen('bed-type')
-    ? 'menu-is-opening menu-open'
-    : ''">
+          <!-----------------------------Shop---------------------------------->
+          <li v-if="$can('shop-create') ||
+            $can('shop-list') ||
+            $can('shop-edit') ||
+            $can('shop-delete')
+            " class="nav-item has-treeview" :class="menuOpen('shops') ? 'menu-is-opening menu-open' : ''">
 
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-hotel" />
               <p>
-                hotels
+                {{ $t('shops') }}
                 <i class="right fas fa-angle-left" />
               </p>
             </a>
-            <ul class="nav nav-treeview" :style="menuOpen('booking-type') || menuOpen('hotels')
-              || menuOpen('floor') || menuOpen('room')
-              || menuOpen('meals') || menuOpen('bed-type')
-              ? 'display: block'
-              : 'display: none'
-              ">
-              <!--                  <li class="nav-item">-->
-              <!--                    <router-link @click.native="closeSideBarControl" :to="{ name: 'booking-type' }" class="nav-link">-->
-              <!--                      <i class="fas fa-truck-loading nav-icon"/>-->
-              <!--                      <p>{{ $t('sidebar.bookingType') }}</p>-->
-              <!--                    </router-link>-->
-              <!--                  </li>-->
-
+            <ul class="nav nav-treeview" :style="menuOpen('shops') ? 'display: block' : 'display: none'">
               <li class="nav-item">
-                <router-link :to="{ name: 'hotels' }" class="nav-link">
+                <router-link :to="{ name: 'shops' }" class="nav-link">
                   <i class="fas fa-hotel nav-icon" />
-                  <p>{{ $t('hotels') }}</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link @click.native="closeSideBarControl" :to="{ name: 'hotel.category' }" class="nav-link">
-                  <i class="nav-icon fas fa-solid fa-bars" />
-                  <p>{{ $t('sidebar.hotel_cat_lsit') }}</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link @click.native="closeSideBarControl" :to="{ name: 'floor' }" class="nav-link">
-                  <i class="nav-icon fas fa-hotel" />
-                  <p>{{ $t('sidebar.floor') }}</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link @click.native="closeSideBarControl" :to="{ name: 'room.facility' }" class="nav-link">
-                  <i class="nav-icon fas fa-solid fa-bath" />
-                  <p>{{ $t('sidebar.room_facility') }}</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link @click.native="closeSideBarControl" :to="{ name: 'meals' }" class="nav-link">
-                  <i class="nav-icon fas fa-solid fa-utensils" />
-                  <p>{{ $t('sidebar.meal_plan') }}</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link @click.native="closeSideBarControl" :to="{ name: 'bed-type' }" class="nav-link">
-                  <i class="nav-icon fas fa-solid fa-bed" />
-                  <p>{{ $t('sidebar.bedType') }}</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link @click.native="closeSideBarControl" :to="{ name: 'room.category' }" class="nav-link">
-                  <i class="nav-icon fas fa-solid fa-hotel" />
-                  <p>{{ $t('sidebar.room_hotel_cat_lsit') }}</p>
+                  <p>{{ $t('shops') }}</p>
                 </router-link>
               </li>
             </ul>

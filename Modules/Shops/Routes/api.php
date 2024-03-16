@@ -12,8 +12,18 @@ use Illuminate\Http\Request;
 |
 */
 // Route::group(['middleware' => 'auth:api'], function () {
-/****** hotel api ******/
-Route::prefix('hotel')->group(function () {
+ 
+Route::prefix('shop')->group(function () {
+
+    Route::get('/all', 'API\ShopController@lists');
+    Route::get('/list-all', 'API\ShopController@listWithoutScope');
+    Route::get('/', 'API\ShopController@index');
+    Route::post('/add', 'API\ShopController@store');
+    Route::post('/edit', 'API\ShopController@store');
+    Route::get('/view/{id?}', 'API\ShopController@show');
+    Route::get('/list', 'API\ShopController@list');
+    Route::post('/delete/{id?}', 'API\ShopController@destroy');
+     
 
     Route::get('/all', 'API\ShopController@lists');
     Route::get('/list-all', 'API\ShopController@listWithoutScope');
@@ -183,6 +193,7 @@ Route::prefix('booking')->group(function () {
 
     Route::get('/all-booking-list', 'API\BookingController@bookingList');
     Route::post('/room-booking-status', 'API\BookingController@roomCheckInOutDetails');
+ 
 });
 
 
@@ -191,7 +202,7 @@ Route::prefix('booking')->group(function () {
 //     return $request->user();
 // });
 // Route::prefix('category')->group(function() {
-//     Route::get('/', 'API\HotelCategoryController@index');
+//     Route::get('/', 'API\ShopCategoryController@index');
 // });
 
 
