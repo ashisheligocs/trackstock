@@ -421,6 +421,7 @@
     "logout": "Logout"
   },
   "sidebar": {
+    "shops": "Shops",
     "dashboard": "Dashboard",
     "activities": "ACTIVITIES",
     "expenses": "Expenses",
