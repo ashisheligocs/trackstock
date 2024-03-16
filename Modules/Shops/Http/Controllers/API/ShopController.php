@@ -47,13 +47,16 @@ class ShopController extends Controller
 
     public function lists(Request $request)
     {
-        return CommonResource::collection(Hotel::withCount('roomFacilityData')
-            ->with(['hotelroomcategory' => function ($query) {
-                $query->select('hotel_id', \DB::raw('min(rate) as min_room_rate'))
-                    ->groupBy('hotel_id');
-            }])
+        return CommonResource::collection(Shop::were('id','!=','') 
             ->latest()
             ->get());
+        // return CommonResource::collection(Hotel::withCount('roomFacilityData')
+        //     ->with(['hotelroomcategory' => function ($query) {
+        //         $query->select('hotel_id', \DB::raw('min(rate) as min_room_rate'))
+        //             ->groupBy('hotel_id');
+        //     }])
+        //     ->latest()
+        //     ->get());
     }
 
 

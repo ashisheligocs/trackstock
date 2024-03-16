@@ -17,11 +17,12 @@ class RestaurantOrderShowResource extends JsonResource
      */
     public function toArray($request)
     {
-        $allItems = RestroItem::where('order_id',$this->id)->get();
-        $newitems = [];
-        foreach($allItems as $item){
-            $newitems[] = Product::where('id',$item->restaurant_item_id)->first();
-        } 
+        $allItems = RestroItem::where('order_id',$this->id)->get(); 
+        if(!empty($allItems)){ 
+            foreach($allItems as $item){
+                $item->items = Product::where('id',$item->restaurant_item_id)->first();
+            } 
+        }
         return [
             'id' => $this->id,
             'date' => $this->order_date,
@@ -29,7 +30,7 @@ class RestaurantOrderShowResource extends JsonResource
             'orderId' => $this->order_id_uniq,
             'type' => $this->type ?? 'Customer order',
             // 'items' => $this->getRestaurantOrderDetails($this),
-            'items' => $newitems,
+            'items' => $allItems,
             'room' => $this->room ?? null,
             'customer' => $this->client ?? null,
             'bookingId' => $this->booking_id,
