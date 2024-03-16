@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Shops\Entities\Booking;
 use Modules\Shops\Entities\BookingDetails;
-use Modules\Shops\Entities\Shop;
+use Modules\Shops\Entities\Hotel;
 use Modules\Restaurant\Entities\Restroorder;
 
 class Invoice extends Model

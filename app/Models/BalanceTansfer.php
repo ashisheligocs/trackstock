@@ -6,7 +6,7 @@ use App\Models\Scopes\selectedHotelResource;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Shops\Entities\Shop;
+use Modules\Shops\Entities\Hotel;
 
 class BalanceTansfer extends Model
 {

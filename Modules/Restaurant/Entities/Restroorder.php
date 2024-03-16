@@ -8,7 +8,7 @@ use App\Models\Invoice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Shops\Entities\Booking;
-use Modules\Shops\Entities\Shop;
+use Modules\Shops\Entities\Hotel;
 use Modules\Shops\Entities\Room;
 
 class Restroorder extends Model

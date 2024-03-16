@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Accounts\Entities\LedgerAccount;
 use Modules\Shops\Entities\Booking;
-use Modules\Shops\Entities\Shop;
+use Modules\Shops\Entities\Hotel;
 use App\Models\Client;
 
 class AccountTransaction extends Model

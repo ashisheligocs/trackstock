@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Shops\Entities\Shop;
+use Modules\Shops\Entities\Hotel;
 
 class NonInvoicePayment extends Model
 {
