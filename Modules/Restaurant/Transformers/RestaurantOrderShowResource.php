@@ -4,7 +4,8 @@ namespace Modules\Restaurant\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Restaurant\Http\RestaurantHelper;
-
+use Modules\Restaurant\Entities\RestroItem;
+use App\Models\Product;
 class RestaurantOrderShowResource extends JsonResource
 {
     use RestaurantHelper;
@@ -16,13 +17,20 @@ class RestaurantOrderShowResource extends JsonResource
      */
     public function toArray($request)
     {
+        $allItems = RestroItem::where('order_id',$this->id)->get(); 
+        if(!empty($allItems)){ 
+            foreach($allItems as $item){
+                $item->items = Product::where('id',$item->restaurant_item_id)->first();
+            } 
+        }
         return [
             'id' => $this->id,
             'date' => $this->order_date,
             'hotel' => $this->hotel,
             'orderId' => $this->order_id_uniq,
             'type' => $this->type ?? 'Customer order',
-            'items' => $this->getRestaurantOrderDetails($this),
+            // 'items' => $this->getRestaurantOrderDetails($this),
+            'items' => $allItems,
             'room' => $this->room ?? null,
             'customer' => $this->client ?? null,
             'bookingId' => $this->booking_id,

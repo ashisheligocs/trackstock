@@ -69,8 +69,8 @@
                                         </div>
                                     </div>
                                     <div class="pos-box-content">
-                                        <p class="pos-box-text">{{ product.name }}</p>
-                                        <span class="text-bold text-lg">{{ product.price | withCurrency }}</span>
+                                        <p class="pos-box-text">{{ product.name }} ({{product.inventoryCount}} In stock)</p>
+                                        <span class="text-bold text-lg">{{ product.regularPrice | withCurrency }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -146,14 +146,13 @@
                                 <tbody
                                         v-if="selectedItemLists && selectedItemLists.length > 0"
                                 >
-                                <tr v-for="(product, i) in selectedItemLists" :key="i">
+                                <tr v-for="(singleItem, i) in selectedItemLists" :key="i">
                                     <td>
-                                        {{ product.name }}
-                                        <span v-if="product.addonString != ''" style="font-size: 11px;"><br/>{{ product.addonString }}</span>
+                                        {{ singleItem.name }}
+                                        <span v-if="singleItem.addonString != ''" style="font-size: 11px;"><br/>{{ singleItem.addonString }}</span>
                                     </td>
-                                    <td>{{ parseFloat(product.variant?.price) + parseFloat(product.addonAmount) |
-                                        withCurrency }}
-                                    </td>
+                                    <!-- <td>{{ parseFloat(product?.price) + parseFloat(product.addonAmount) |  withCurrency }}  </td> -->
+                                    <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td>
                                     <td>
                                         <div class="d-flex custom-qty-input">
                                             <input
@@ -167,7 +166,7 @@
                                                     type="number"
                                                     step="any"
                                                     :id="`Qty-${i}`"
-                                                    :value="product.quantity"
+                                                    :value="singleItem.quantity"
                                                     name="quantity"
                                                     class="quantity-field border-0 incrementor"
                                                     required
@@ -185,7 +184,7 @@
                                         </div>
                                     </td>
                                     
-                                    <td class="text-right">{{ itemSubtotal(product) | withCurrency }}</td>
+                                    <td class="text-right">{{ itemSubtotal(singleItem) | withCurrency }}</td>
                                     <td class="text-right">
                                         <button
                                                 type="button"
@@ -908,46 +907,67 @@
                 
                 const addonNames = this.currentAddon?.map(add => add.name);
                 const addonString = addonNames ? addonNames.join(' + ') : '';
-                
                 if (alreadyAddedItem >= 0) {
                     this.selectedItemList[alreadyAddedItem] = {
-                        name: `${this.currentProduct?.name} (${this.currentVariant?.name})`,
-                        id: this.currentProduct.id,
-                        variant: this.currentVariant,
-                        addon: this.currentAddon,
-                        addonAmount: this.currentAddonAmount,
+                        name: `${this.currentProduct?.name}`,
+                        id: this.currentProduct.id, 
+                        addon: this.currentAddon, 
                         addonString:addonString,
-                        quantity: 1,
-                        total: parseFloat(this.currentVariant?.price || 0) + this.currentAddonAmount
+                        quantity: 1, 
+                        price: parseFloat(this.currentProduct?.regularPrice || 0),
+                        total: parseFloat(this.currentProduct?.regularPrice || 0)
                     }
                 } else {
                     this.selectedItemList.push({
-                        name: `${this.currentProduct?.name} (${this.currentVariant?.name})`,
-                        id: this.currentProduct.id,
-                        variant: this.currentVariant,
-                        addon: this.currentAddon,
-                        addonAmount: this.currentAddonAmount,
+                        name: `${this.currentProduct?.name}`,
+                        id: this.currentProduct.id, 
+                        addon: this.currentAddon, 
                         addonString:addonString,
-                        quantity: 1,
-                        total: parseFloat(this.currentVariant?.price || 0) + this.currentAddonAmount
+                        quantity: 1, 
+                        price: parseFloat(this.currentProduct?.regularPrice || 0),
+                        total: parseFloat(this.currentProduct?.regularPrice || 0)
                     })
                 }
+                // if (alreadyAddedItem >= 0) {
+                //     this.selectedItemList[alreadyAddedItem] = {
+                //         name: `${this.currentProduct?.name} (${this.currentVariant?.name})`,
+                //         id: this.currentProduct.id,
+                //         variant: this.currentVariant,
+                //         addon: this.currentAddon,
+                //         addonAmount: this.currentAddonAmount,
+                //         addonString:addonString,
+                //         quantity: 1,
+                //         total: parseFloat(this.currentVariant?.price || 0) + this.currentAddonAmount
+                //     }
+                // } else {
+                //     this.selectedItemList.push({
+                //         name: `${this.currentProduct?.name} (${this.currentVariant?.name})`,
+                //         id: this.currentProduct.id,
+                //         variant: this.currentVariant,
+                //         addon: this.currentAddon,
+                //         addonAmount: this.currentAddonAmount,
+                //         addonString:addonString,
+                //         quantity: 1,
+                //         total: parseFloat(this.currentVariant?.price || 0) + this.currentAddonAmount
+                //     })
+                // }
                 this.currentVariant = null;
                 this.currentAddon = [];
 
                 this.showProductModal = false;
-                // console.log(this.selectedItemList, 'list')
+                console.log(this.selectedItemList, 'list')
             },
             itemSubtotal(item) {
                 
-                let addonTotal = 0;
-                if (item.addon?.length > 0) {
-                    item.addon?.forEach(add => {
+                // let addonTotal = 0;
+                // if (item.addon?.length > 0) {
+                //     item.addon?.forEach(add => {
                         
-                        addonTotal += (typeof add.item_price !== 'undefined') ? parseFloat(add.item_price) : parseFloat(add.price);
-                    })
-                }
-                return parseFloat(item.quantity * (parseFloat(item.variant?.price) + parseFloat(addonTotal)) || 0);
+                //         addonTotal += (typeof add.item_price !== 'undefined') ? parseFloat(add.item_price) : parseFloat(add.price);
+                //     })
+                // }
+                // return parseFloat(item.quantity * (parseFloat(item.variant?.price) + parseFloat(addonTotal)) || 0);
+                return parseFloat(item.quantity * parseFloat(item?.price));
             },
             addonPrice(item) {
                 let addonTotal = 0;
@@ -1011,7 +1031,8 @@
                 let currentPage = this.pagination ? this.pagination.current_page : 1;
                 const { data } = await this.form.get(
                     window.location.origin +
-                    "/api/food/item/list/pos?page=" +
+                    // "/api/food/item/list/pos?page=" +
+                    "/api/products?page=" +
                     currentPage
                 );
                 console.log(data.data);

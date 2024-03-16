@@ -12,30 +12,17 @@ use Illuminate\Http\Request;
 |
 */
 // Route::group(['middleware' => 'auth:api'], function () {
-/****** Shop api ******/
+/****** hotel api ******/
 Route::prefix('shop')->group(function () {
 
     Route::get('/all', 'API\ShopController@lists');
     Route::get('/list-all', 'API\ShopController@listWithoutScope');
+  
     Route::get('/', 'API\ShopController@index');
     Route::post('/add', 'API\ShopController@store');
     Route::post('/edit', 'API\ShopController@store');
     Route::get('/view/{id?}', 'API\ShopController@show');
     Route::get('/list', 'API\ShopController@list');
     Route::post('/delete/{id?}', 'API\ShopController@destroy');
-    
+
 });
-
-
-// });
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-// Route::prefix('category')->group(function() {
-//     Route::get('/', 'API\ShopCategoryController@index');
-// });
-
-
-
-// Route::middleware('auth:sanctum')->group( function () {
-// });
