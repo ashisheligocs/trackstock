@@ -49,7 +49,7 @@
                                         </div>
                                         <div class="pos-box-content">
                                             <p class="pos-box-text">{{ product.label }}</p>
-                                            <span class="text-bold text-lg">{{ product.sellingPrice | withCurrency }}</span>
+                                            <span class="text-bold text-lg">{{ product.regularPrice | withCurrency }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -87,12 +87,12 @@
                                 </ClientCreateModal>
                             </div>
                             <has-error :form="form" field="client" />
-                            <div class="w-100 mt-2">
+                            <!-- <div class="w-100 mt-2">
                                 <Multiselect v-model="form.room" :options="occupiedRooms" :taggable="false"
                                     :show-labels="false" tag-placeholder="" placeholder="Select a room" class="form-control"
                                     @select="form.client = null" label="room_name" track-by="id" style="min-width: 80%">
                                 </Multiselect>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="table-responsive table-wrap">
@@ -212,7 +212,7 @@
                 <div class="row no-print">
                     <div class="col-12 col-lg-6 mb-1">
                         <button class="btn btn-primary btn-block" @click="saveOrder($event, false)"
-                            @keydown="form.onKeydown($event)" :disabled="!form.room || selectedItemList.length <= 0">
+                            @keydown="form.onKeydown($event)" :disabled="selectedItemList.length <= 0">
                             <i class="fas fa-save" /> Save
                         </button>
                     </div>
@@ -605,10 +605,10 @@
                 let price = 0;
                 if (this.tax_included) {
                     price = this.setTaxInclusivePrice();
-                    return price - this.foodItemDiscount + this.foodItemTax * 2;
+                    return price - this.foodItemDiscount + this.foodItemTax;
                 } else {
                     price = this.foodItemSubTotal;
-                    return price - this.foodItemDiscount + this.foodItemTax * 2;
+                    return price - this.foodItemDiscount + this.foodItemTax;
                 }
                 
             },
