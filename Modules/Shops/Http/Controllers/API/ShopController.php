@@ -23,7 +23,7 @@ use Modules\Restaurant\Entities\Item;
 use Modules\Shops\Entities\BookingDetails;
 use Exception;
 
-class HotelController extends Controller
+class ShopController extends Controller
 {
     use ApiResponse;
     /**
@@ -36,27 +36,11 @@ class HotelController extends Controller
         $search = $request->search ?? '';
 
         $checkInDate = (@$request->check_in_date) ? $request->check_in_date : '';
-        // $hotel = Hotel::latest()->with('category', 'rooms.Roomcategory', 'facilities.room_facilitytdatas')->when($search, function ($q) use ($search) {
-        //     $q->where('hotel_name', 'like', "%$search%")->orWhere('hotel_email', 'like', "%$search%");
-        // })->paginate($request->perPage);
-        //  if(@$request->check_in_date){
-        //     $checkInDate = $request->check_in_date;
-        //     $hotel = Hotel::latest()
-        //     ->with('category', 'hotelroomcategory', 'hotelroomcategory.roomCategory', 'facilities.room_facilitytdatas')
-        //     ->when($search, function ($q) use ($search) {
-        //         $q->where('hotel_name', 'like', "%$search%")->orWhere('hotel_email', 'like', "%$search%");
-        //     })->with(['hotelroomcategory.rooms' => function ($query) use ($checkInDate) {
-        //         $query->available($checkInDate);
-        //     }])->paginate($request->perPage);
-
-        //  } else {
+      
         $hotel = Hotel::latest()->with('category', 'hotelroomcategory', 'hotelroomcategory.roomCategory', 'hotelroomcategory.rooms', 'facilities.room_facilitytdatas')->when($search, function ($q) use ($search) {
             $q->where('hotel_name', 'like', "%$search%")->orWhere('hotel_email', 'like', "%$search%");
         })->paginate($request->perPage);
-        //}
-
-
-        // dd($hotel->toArray());
+        
         return HotelResource::collection($hotel);
     }
 

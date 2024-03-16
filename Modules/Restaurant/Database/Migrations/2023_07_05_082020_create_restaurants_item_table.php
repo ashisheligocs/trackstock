@@ -15,8 +15,6 @@ return new class extends Migration
     {
         Schema::create('restaurants_item', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('restaurant_id')->unsigned()->index();
-            $table->foreign('restaurant_id')->references('id')->on('restaurants')->onDelete('cascade');
             $table->bigInteger('item_id')->unsigned()->index();
             $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
             $table->bigInteger('varient_id')->unsigned()->index();

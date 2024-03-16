@@ -13,19 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('account_transactions', function (Blueprint $table) {
-            $table->unsignedBigInteger('order_id')->nullable();
-            $table->foreign('order_id')->references('id')->on('item_restro_orders')->onDelete('cascade')->onUpdate('no action');
-        });
-
         Schema::table('non_invoice_payments', function (Blueprint $table) {
-            $table->unsignedBigInteger('hotel_id')->nullable();
-            $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('cascade')->onUpdate('no action');
+            $table->unsignedBigInteger('shop_id')->nullable();
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('no action');
         });
 
         Schema::table('non_purchase_payments', function (Blueprint $table) {
-            $table->unsignedBigInteger('hotel_id')->nullable();
-            $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('cascade')->onUpdate('no action');
+            $table->unsignedBigInteger('shop_id')->nullable();
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('no action');
         });
     }
 
@@ -36,19 +31,14 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('account_transactions', function (Blueprint $table) {
-            $table->dropForeign('account_transactions_order_id_foreign');
-            $table->dropColumn('order_id');
-        });
-
         Schema::table('non_invoice_payments', function (Blueprint $table) {
-            $table->dropForeign('non_invoice_payments_hotel_id_foreign');
-            $table->dropColumn('hotel_id');
+            $table->dropForeign('non_invoice_payments_shop_id_foreign');
+            $table->dropColumn('shop_id');
         });
 
         Schema::table('non_purchase_payments', function (Blueprint $table) {
-            $table->dropForeign('non_purchase_payments_hotel_id_foreign');
-            $table->dropColumn('hotel_id');
+            $table->dropForeign('non_purchase_payments_shop_id_foreign');
+            $table->dropColumn('shop_id');
         });
     }
 };

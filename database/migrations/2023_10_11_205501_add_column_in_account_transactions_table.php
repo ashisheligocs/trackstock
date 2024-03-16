@@ -17,15 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('payroll_id')->nullable();
             $table->foreign('payroll_id')->references('id')->on('payrolls')->onDelete('cascade')->onUpdate('no action');
         });
-        Schema::table('booking_details', function (Blueprint $table) {
-            $table->float('modified_room_rate')->nullable();
-        });
-        Schema::table('bookings', function (Blueprint $table) {
-            $table->boolean('tax_included')->nullable();
-        });
         Schema::table('balance_tansfers', function (Blueprint $table) {
-            $table->unsignedBigInteger('hotel_id')->nullable();
-            $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('cascade')->onUpdate('no action');
+            $table->unsignedBigInteger('shop_id')->nullable();
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('no action');
         });
     }
 
@@ -40,15 +34,9 @@ return new class extends Migration
             $table->dropForeign('account_transactions_payroll_id_foreign');
             $table->dropColumn('payroll_id');
         });
-        Schema::table('booking_details', function (Blueprint $table) {
-            $table->dropColumn('modified_room_rate');
-        });
-        Schema::table('bookings', function (Blueprint $table) {
-            $table->dropColumn('tax_included');
-        });
         Schema::table('balance_tansfers', function (Blueprint $table) {
-            $table->dropForeign('balance_tansfers_hotel_id_foreign');
-            $table->dropColumn('hotel_id');
+            $table->dropForeign('balance_tansfers_shop_id_foreign');
+            $table->dropColumn('shop_id');
         });
     }
 };

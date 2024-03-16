@@ -345,7 +345,23 @@ class AccountsDatabaseSeeder extends Seeder
                     'system_name' => "DIRECT-SALES",
                     'code' => "DIRECT-SALES",
                     'is_bank' => 0,
-                ]
+                ],
+                [
+                    'ledger_type' => 1,
+                    'ledger_group' => 13,
+                    'ledger_name' => "In Charge",
+                    'system_name' => "in-charge",
+                    'code' => "in-charge",
+                    'is_bank' => 1,
+                ],
+                [
+                    'ledger_type' => 1,
+                    'ledger_group' => 13,
+                    'ledger_name' => "Warehouse",
+                    'system_name' => "warehouse",
+                    'code' => "warehouse",
+                    'is_bank' => 1,
+                ],
                 
             ]);
         }
@@ -543,6 +559,30 @@ class AccountsDatabaseSeeder extends Seeder
                     'date' => now(),
                     'note' => null,
                     'account_id' => $lastAccountId + 16
+                ],
+                [
+                    'bank_name' => 'In Charge',
+                    'branch_name' => 'Office',
+                    'account_number' => 'in-charge',
+                    'slug' => 'in-charge',
+                    'created_by' => '1',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'date' => now(),
+                    'note' => null,
+                    'account_id' => $lastAccountId + 17
+                ],
+                [
+                    'bank_name' => 'Warehouse',
+                    'branch_name' => 'Office',
+                    'account_number' => 'warehouse',
+                    'slug' => 'warehouse',
+                    'created_by' => '1',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'date' => now(),
+                    'note' => null,
+                    'account_id' => $lastAccountId + 18
                 ],
             ]);
         }
