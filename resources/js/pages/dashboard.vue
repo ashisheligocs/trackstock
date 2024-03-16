@@ -723,7 +723,7 @@ export default {
   },
   created() {
     this.loading = true;
-    this.getRoomCategoryAvailability();
+    // this.getRoomCategoryAvailability();
     let currentDate = new Date();
     currentDate.setDate(currentDate.getDate() - 6); 
     this.generateLinechart(currentDate,new Date()) 
@@ -777,23 +777,23 @@ export default {
       if (this.$can("sales-vs-purchases")) {
         this.getMonthlySalesAndPurchases();
       }
-      this.getRoomCategoryAvailability();
+      // this.getRoomCategoryAvailability();
       // this.getData();
       this.loading = false;
     }
   },
   methods: {
-    async getRoomCategoryAvailability() {
+    // async getRoomCategoryAvailability() {
 
-      this.$store.state.operations.loading = true;
-      let hotel = '';
-      if (this.selectedHotel && this.selectedHotel !== 'all') {
-        hotel = this.selectedHotel
-      }
-      const { data } = await axios.get(window.location.origin + `/api/room-category-availability?hotel_id=${hotel}&check_in_date=${this.checkIndate}`);
-      this.rooms_availability = data;
-      this.$store.state.operations.loading = false;
-    },
+    //   this.$store.state.operations.loading = true;
+    //   let hotel = '';
+    //   if (this.selectedHotel && this.selectedHotel !== 'all') {
+    //     hotel = this.selectedHotel
+    //   }
+    //   const { data } = await axios.get(window.location.origin + `/api/room-category-availability?hotel_id=${hotel}&check_in_date=${this.checkIndate}`);
+    //   this.rooms_availability = data;
+    //   this.$store.state.operations.loading = false;
+    // },
     async generateLinechart(startDate, endDate) { 
       endDate.setDate(startDate.getDate() + 6); // Adding 7 days to the end date 
       const dayLabels = [];

@@ -20,7 +20,7 @@ class SelectedHotel implements Scope
     {
         $setting = GeneralSetting::where('key', 'selected_hotel')->first();
         if ($setting && $setting->value && $setting->value !== 'all') {
-            $builder->where('hotels.id', $setting->value);
+            $builder->where('shops.id', $setting->value);
         }
     }
 }

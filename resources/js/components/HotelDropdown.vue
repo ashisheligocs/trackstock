@@ -1,14 +1,14 @@
 <template>
-    <li v-if="hotels && hotels.length >= 1" class="nav-item dropdown">
+    <li v-if="shops && shops.length >= 1" class="nav-item dropdown">
         <a
                 class="nav-link dropdown-toggle"
                 href="#"
                 role="button"
-                :data-toggle="hotels && hotels.length === 1 ? '' : 'dropdown'"
+                :data-toggle="shops && shops.length === 1 ? '' : 'dropdown'"
                 aria-haspopup="true"
                 aria-expanded="false"
         >
-            {{ selectedHotel && selectedHotel === 'all' ? 'All' : (selectedHotel && Object.keys(selectedHotel).length > 0 ? selectedHotel.hotel_name : $t('common.select_hotel')) }}
+            {{ selectedHotel && selectedHotel === 'all' ? 'All' : (selectedHotel && Object.keys(selectedHotel).length > 0 ? selectedHotel.shop_name : $t('common.select_hotel')) }}
         </a>
         <div class="dropdown-menu dropdown-menu-sm">
             <a
@@ -19,14 +19,14 @@
                 All
             </a>
             <a
-                    v-for="(value, key) in hotels"
+                    v-for="(value, key) in shops"
                     :key="key"
                     class="dropdown-item"
                     :title="value[1]"
                     href="#"
                     @click.prevent="setHotel(value)"
             >
-                {{value.hotel_name}}
+                {{value.shope_name}}
             </a>
         </div>
     </li>
@@ -40,46 +40,47 @@
     export default {
         data() {
             return {
-                hotels: null,
+                shops: null,
             }
         },
         computed: {
-            ...mapGetters({ hotel: "operations/selectedHotel" }),
+            ...mapGetters({ shop: "operations/selectedHotel" }),
 
             selectedHotel() {
-                let hotel = this.hotel;
-                if (!hotel) hotel = Cookies.get('selectedHotel');
-                if (hotel && hotel === 'all') return 'all';
-                else if (hotel) {
-                    return this.hotels.filter(v => v.id == hotel)[0];
+                let shop = this.shop;
+                if (!shop) shop = Cookies.get('selectedHotel');
+                if (shop && shop === 'all') return 'all';
+                else if (shop) {
+                    return this.shops.filter(v => v.id == shop)[0];
                 } else return null;
             },
         },
         async created() {
-            await this.getHotels();
-            await this.setDefaultHotel();
+            await this.getShops();
+            await this.setDefaultShop();
         },
 
         methods: {
-            async getHotels() {
-                await axios.get('/api/hotel/list-all').then((response) => {
-                    this.hotels = response?.data?.data;
+            async getShops() {
+                await axios.get('/api/shop/list-all').then((response) => {
+                    this.shops = response?.data?.data;
                 });
             },
             setHotel(hotel) {
                 this.$store.dispatch("operations/setHotel", { hotel });
             },
-            async setDefaultHotel() {
+            async setDefaultShop() {
                 if (!Cookies.get('selectedHotel')) {
                     this.setHotel('all');
                 } else {
-                  await axios.get('/api/get-hotel').then((response) => {
+                  await axios.get('/api/get-shop').then((response) => {
                     this.setHotel(response.data)
                   });
                 }
-                if (this.hotels && this.hotels.length === 1) {
+                console.log('selected',this.shops);
+                if (this.shops && this.shops.length === 1) {
                   Cookies.remove('selectedHotel')
-                  this.setHotel(this.hotels[0])
+                  this.setHotel(this.shops[0])
               }
             },
         },

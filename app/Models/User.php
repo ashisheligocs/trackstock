@@ -8,7 +8,7 @@ use App\Traits\HasPermissions;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
@@ -133,9 +133,9 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return $this->belongsToMany(Role::class, 'user_role');
     }
 
-    public function hotels()
+    public function shops()
     {
-        return $this->belongsToMany(Hotel::class, 'user_hotel');
+        return $this->belongsToMany(Shop::class, 'user_shop');
     }
     /**
      * @return array

@@ -426,5 +426,5 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::get('oauth/{driver}/callback', [OAuthController::class, 'handleCallback'])->name('oauth.callback');
 });
 
-Route::get('get-hotel', [GeneralController::class, 'getSelectedHotel'])->name('get-hotel');
-Route::post('set-hotel', [GeneralController::class, 'setSelectedHotel'])->name('set-hotel');
+Route::get('get-shop', [GeneralController::class, 'getSelectedShop'])->name('get-shop');
+Route::post('set-shop', [GeneralController::class, 'setSelectedShop'])->name('set-shop');

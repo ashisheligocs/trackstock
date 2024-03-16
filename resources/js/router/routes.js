@@ -1148,36 +1148,6 @@ export default [
         component: page("errors/404.vue")
     },/***hotel routes  *****/
     {
-        path: "/shop-category",
-        name: "shop.category",
-        component: shopPath("shops/hotel_categories/index.vue"),
-    },
-    {
-        path: "/shop/create",
-        name: "shop.category.create",
-        component: shopPath("shops/hotel_categories/create.vue"),
-    },
-    {
-        path: "/shop-category/edit/:slug",
-        name: "shop.category.edit",
-        component: shopPath("shops/hotel_categories/edit.vue"),
-    },
-    {
-        path: "/facility",
-        name: "facility",
-        component: shopPath("shops/facility/index.vue"),
-    },
-    {
-        path: "/facility/create",
-        name: "facility.create",
-        component: shopPath("shops/facility/create.vue"),
-    },
-    {
-        path: "/facility/edit/:slug",
-        name: "facility.edit",
-        component: shopPath("shops/facility/edit.vue"),
-    },
-    {
         path: "/shops",
         name: "shops",
         component: shopPath("shops/index.vue"),

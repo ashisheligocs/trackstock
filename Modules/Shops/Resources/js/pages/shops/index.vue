@@ -5,17 +5,17 @@
         <!-- breadcrumbs end -->
         <div class="row">
             <div class="col-lg-12">
-                <div class="card" v-if="$can('shops-create') ||
-                    $can('shops-list') ||
-                    $can('shops-edit') ||
-                    $can('shops-delete')
+                <div class="card" v-if="$can('shop-create') ||
+                    $can('shop-list') ||
+                    $can('shop-edit') ||
+                    $can('shop-delete')
                     ">
                     <div class="card-header m-0">
                         <div class="row justify-content-between p-2">
                             <div class="col-6 col-xl-4 mb-2">
                                 <search v-model="query" @reset-pagination="resetPagination()" @reload="reload" />
                             </div>
-                            <div class="col-6 col-xl-4 text-right mb-2" v-if="$can('hotel-create')">
+                            <div class="col-6 col-xl-4 text-right mb-2" v-if="$can('shop-create')">
                                 <div class="btn-group c-w-100">
                                     <a @click="refreshTable()" href="#" v-tooltip="'Refresh'" class="btn btn-success">
                                         <i class="fas fa-sync"></i>
@@ -23,7 +23,7 @@
                                     <a href="/hotel/excel" v-tooltip="$t('common.export_table')" class="btn btn-dark ">
                                         <i class="fas fa-file-export"></i>
                                     </a>
-                                    <router-link :to="{ name: 'hotel.create' }" class="btn btn-primary">
+                                    <router-link :to="{ name: 'shop.create' }" class="btn btn-primary">
                                         {{ $t("common.create") }}
                                         <i class="fas fa-plus-circle d-none d-sm-inline-block" />
                                     </router-link>
@@ -41,14 +41,10 @@
                                     <tr>
                                         <th>{{ $t("common.s_no") }}</th>
                                         <th>{{ $t("common.image") }}</th>
-                                        <th>{{ $t("hotel.common.name") }}</th>
-                                        <th>{{ $t("hotel.common.hotel_email") }}</th>
+                                        <th>{{ $t("shop.common.name") }}</th>
+                                        <th>{{ $t("shop.common.hotel_email") }}</th>
                                         <th>{{ $t("common.phone") }}</th>
-                                        <th>{{ $t("hotel.common.total_no_of_rooms") }}</th>
-                                        <th v-if="$can('hotel-edit') ||
-                                            $can('hotel-view') ||
-                                            $can('hotel-delete')
-                                            " class="text-right no-print">
+                                        <th v-if="$can('shop-edit') || $can('shop-delete')" class="text-right no-print">
                                             {{ $t("common.action") }}
                                         </th>
                                     </tr>
@@ -65,29 +61,27 @@
                                             <span v-else>{{ i + 1 }}</span>
                                         </td>
                                         <td> <a v-if="data?.images" href="#" id="show-modal">
-                                                <img :src="'images/hotel/' + data?.image_path" class="rounded preview-sm"
+                                                <img :src="'images/shop/' + data?.image_path" class="rounded preview-sm"
                                                     loading="lazy" />
                                             </a>
                                             <div v-else class="bg-secondary rounded no-preview-sm">
                                                 <small>{{ $t("common.no_preview") }}</small>
                                             </div>
                                         </td>
-                                        <td>{{ data.hotel_name }}</td>
-                                        <td>{{ data.hotel_email }}</td>
+                                        <td>{{ data.shop_name }}</td>
+                                        <td>{{ data.shop_email }}</td>
                                         <td>{{ data.contact_phone }}</td>
-                                        <td>{{ data.total_no_of_rooms }}</td>
-                                        <td v-if="$can('hotel-edit') ||
-                                            $can('hotel-view') ||
-                                            $can('hotel-delete')
+                                        <td v-if="$can('shop-edit') ||
+                                            $can('shop-delete')
                                             " class="text-right no-print">
                                             <div class="btn-group">
-                                                <router-link v-if="$can('hotel-edit')" v-tooltip="$t('common.edit')" :to="{
-                                                    name: 'hotel.edit',
+                                                <router-link v-if="$can('shop-edit')" v-tooltip="$t('common.edit')" :to="{
+                                                    name: 'shop.edit',
                                                     params: { slug: data.id },
                                                 }" class="btn btn-info btn-sm">
                                                     <i class="fas fa-edit" />
                                                 </router-link>
-                                                <a v-if="$can('hotel-delete')" v-tooltip="$t('common.delete')" href="#"
+                                                <a v-if="$can('shop-delete')" v-tooltip="$t('common.delete')" href="#"
                                                     class="btn btn-danger btn-sm" @click="deleteData(data.id)">
                                                     <i class="fas fa-trash" />
                                                 </a>
@@ -104,7 +98,7 @@
                         </div>
                     </div>
                     <!-- /.card-body -->
-                    <div class="dtable-footer card-footer" v-if="shouldShowPerPageSelection">
+                    <div class="dtable-footer card-footer">
                         <div class="form-group row display-per-page">
                             <label>{{ $t("per_page") }} </label>
                             <div>
@@ -136,20 +130,20 @@ import { mapGetters } from "vuex";
 export default {
     // middleware: ["auth", "check-permissions"],
     metaInfo() {
-        return { title: this.$t("hotel.hotelAdd.index.page_title") };
+        return { title: this.$t("shop.shopAdd.index.page_title") };
     },
     components: {
         DateRangePicker,
     },
     data: () => ({
-        breadcrumbsCurrent: "hotel.hotelAdd.index.breadcrumbs_current",
+        breadcrumbsCurrent: "shop.shopAdd.index.breadcrumbs_current",
         breadcrumbs: [
             {
-                name: "hotel.hotelAdd.index.breadcrumbs_first",
+                name: "shop.shopAdd.index.breadcrumbs_first",
                 url: "home",
             },
             {
-                name: "hotel.hotelAdd.index.breadcrumbs_active",
+                name: "shop.shopAdd.index.breadcrumbs_active",
                 url: "",
             },
         ],
@@ -187,9 +181,6 @@ export default {
     computed: {
         ...mapGetters("operations", ["items", "loading", "pagination", "appInfo", "hotelCategoryItems", "selectedHotel"]),
 
-        shouldShowPerPageSelection() {
-            return this.hotelCategoryItems.length === 10;
-        },
     },
     watch: {
         // watch search data
@@ -240,7 +231,7 @@ export default {
         async getData() {
             this.$store.state.operations.loading = true;
             await this.$store.dispatch("operations/getHotelCategoryData", {
-                path: "/api/hotel?search=",
+                path: "/api/shop?search=",
                 search: this.query
             });
         },
@@ -284,7 +275,7 @@ export default {
                 if (result.value) {
                     this.$store
                         .dispatch("operations/hotelDeleteData", {
-                            path: "/api/hotel/delete/",
+                            path: "/api/shop/delete/",
                             slug: slug,
                         })
                         .then((response) => {
