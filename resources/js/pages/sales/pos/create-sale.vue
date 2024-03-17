@@ -48,7 +48,7 @@
                                             </div>
                                         </div>
                                         <div class="pos-box-content">
-                                            <p class="pos-box-text">{{ product.name }}  ({{product.inventoryCount}} In stock)</p>
+                                            <p class="pos-box-text">{{ product.name }}  ({{product.inventoryCount ?? 0      }} In stock)</p>
                                             <span class="text-bold text-lg">{{ product.regularPrice | withCurrency }}</span>
                                         </div>
                                     </div>
@@ -142,7 +142,7 @@
                                             </button>
                                         </td>
                                     </tr>
-                                </tbody>
+                                </tbody>    
                                 <tbody v-else>
                                     <tr class="text-center">
                                         <td colspan="5">{{ $t("no_data_found") }}</td>
@@ -720,6 +720,10 @@
                 console.log("do this");
             },
             openProductModal(product) {
+                if (product.inventoryCount >= 0){
+                    toast.fire({ type: "error", title: "Insuficient Stock" });
+                    return;
+                }
                 toast.fire({ type: "success", title: "Order Added Successfully" });
                 this.currentProduct = product;
                 console.log(product)
@@ -846,8 +850,7 @@
                     "/api/products?page=" +
                     currentPage
                     );
-                    
-                    alert(data)
+                     
                 this.taxRate = data.data?.length > 0 ? data.data[0].taxRate : 0;
                 this.products = data.data; 
                 this.pagination = data.meta;
