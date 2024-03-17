@@ -30,7 +30,7 @@
                                     <label for="hotel" class="d-block">{{ $t('sidebar.hotel') }}
                                         <span class="required">*</span></label>
                                     <v-select class="flex-grow-1" v-model="form.hotel_id" :options="hotelItems"
-                                        label="hotel_name" :class="{ 'is-invalid': form.errors.has('hotel_id') }"
+                                        label="shop_name" :class="{ 'is-invalid': form.errors.has('hotel_id') }"
                                         name="hotel_id" placeholder="Search a hotel" @input="getAccountsAndSupplier" />
                                     <has-error :form="form" field="hotel_id" />
                                 </div>
@@ -562,7 +562,7 @@ export default {
         },
         async getHotelDataList() {
             await this.$store.dispatch('operations/getHotelData', {
-                path: '/api/hotel',
+                path: '/api/shop',
             });
         },
         async getSuppliers() {
