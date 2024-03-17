@@ -7,7 +7,7 @@ use App\Models\Scopes\SelectedHotel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Scopes\selectedHotelResource;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 
 class PlutusEntries extends Model
 {
@@ -15,10 +15,10 @@ class PlutusEntries extends Model
 
     protected $table = 'plutus_entries';
     protected $primaryKey = 'id';
-    protected $fillable = ['id','hotel_id','date','note','amount'];
+    protected $fillable = ['id','shop_id','date','note','amount'];
 
-    public function hotel(){
-        return $this->belongsTo(Hotel::class);
+    public function shop(){
+        return $this->belongsTo(Shop::class);
     }
 
     public function balanceTransactions(){

@@ -61,9 +61,11 @@ class JournalEntryController extends Controller
     public function getJournalDetail($id){
         try {
 
-            $journalEntryDetails = JournalEntry::with('hotel', 'balanceTransactions.ledgerAccount.ledgerCategory')
+            $journalEntryDetails = JournalEntry::with('shop', 'balanceTransactions.ledgerAccount.ledgerCategory')
                 ->where('id', $id)->first();
             
+            // dd($journalEntryDetails);
+
             $setTableData = collect($journalEntryDetails->balanceTransactions)->map(function ($transaction) {
                 $isAssetOrExpense = $transaction->ledgerAccount->code === 'GST-INPUT' ||
                     in_array($transaction->ledgerAccount->ledger_type, [1, 5]);
@@ -93,17 +95,17 @@ class JournalEntryController extends Controller
     public function journalCreate(Request $request){
 
         $data = $request->input();
-        
+
         $this->validate($request, [
             'note' =>  'required|string|max:800|',
             'date' => 'required|date_format:Y-m-d',
-            'hotel_id' => 'nullable',
+            'shop_id' => 'nullable',
             'amount'=> 'required|numeric'
         ]);
 
         try {
                 $createJournal = JournalEntry::create([
-                    'hotel_id' => @$request->hotel_id['id'],
+                    'shop_id' => @$request->shop_id['id'],
                     'note' => $request->note,
                     'date' => $request->date,
                     'amount' => $request->amount,
@@ -113,8 +115,8 @@ class JournalEntryController extends Controller
             }
             $journalId = $createJournal->id;
 
-            $note = "Journal Entry for ".$request->hotel_id['hotel_name'] ;
-            $plutusId = $this->createPlutusEntry($request->hotel_id['id'],$note,now(),$request->amount);
+            $note = "Journal Entry for ".$request->shop_id['shop_name'] ;
+            $plutusId = $this->createPlutusEntry($request->shop_id['id'],$note,now(),$request->amount);
             
             /*Add New Transactions*/
             $createTransaction = $this->saveTransactionJournalEntry($data,$journalId,$plutusId);
@@ -132,7 +134,7 @@ class JournalEntryController extends Controller
         $this->validate($request, [
             'note' =>  'required|string|max:800|',
             'date' => 'required|date_format:Y-m-d',
-            'hotel_id' => 'nullable',
+            'shop_id' => 'nullable',
             'amount'=> 'required|numeric'
         ]);
 
@@ -140,7 +142,7 @@ class JournalEntryController extends Controller
 
             $journalEntry = JournalEntry::where('id', $journalId)->first();
                 $journalEntry->update([
-                    'hotel_id' => @$request->hotel_id['id'],
+                    'shop_id' => @$request->shop_id['id'],
                     'note' => $request->note,
                     'date' => $request->date,
                     'amount' => $request->amount,
@@ -155,8 +157,8 @@ class JournalEntryController extends Controller
         if($getPlutusId->plutus_entries_id !== NULL){
             $plutusId = $getPlutusId->plutus_entries_id;
         } else {
-            $note = "Journal Entry for ".$request->hotel_id['hotel_name'] ;
-            $plutusId = $this->createPlutusEntry($request->hotel_id['id'],$note,now(),$request->amount);
+            $note = "Journal Entry for ".$request->shop_id['shop_name'] ;
+            $plutusId = $this->createPlutusEntry($request->shop_id['id'],$note,now(),$request->amount);
         }
 
         /*Delete Old Transactions*/
@@ -215,7 +217,7 @@ class JournalEntryController extends Controller
                         'status' => 1,
                         'note' => $postData['tableData'][$i][3],
                         'journal_entry_id' => $journalId,
-                        'hotel_id' => $postData['hotel_id']['id'],
+                        'shop_id' => $postData['shop_id']['id'],
                         'account_id ' => $accountId,
                         'plutus_entries_id' => $plutusId
                     ]);
@@ -230,7 +232,7 @@ class JournalEntryController extends Controller
     protected function createPlutusEntry($hotelId, $note, $date, $amount)
     {
         $createPlutus = PlutusEntries::create([
-            'hotel_id' => $hotelId,
+            'shop_id' => $hotelId,
             'note' => $note,
             'date' => $date,
             'amount' => $amount,

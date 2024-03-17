@@ -30,10 +30,10 @@
                     <span class="required">*</span></label>
                   <v-select
                     class="flex-grow-1"
-                    v-model="form.hotel_id"
+                    v-model="form.shop_id"
                     :options="hotelItems"
-                    label="hotel_name"
-                    name="hotel_id"
+                    label="shop_name"
+                    name="shop_id"
                     placeholder="Search a hotel"
                   />
                 </div>
@@ -129,7 +129,7 @@
         date: new Date().toISOString().slice(0, 10),
         id: '',
         note: '',
-        hotel_id: null,
+        shop_id: null,
         amount:0,
         tableData : []
       }),
@@ -267,7 +267,7 @@
       if (this.selectedHotel && this.selectedHotel !== 'all') {
           this.hotelItems.forEach((hotel) => {
               if (hotel.id == this.selectedHotel) {
-                this.form.hotel_id = hotel;
+                this.form.shop_id = hotel;
               }
           })
       }
@@ -290,7 +290,7 @@
 
       async getHotelDataList () {
         await this.$store.dispatch('operations/getHotelData', {
-          path: '/api/hotel',
+          path: '/api/shop',
         });
       },
 
@@ -300,8 +300,8 @@
         const { data } = await this.form.get(
           window.location.origin + '/api/account/journal/transaction/' + this.$route.params.slug
         )
-        
-        this.form.hotel_id = data.journaldData.hotel;
+        // console.log('journalEntry',data.data)
+        this.form.shop_id = data.journaldData.shop;
         this.form.date = data.journaldData.date;
         this.form.note = data.journaldData.note;
         this.form.id = data.journaldData.id;

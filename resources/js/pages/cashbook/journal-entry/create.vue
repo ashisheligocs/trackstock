@@ -30,10 +30,10 @@
                     <span class="required">*</span></label>
                   <v-select
                     class="flex-grow-1"
-                    v-model="form.hotel_id"
+                    v-model="form.shop_id"
                     :options="hotelItems"
-                    label="hotel_name"
-                    name="hotel_id"
+                    label="shop_name"
+                    name="shop_id"
                     placeholder="Search a hotel"
                   />
                 </div>
@@ -128,7 +128,7 @@
       form: new Form({
         date: new Date().toISOString().slice(0, 10),
         note: '',
-        hotel_id: null,
+        shop_id: null,
         amount:0,
         tableData : []
       }),
@@ -263,7 +263,7 @@
       if (this.selectedHotel && this.selectedHotel !== 'all') {
           this.hotelItems.forEach((hotel) => {
               if (hotel.id == this.selectedHotel) {
-                this.form.hotel_id = hotel;
+                this.form.shop_id = hotel;
               }
           })
       }
@@ -285,7 +285,7 @@
 
       async getHotelDataList () {
         await this.$store.dispatch('operations/getHotelData', {
-          path: '/api/hotel',
+          path: '/api/shop',
         });
       },
       async saveJournalEntry () {
