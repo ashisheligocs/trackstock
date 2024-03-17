@@ -60,7 +60,7 @@
                       <thead>
                         <tr>
                           <th>{{ $t("common.date") }}</th>
-                          <th>{{ $t("sidebar.hotel") }}</th>
+                          <th>{{ $t("sidebar.shops") }}</th>
                           <th>{{ $t("common.description") }}</th>
                           <th class="text-right">{{ $t("common.debit") }}</th>
                           <th class="text-right">{{ $t("common.credit") }}</th>
@@ -71,7 +71,7 @@
                         <template v-show="newtransactiondata.length" v-for="(plutus, i) in newtransactiondata">
                           <tr v-for="(entry, index) in plutus.items" :key="index + entry.date">
                             <td>{{ entry.date | moment("DD-MM-YYYY") }}</td>
-                            <td>{{ entry?.hotel }}</td>
+                            <td>{{ entry?.shop }}</td>
                             <td class="pl-4">
                               <router-link v-if="$can('client-view')" :to="{
                                 name: 'accounts.show',
@@ -157,7 +157,7 @@
                           <tr>
                             <th>{{ $t("common.s_no") }}</th>
                             <th>{{ $t("common.date") }}</th>
-                            <th>{{ $t("sidebar.hotel") }}</th>
+                            <th>{{ $t("sidebar.shops") }}</th>
                             <th>{{ $t("common.account") }}</th>
                             <th>{{ $t("common.reason") }}</th>
                             <th>{{ $t("common.type") }}</th>
@@ -184,8 +184,8 @@
                               }}</span>
                             </td>
                             <td>
-                              <span v-if="data?.hotel?.hotel_name">{{
-                                data?.hotel?.hotel_name
+                              <span v-if="data?.shop?.shop_name">{{
+                                data?.shop?.shop_name
                               }}</span>
                             </td>
                             <td v-if="data.account">{{ data.account.ledgerName }}</td>

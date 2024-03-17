@@ -21,7 +21,7 @@ class TransactionController extends Controller
     public function allTransactions(Request $request)
     {
         $transactions = AccountTransaction::with('cashbookAccount', 'user')->whereBetween('transaction_date', [$request->startDate, $request->endDate])->latest()->paginate($request->perPage);
-
+        // dd($transactions);
         return AccountTransactionResource::collection($transactions);
     }
 
@@ -42,7 +42,7 @@ class TransactionController extends Controller
 
         $perPage = ($request->perPage == 'all') ? PHP_INT_MAX : $request->perPage;
         $plutusEntryDetails = PlutusEntries::with(
-            'hotel',
+            'shop',
             'balanceTransactions.ledgerAccount.ledgerCategory',
             'balanceTransactions.ledgerAccount.ledger',
             'balanceTransactions.user'
@@ -65,7 +65,7 @@ class TransactionController extends Controller
                         'ledger_type' => $transaction->ledgerAccount->ledger->name,
                         'ledger_name' => $transaction->ledgerAccount->ledger_name,
                         'slug' => $transaction->ledgerAccount->system_name,
-                        'hotel' => $transaction->hotel->hotel_name,
+                        'shop' => $transaction->shop->shop_name,
                         'debit' => ($type == 0) ? $transaction->amount : 0,
                         'credit' => ($type == 1) ? $transaction->amount : 0,
                         'date' => $transaction->transaction_date,
