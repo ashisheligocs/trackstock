@@ -172,11 +172,11 @@ class AccountController extends Controller
      */
     public function allAccounts(Request $request)
     {
-        $hotelId = $request->hotel_id ?? null;
+        $shopId = $request->shop_id ?? null;
         $accounts = Account::where('status', 1)
-            ->with(['balanceTransactions' => function ($query) use ($hotelId) {
-                if ($hotelId) {
-                    $query->shop($hotelId);
+            ->with(['balanceTransactions' => function ($query) use ($shopId) {
+                if ($shopId) {
+                    $query->shop($shopId);
                 }
             }])
             ->whereHas('ledgerAccount', function ($query) {

@@ -20,15 +20,15 @@
             <div class="card-body">
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="hotel" class="d-block">{{ $t('sidebar.hotel') }}
+                  <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                     <span class="required">*</span></label>
                   <v-select
                     class="flex-grow-1"
                     v-model="selectedHotelId"
                     :options="hotelItems"
-                    label="hotel_name"
-                    name="hotel_id"
-                    placeholder="Search a hotel"
+                    label="shop_name"
+                    name="shop_id"
+                    placeholder="Search a Shop"
                     @input="getAccoutns"
                   />
                 </div>
@@ -160,7 +160,7 @@ export default {
       date: new Date().toISOString().slice(0, 10),
       note: '',
       status: 1,
-      hotel_id: '',
+      shop_id: '',
     }),
     selectedHotelId: null,
     loading: true,
@@ -197,13 +197,13 @@ export default {
   methods: {
     async getHotelDataList () {
       await this.$store.dispatch('operations/getHotelData', {
-        path: '/api/hotel',
+        path: '/api/shop',
       });
     },
     // get all accounts
     async getAccoutns() {
       await this.$store.dispatch('operations/allData', {
-        path: (typeof this.selectedHotelId?.id === 'undefined') ? '/api/all-accounts' : '/api/all-accounts?hotel_id='+this.selectedHotelId?.id,
+        path: (typeof this.selectedHotelId?.id === 'undefined') ? '/api/all-accounts' : '/api/all-accounts?shop_id='+this.selectedHotelId?.id,
       })
       // assign default account
       if (this.items && this.items.length > 0) {
@@ -222,7 +222,7 @@ export default {
     // save transfer
     async saveTransfer() {
       if (!this.selectedHotelId) toast.fire({ type: 'error', title: 'Please select hotel' })
-      this.form.hotel_id = this.selectedHotelId?.id;
+      this.form.shop_id = this.selectedHotelId?.id;
       await this.form
         .post(window.location.origin + '/api/balance-transfers')
         .then(() => {

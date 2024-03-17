@@ -20,13 +20,13 @@
             <div class="card-body">
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="hotel" class="d-block">{{ $t('sidebar.hotel') }}
+                  <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                     <span class="required">*</span></label>
                   <v-select
                     class="flex-grow-1"
                     v-model="selectedHotelId"
                     :options="hotelItems"
-                    label="hotel_name"
+                    label="shop_name"
                     name="hotel_id"
                     placeholder="Search a hotel"
                     disabled
@@ -161,7 +161,7 @@ export default {
       date: new Date().toISOString().slice(0, 10),
       note: '',
       status: 1,
-      hotel_id: null,
+      shop_id: null,
     }),
     selectedHotelId: null,
     loading: true,
@@ -198,14 +198,14 @@ export default {
   methods: {
     async getHotelDataList () {
       await this.$store.dispatch('operations/getHotelData', {
-        path: '/api/hotel',
+        path: '/api/shop',
       });
     },
     // get all accounts
     async getAccoutns(hotelId = '') {
 
       await this.$store.dispatch('operations/allData', {
-        path: (hotelId == '') ? '/api/all-accounts' : '/api/all-accounts?hotel_id='+hotelId,
+        path: (hotelId == '') ? '/api/all-accounts' : '/api/all-accounts?shop_id='+hotelId,
       })
 
       if (this.items && this.items.length > 0 && hotelId != "") {
@@ -231,7 +231,7 @@ export default {
       this.form.date = data.data.date
       this.form.note = data.data.note
       this.form.status = data.data.status
-      this.selectedHotelId = data.data.hotel
+      this.selectedHotelId = data.data.shop
     },
 
     // update available balance
@@ -243,7 +243,7 @@ export default {
     // update transfer
     async updateTransfer() {
       if (!this.selectedHotelId) toast.fire({ type: 'error', title: 'Please select hotel' })
-      this.form.hotel_id = this.selectedHotelId?.id;
+      this.form.shop_id = this.selectedHotelId?.id;
       await this.form
         .patch(
           window.location.origin +

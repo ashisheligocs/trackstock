@@ -27,7 +27,7 @@ class BalanceTransferResource extends JsonResource
             'note' => $this->note,
             'status' => (int) $this->status,
             'createdBy' => $this->user->name,
-            'hotel' => $this->hotel
+            'shop' => $this->shop
         ];
     }
 }

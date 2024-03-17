@@ -128,7 +128,7 @@
               <p>{{ $t('sidebar.ledger_account') }}</p>
             </router-link>
           </li>
-          <!-- <li v-if="$can('account-transfer-balance-list') ||
+          <li v-if="$can('account-transfer-balance-list') ||
       $can('account-transfer-balance-create') ||
       $can('account-transfer-balance-edit') ||
       $can('account-transfer-balance-view') ||
@@ -138,7 +138,7 @@
               <i class="fas fa-exchange-alt nav-icon" />
               <p>{{ $t("sidebar.balance_transfers") }}</p>
             </router-link>
-          </li> -->
+          </li>
           <li v-if="$can('transaction-history')" class="nav-item">
             <router-link :to="{ name: 'transactions.index' }" class="nav-link">
               <i class="fas fa-history nav-icon" />
