@@ -20,15 +20,15 @@
             <div class="card-body">
               <div class="row">
                 <div class="form-group col-md-12 col-xl-4">
-                  <label for="hotel" class="d-block">{{ $t('sidebar.hotel') }}
+                  <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                     <span class="required">*</span></label>
                   <v-select
                     class="flex-grow-1"
                     v-model="chosenHotel"
                     :options="hotelItems"
-                    label="hotel_name"
+                    label="shop_name"
                     name="hotel_id"
-                    placeholder="Search a hotel"
+                    placeholder="Search a Shop"
                   />
                 </div>
                 <div class="form-group col-md-4">
@@ -357,7 +357,7 @@ export default {
 
     async getHotelDataList () {
       await this.$store.dispatch('operations/getHotelData', {
-        path: '/api/hotel',
+        path: '/api/shop',
       });
     },
 
@@ -392,8 +392,8 @@ export default {
       this.form.email = data.data.email
       this.form.role = data.data.role
       this.form.back_days = data.data.back_days
-      this.selectedHotels = data.data.hotels
-      this.chosenHotel = data.data.hotel
+      this.selectedHotels = data.data.shops
+      this.chosenHotel = data.data.shop
       this.url = data.data.image
     },
 
