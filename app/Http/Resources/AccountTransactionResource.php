@@ -38,6 +38,7 @@ class AccountTransactionResource extends JsonResource
             'prevTotal' => $request->total,
             'isAsset' => $this->asset,
             'hotel' => $this->hotel,
+            'shop' => $this->shop,
             'isExpense' => $this->expense,
             // 'customer_name'=> @$this->booking ? (@$this->booking->Source ? $this->booking->Source->name : (@$this->booking->Customer ? $this->booking->Customer->name : '')) : '',
             // 'customer_slug'=> @$this->booking ? (@$this->booking->Source ? $this->booking->Source->slug : (@$this->booking->Customer ? $this->booking->Customer->slug : '')) : '',
