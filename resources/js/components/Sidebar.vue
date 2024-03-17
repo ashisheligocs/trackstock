@@ -145,12 +145,12 @@
               <p>{{ $t("sidebar.transaction_history") }}</p>
             </router-link>
           </li>
-          <!-- <li class="nav-item" v-if="$can('journal-entry-list')">
+          <li class="nav-item" v-if="$can('journal-entry-list')">
             <router-link :to="{ name: 'journalEntry.index' }" class="nav-link">
               <i class="fas fa-book nav-icon" />
               <p>{{ $t("sidebar.journal_entry") }}</p>
             </router-link>
-          </li> -->
+          </li>
 
           <!--------------------------Inventory---------------------------------->
           <li v-if="$can('adjustment-create') ||
