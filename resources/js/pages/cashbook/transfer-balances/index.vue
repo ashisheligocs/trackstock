@@ -96,7 +96,7 @@
                   <tr>
                     <th>{{ $t("common.s_no") }}</th>
                     <th>{{ $t("common.date") }}</th>
-                    <th>Hotel</th>
+                    <th>Shop</th>
                     <!-- <th>{{ $t("common.reason") }}</th> -->
                     <th>{{ $t("cashbook.common.from_account") }}</th>
                     <th>{{ $t("cashbook.common.to_account") }}</th>
@@ -131,7 +131,7 @@
                       }}</span>
                     </td>
                     <td>
-                      {{data.hotel?.hotel_name}}
+                      {{data.shop?.shop_name}}
                     </td>
                     <!-- <td>
                       <router-link

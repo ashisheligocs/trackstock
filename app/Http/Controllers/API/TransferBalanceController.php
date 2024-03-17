@@ -8,6 +8,7 @@ use App\Models\BalanceTansfer;
 use App\Models\AccountTransaction;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BalanceTransferResource;
+use Modules\Accounts\Entities\PlutusEntries;
 
 class TransferBalanceController extends Controller
 {
@@ -39,6 +40,7 @@ class TransferBalanceController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->input());
         // validate request
         $this->validate($request, [
             'transferReason' => 'required|string|max:255',
@@ -47,14 +49,21 @@ class TransferBalanceController extends Controller
             'amount' => 'required|numeric|min:1|max:'.$request->availableBalance,
             'date' => 'nullable|date_format:Y-m-d',
             'note' => 'nullable|string|max:255',
-            'hotel_id' => 'required'
+            'shop_id' => 'required'
         ]);
 
         try {
             // get logged in user id
             $userId = auth()->user()->id;
 
+            $toAccountNumber = $request->toAccount['accountNumber'];
             $fromAccountNumber = $request->fromAccount['accountNumber'];
+
+            $note = "Balance transfer to [$toAccountNumber] by ".auth()->user()->name;
+            $plutusId = $this->createPlutusEntry($request->shop_id,$note,now(),$request->amount);
+
+            
+            
             $debitReason = "Balance transfer from [$fromAccountNumber]";
             // store debit transaction
             $debitTransaction = AccountTransaction::create([
@@ -65,10 +74,11 @@ class TransferBalanceController extends Controller
                 'transaction_date' => $request->date,
                 'created_by' => $userId,
                 'status' => $request->status,
-                'hotel_id' => $request->hotel_id
+                'shop_id' => $request->shop_id,
+                'plutus_entries_id' => $plutusId
             ]);
 
-            $toAccountNumber = $request->toAccount['accountNumber'];
+            
             $creditReason = "Balance transfer to [$toAccountNumber]";
             // store credit transaction
             $creditTransaction = AccountTransaction::create([
@@ -79,7 +89,8 @@ class TransferBalanceController extends Controller
                 'transaction_date' => $request->date,
                 'created_by' => $userId,
                 'status' => $request->status,
-                'hotel_id' => $request->hotel_id
+                'shop_id' => $request->shop_id,
+                'plutus_entries_id' => $plutusId
             ]);
 
             // create transfer
@@ -92,7 +103,7 @@ class TransferBalanceController extends Controller
                 'note' => clean($request->note),
                 'status' => $request->status,
                 'created_by' => $userId,
-                'hotel_id' => $request->hotel_id
+                'shop_id' => $request->shop_id
             ]);
 
             return $this->responseWithSuccess('Transfer added successfully');
@@ -237,4 +248,17 @@ class TransferBalanceController extends Controller
 
         return BalanceTransferResource::collection($query->latest()->paginate($request->perPage));
     }
+
+     /*Manage Plutus Entry*/
+     protected function createPlutusEntry($hotelId, $note, $date, $amount)
+     {
+         $createPlutus = PlutusEntries::create([
+             'shop_id' => $hotelId,
+             'note' => $note,
+             'date' => $date,
+             'amount' => $amount,
+         ]);
+         
+         return $createPlutus->id;
+     }
 }

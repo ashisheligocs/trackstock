@@ -47,7 +47,6 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->input());
         // validate request
         $this->validate($request, [
             'employeeName' => 'required|string|max:255',

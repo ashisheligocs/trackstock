@@ -38,8 +38,8 @@ class EmployeeResource extends JsonResource
             'role' => isset($this->user_id) ? $this->user->roles[0] : '',
             'status' => (int) $this->status,
             'image' => $this->image_path ? asset('/images/employees/'.$this->image_path) : '',
-            'hotels' => $this->hotels(),
-            'hotel' => $this->hotel,
+            'shops' => $this->shops(),
+            'shop' => $this->shop,
             'back_days' => $this->user->back_days,
         ];
     }

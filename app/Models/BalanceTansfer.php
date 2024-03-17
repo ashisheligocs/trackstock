@@ -6,7 +6,7 @@ use App\Models\Scopes\selectedHotelResource;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 
 class BalanceTansfer extends Model
 {
@@ -18,7 +18,7 @@ class BalanceTansfer extends Model
      * @var array
      */
     protected $fillable = [
-        'reason', 'slug', 'debit_id', 'credit_id', 'amount', 'date', 'note', 'status', 'created_by', 'hotel_id'
+        'reason', 'slug', 'debit_id', 'credit_id', 'amount', 'date', 'note', 'status', 'created_by', 'shop_id'
     ];
 
     /**
@@ -35,9 +35,9 @@ class BalanceTansfer extends Model
         ];
     }
 
-    public function hotel()
+    public function shop()
     {
-        return $this->belongsTo(Hotel::class);
+        return $this->belongsTo(Shop::class);
     }
 
     /**

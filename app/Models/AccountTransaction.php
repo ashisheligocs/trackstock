@@ -147,8 +147,8 @@ class AccountTransaction extends Model
         return @$this->cashbookAccount->ledgerAccount->ledger->id == 5 ? 1 : 0;
     }
 
-    public function scopeHotel($query, $hotelId){
-        return $query->where('shop_id', $hotelId)->orWhereNull('shop_id');
+    public function scopeShop($query, $shopId){
+        return $query->where('shop_id', $shopId)->orWhereNull('shop_id');
     }
 
     protected static function boot()
