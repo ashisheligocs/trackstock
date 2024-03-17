@@ -22,14 +22,14 @@
                                         <span class="required">*</span></label>
                                     <v-select
                                             class="flex-grow-1"
-                                            v-model="form.hotel_id"
+                                            v-model="form.shop_id"
                                             :options="hotelItems"
-                                            label="hotel_name"
-                                            :class="{ 'is-invalid': form.errors.has('hotel_id') }"
-                                            name="hotel_id"
+                                            label="shop_name"
+                                            :class="{ 'is-invalid': form.errors.has('shop_id') }"
+                                            name="shop_id"
                                             placeholder="Search a hotel"
                                     />
-                                    <has-error :form="form" field="hotel_id"/>
+                                    <has-error :form="form" field="shop_id"/>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="name">{{ $t('common.name') }}
@@ -152,7 +152,7 @@
                 address: '',
                 image: '',
                 status: 1,
-                hotel_id: ''
+                shop_id: ''
             }),
             url: null,
             loading: true,
@@ -171,7 +171,7 @@
         methods: {
             async getHotelDataList () {
                 await this.$store.dispatch('operations/getHotelData', {
-                    path: '/api/hotel',
+                    path: '/api/shop',
                 });
             },
             // get supplier
@@ -186,7 +186,7 @@
                 this.form.address = data.data.address
                 this.form.status = data.data.status
                 this.url = data.data.image
-                this.form.hotel_id = data.data.hotel
+                this.form.shop_id = data.data.shop
             },
 
             // vue file upload

@@ -55,7 +55,7 @@
                       <i class="fas fa-sign-in-alt"></i>
                     </div> -->
                       <h3>
-                        <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} 
+                        <span>{{ inr }}</span> {{ dashboardSummery.cashbook }}
                       </h3>
                       <p>
                         {{ $t("dashboard.summery_items.cashbook") }}
@@ -367,7 +367,7 @@
           : 'col-lg-12'
           ">
           <RecentActivities />
-         
+
         </div> -->
       </div>
 
@@ -477,7 +477,7 @@
               Room Summary
             </h3>
             <div class="card-tools">
-              
+
               <input id="date" v-model="checkIndate" type="date" class="form-control" name="date" @input="getRoomCategoryAvailability"/>
             </div>
           </div>
@@ -511,7 +511,7 @@
                     </tbody>
                   </table>
                   </div>
-                  
+
                 </div>
           </div>
         </div>
@@ -519,7 +519,7 @@
 
       <!-- table for occupancy -->
 
-    </div> 
+    </div>
 </template>
 
 <script>
@@ -529,7 +529,7 @@ import axios from "axios";
 import { use } from "echarts/core";
 import "echarts/lib/component/grid";
 import { BarChart, LineChart, PieChart } from "echarts/charts";
-import VChart, { THEME_KEY } from "vue-echarts";
+// import VChart, { THEME_KEY } from "vue-echarts";
 import { CanvasRenderer } from "echarts/renderers";
 import moment from "moment";
 import { LegendComponent, TitleComponent, TooltipComponent, } from "echarts/components";
@@ -725,9 +725,9 @@ export default {
     this.loading = true;
     // this.getRoomCategoryAvailability();
     let currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() - 6); 
-    this.generateLinechart(currentDate,new Date()) 
-    this.generateBarchart(currentDate,new Date()) 
+    currentDate.setDate(currentDate.getDate() - 6);
+    this.generateLinechart(currentDate,new Date())
+    this.generateBarchart(currentDate,new Date())
     // this.getData();
     // this.getD();
 
@@ -736,7 +736,7 @@ export default {
     // this.roomCategories = rooms.map(val => val.room_category)
     // this.roomCategories = [...new Map(this.roomCategories.map(item => [item['id'], item])).values()];
 
-    this.inr = this.appInfo.currency.symbol; 
+    this.inr = this.appInfo.currency.symbol;
     if (this.$can("account-summery")) {
       this.getSummery();
     }
@@ -794,17 +794,17 @@ export default {
     //   this.rooms_availability = data;
     //   this.$store.state.operations.loading = false;
     // },
-    async generateLinechart(startDate, endDate) { 
-      endDate.setDate(startDate.getDate() + 6); // Adding 7 days to the end date 
+    async generateLinechart(startDate, endDate) {
+      endDate.setDate(startDate.getDate() + 6); // Adding 7 days to the end date
       const dayLabels = [];
-      const oneDay = 24 * 60 * 60 * 1000; 
+      const oneDay = 24 * 60 * 60 * 1000;
       for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
         const formattedDate = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
         dayLabels.push(formattedDate);
-      } 
-      if(dayLabels){ 
+      }
+      if(dayLabels){
         this.chartOptions = {
-            chart: { 
+            chart: {
               type: 'area'
             },
             dataLabels: {
@@ -814,58 +814,58 @@ export default {
               curve: 'smooth'
             },
             xaxis: {
-              type: 'category',  
-              categories: dayLabels 
-            }, 
-            colors: ['#ff6262', '#6be96b'], 
+              type: 'category',
+              categories: dayLabels
+            },
+            colors: ['#ff6262', '#6be96b'],
           }
         }
         this.series = [];
-        axios.post(window.location.origin + `/api/getDaywiseRevenue`,{startDate:startDate,endDate:endDate}).then(response => { 
+        axios.post(window.location.origin + `/api/getDaywiseRevenue`,{startDate:startDate,endDate:endDate}).then(response => {
           this.series.push({
             name: response.data.total_rev > 0 ? 'Total Revenue (₹'+response.data.total_rev+')':'',
-            data: response.data.data, 
+            data: response.data.data,
             color:'#6be96b'
-          });  
-        }); 
-        axios.post(window.location.origin + `/api/getDaywiseExpenses`,{startDate:startDate,endDate:endDate}).then(response => {  
+          });
+        });
+        axios.post(window.location.origin + `/api/getDaywiseExpenses`,{startDate:startDate,endDate:endDate}).then(response => {
           this.series.push({
             name: response.data.total_exp > 0 ? 'Total Expenses (₹'+response.data.total_exp+')':'',
-            data: response.data.data, 
+            data: response.data.data,
             color:'#ff6262'
           });
         });
     },
-    async generateBarchart(startDate, endDate) { 
-      endDate.setDate(startDate.getDate() + 6); // Adding 7 days to the end date 
+    async generateBarchart(startDate, endDate) {
+      endDate.setDate(startDate.getDate() + 6); // Adding 7 days to the end date
       const dayLabels = [];
-      const oneDay = 24 * 60 * 60 * 1000; 
+      const oneDay = 24 * 60 * 60 * 1000;
       for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
         const formattedDate = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
         dayLabels.push(formattedDate);
-      } 
-      if(dayLabels){ 
-        this.chartOptions1 = { 
+      }
+      if(dayLabels){
+        this.chartOptions1 = {
           chart: {
             height: 350,
             type: 'line',
           },
           stroke: {
             width: [0, 4]
-          }, 
+          },
           dataLabels: {
             enabled: true,
             enabledOnSeries: [1]
           },
           xaxis: {
-            type: 'category',  
-            categories: dayLabels 
-          },  
+            type: 'category',
+            categories: dayLabels
+          },
           yaxis: [{
             title: {
               text: 'Purchase',
             },
-          
+
           }, {
             opposite: true,
             title: {
@@ -882,27 +882,27 @@ export default {
           //   name: 'Social Media',
           //   type: 'line',
           //   data: [23, 42, 35, 27, 43, 22, 17, 31, 22, 22, 12, 16]
-          // }]; 
+          // }];
 
-        axios.post(window.location.origin + `/api/getDaywiseSales`,{startDate:startDate,endDate:endDate}).then(response => {  
+        axios.post(window.location.origin + `/api/getDaywiseSales`,{startDate:startDate,endDate:endDate}).then(response => {
           this.series1.push({
             name: response.data.total_sale > 0 ? 'Total Sales (₹'+response.data.total_sale+')':'',
-            data: response.data.data, 
+            data: response.data.data,
             // color:'#059905',
             type: 'column',
           });
         });
-        axios.post(window.location.origin + `/api/getDaywisePurchases`,{startDate:startDate,endDate:endDate}).then(response => { 
+        axios.post(window.location.origin + `/api/getDaywisePurchases`,{startDate:startDate,endDate:endDate}).then(response => {
           this.series1.push({
             name: response.data.total_purchase > 0 ? 'Total Purchase (₹'+response.data.total_purchase+')':'',
-            data: response.data.data, 
+            data: response.data.data,
             // color:'#ff6262',
             type: 'line',
-          });  
-        }); 
+          });
+        });
       }
     },
-    // room status data getting for table......... 
+    // room status data getting for table.........
     // async updateValues() {
     //     this.filterDate = moment(this.date?.startDate).format("YYYY-MM-DD");
     //     await this.getRooms();

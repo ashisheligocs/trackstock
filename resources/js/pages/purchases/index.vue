@@ -59,7 +59,7 @@
                 <thead>
                   <tr>
                     <th>{{ $t("common.s_no") }}</th>
-                    <th>Hotel</th>
+                    <th>Shop</th>
                     <th>{{ $t("purchases.list.common.purchase_no") }}</th>
                     <th>{{ $t("common.date") }}</th>
                     <th>{{ $t("common.supplier") }}</th>
@@ -90,7 +90,7 @@
                       <span v-else>{{ i + 1 }}</span>
                     </td>
                     <td>
-                      {{ data.hotel?.hotel_name }}
+                      {{ data.shop?.shop_name }}
                     </td>
                     <td>
                       <router-link v-if="$can('purchase-view')" :to="{

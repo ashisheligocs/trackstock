@@ -34,7 +34,7 @@ class SupplierResource extends JsonResource
             'nonPurchaseTotalDue' => $this->nonPurchaseTotalDue(),
             'nonPurchasePaid' => $this->nonPurchasePaid(),
             'nonPurchaseCurrentDue' => $this->nonPurchaseCurrentDue(),
-            'hotel' => $this->hotel
+            'shop' => $this->shop
         ];
     }
 }

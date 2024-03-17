@@ -74,12 +74,21 @@
             <div class="col-12 col-md-5">
                 <div class="card">
                     <div class="card-body-l p-0">
-                        <div class="form-group pl-3 pt-3 pr-3">
+                        <div class="form-group pl-3 pt-3 pr-3 d-none">
                             <div class="d-flex w-100">
-                                <Multiselect v-model="form.client" :options="clients" :taggable="false" :show-labels="false"
+                                <!-- <Multiselect v-model="form.client" :options="clients" :taggable="false" :show-labels="false"
                                     tag-placeholder="" :placeholder="$t('common.client_placeholder')" class="form-control"
                                     @select="form.room = null" :custom-label="({ name, phone }) => `${name} (${phone})`"
-                                    label="name" track-by="id" style="min-width: 85%"></Multiselect>
+                                    label="name" track-by="id" style="min-width: 85%"></Multiselect> -->
+                                    <v-select
+                    v-model="form.client"
+                    :options="clients"
+                    label="name"
+                    :class="{ 'is-invalid': form.errors.has('client') }"
+                    name="client"
+                    :placeholder="$t('common.client_placeholder')"
+                  />
+                  <has-error :form="form" field="client" />
                                 <ClientCreateModal @reloadClients="getClients">
                                     <div class="input-group-text create-btn">
                                         <i class="fas fa-solid fa-plus-circle"></i>
@@ -142,7 +151,7 @@
                                             </button>
                                         </td>
                                     </tr>
-                                </tbody>    
+                                </tbody>
                                 <tbody v-else>
                                     <tr class="text-center">
                                         <td colspan="5">{{ $t("no_data_found") }}</td>
@@ -496,7 +505,7 @@
                 hotel_id: '',
                 search: '',
                 invoice_id: "",
-                client: "",
+                client: "Walking Customer",
                 discount: null,
                 discountType: null,
                 category: "",
@@ -597,7 +606,7 @@
                     price = this.foodItemSubTotal;
                     console.log(price);
                 }
-                
+
                 return parseFloat(price)*parseFloat(this.taxRate)/100;
                 console.log(this.taxRate);
             },
@@ -610,7 +619,7 @@
                     price = this.foodItemSubTotal;
                     return price - this.foodItemDiscount + this.foodItemTax;
                 }
-                
+
             },
             foodItemFinalSubtotal() {
                 let price = 0;
@@ -625,9 +634,9 @@
             }
         },
         async created() {
-            
+
             await this.getHotelDataList();
-            
+
             if (this.selectedHotel && this.selectedHotel !== 'all') {
                 this.hotelItems.forEach((hotel) => {
                     if (hotel.id == this.selectedHotel) this.hotel = hotel
@@ -677,13 +686,13 @@
         //     else this.setTaxExclusivePrice();
         //   },
           setTaxInclusivePrice() {
-            
-            let finalPrice = this.inclusiveTaxAmount(this.foodItemSubTotal,this.taxRate) 
+
+            let finalPrice = this.inclusiveTaxAmount(this.foodItemSubTotal,this.taxRate)
             return finalPrice;
           },
           setTaxExclusivePrice() {
-            
-            let finalPrice = this.exclusiveTaxAmount(this.foodItemSubTotal,this.taxRate) 
+
+            let finalPrice = this.exclusiveTaxAmount(this.foodItemSubTotal,this.taxRate)
             return finalPrice;
           },
 
@@ -720,6 +729,7 @@
                 console.log("do this");
             },
             openProductModal(product) {
+              console.log(product.inventoryCount);
                 if (product.inventoryCount >= 0){
                     toast.fire({ type: "error", title: "Insuficient Stock" });
                     return;
@@ -743,11 +753,11 @@
                 let alreadyAddedItem = _.findIndex(this.selectedItemList, (item) => {
                     return item.id == this.currentProduct.id && item.variant == this.currentVariant
                 })
-                
+
                 const addonNames = this.currentAddon?.map(add => add.name);
-                
+
                 const addonString = addonNames ? addonNames.join(' + ') : '';
-                
+
                 if (alreadyAddedItem >= 0) {
                     this.selectedItemList[alreadyAddedItem] = {
                         name: `${this.currentProduct?.name}`,
@@ -788,7 +798,7 @@
                 //         addonTotal += parseFloat(add.price);
                 //     })
                 // }
-                // return parseFloat(item.quantity * (parseFloat(item.variant?.price) + parseFloat(addonTotal)) || 0); 
+                // return parseFloat(item.quantity * (parseFloat(item.variant?.price) + parseFloat(addonTotal)) || 0);
                 return parseFloat(item.quantity * parseFloat(item?.price));
             },
             addonPrice(item) {
@@ -801,7 +811,7 @@
 
                 return addonTotal;
             },
-           
+
             // get all clients
             async getClients(id = null) {
                 await axios
@@ -821,7 +831,7 @@
                     window.location.origin + "/api/all-accounts?bank_only=1"
                 );
                 this.accounts = data.data;
-                
+
                 // assign default account
                 if (this.accounts && this.accounts.length > 0) {
                     let defaultAccountSlug = this.appInfo.defaultAccountSlug;
@@ -833,9 +843,9 @@
                         'id': 0,
                         'ledgerName':'Pay Later'
                     }
-               
+
                     this.accounts.push(extraAccount)
-                
+
             },
 
             // get products
@@ -850,9 +860,9 @@
                     "/api/products?page=" +
                     currentPage
                     );
-                     
+
                 this.taxRate = data.data?.length > 0 ? data.data[0].taxRate : 0;
-                this.products = data.data; 
+                this.products = data.data;
                 this.pagination = data.meta;
                 this.loading = false;
             },
@@ -861,7 +871,7 @@
             async paginate(page) {
                 this.pagination.current_page = page
                 let catSlug = this.form.category?.slug;
-                
+
                 if (this.query === "") {
                     await this.getProducts();
                 } else {
@@ -891,7 +901,7 @@
                     this.selectedItemList[i].quantity = event.target.value;
                 }
                 if (this.selectedItemList[i].quantity == 0) this.selectedItemList[i].quantity = 1;
-                
+
                 this.selectedItemList[i].total = this.itemSubtotal(this.selectedItemList[i]);
 
             },
@@ -1368,4 +1378,5 @@ span.pqty {
 .create-btn-2 {
     padding: 10px;
 }
+
 </style>
