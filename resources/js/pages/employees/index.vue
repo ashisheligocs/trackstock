@@ -88,7 +88,7 @@
                     <th>{{ $t("common.s_no") }}</th>
                     <th>{{ $t("common.image") }}</th>
                     <th>{{ $t("common.name") }}</th>
-                    <th>Hotel</th>
+                    <th>Shop</th>
                     <th>{{ $t("common.emp_id") }}</th>
                     <th>{{ $t("common.department") }}</th>
                     <th>{{ $t("common.designation") }}</th>
@@ -149,7 +149,7 @@
                       </router-link>
                     </td>
                     <td>
-                      {{data?.hotel?.hotel_name}}
+                      {{data?.shop?.shop_name}}
                     </td>
                     <td>{{ data.empID | withPrefix(employeePrefix) }}</td>
                     <td>
