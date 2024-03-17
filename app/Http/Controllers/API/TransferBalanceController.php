@@ -29,7 +29,14 @@ class TransferBalanceController extends Controller
      */
     public function index(Request $request)
     {
-        return BalanceTransferResource::collection(BalanceTansfer::with('debitTransaction.cashbookAccount', 'creditTransaction.cashbookAccount', 'user')->latest()->paginate($request->perPage));
+        $userId = auth()->user()->id;
+     
+        if(auth()->user()->roles[0]->id !== 1){
+            return BalanceTransferResource::collection(BalanceTansfer::with('debitTransaction.cashbookAccount', 'creditTransaction.cashbookAccount', 'user')->where('created_by',$userId)->latest()->paginate($request->perPage));
+        } else {
+            return BalanceTransferResource::collection(BalanceTansfer::with('debitTransaction.cashbookAccount', 'creditTransaction.cashbookAccount', 'user')->latest()->paginate($request->perPage));
+        }
+        
     }
 
     /**
