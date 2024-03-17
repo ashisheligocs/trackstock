@@ -27,15 +27,15 @@
             <div class="card-body">
               <div class="row">
                 <div class="form-group col-xl-4">
-                  <label for="hotel" class="d-block">{{ $t('sidebar.hotel') }}
+                  <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                     <span class="required">*</span></label>
                   <v-select
                     class="flex-grow-1"
                     v-model="chosenHotel"
                     :options="hotelItems"
-                    label="hotel_name"
-                    name="hotel_id"
-                    placeholder="Search a hotel"
+                    label="shop_name"
+                    name="shop_id"
+                    placeholder="Search a shop"
                   />
                 </div>
                 <div class="form-group col-md-4">
@@ -389,16 +389,16 @@
                 <div class="form-group col-md-6">
                   <label for="hotel" class="d-block">Hotel Access
                     <span class="required">*</span></label>
-                  <multiselect id="hotel" v-model="selectedHotels" :options="hotelItems" :show-labels="false" tag-placeholder="" :taggable="false" placeholder="Search an hotel"
-                               class="form-control" label="hotel_name" track-by="hotel_name" :allowEmpty="false" :multiple="true"/>
+                  <multiselect id="hotel" v-model="selectedHotels" :options="hotelItems" :show-labels="false" tag-placeholder="" :taggable="false" placeholder="Search a Shop"
+                               class="form-control" label="shop_name" track-by="shop_name" :allowEmpty="false" :multiple="true"/>
                 </div>
-                <div class="form-group col-md-6">
+                <!-- <div class="form-group col-md-6">
                   <label for="back_days">Back Days <span class="required">*</span></label>
                   <input id="back_days" v-model="form.back_days" type="text" class="form-control"
                     :class="{ 'is-invalid': form.errors.has('back_days') }" name="back_days"
                     placeholder="Enter a back days" />
                   <has-error :form="form" field="back_days" />
-                </div>
+                </div> -->
               </div>
             </div>
             <!-- /.card-body -->
@@ -459,8 +459,8 @@ export default {
     selectedHotels: [],
     chosenHotel: null,
     form: new Form({
-      hotel_id: [],
-      hotel: '',
+      shop_id: [],
+      shop: '',
       employeeName: "",
       department: "",
       designation: "",
@@ -512,15 +512,16 @@ export default {
     },
     async getHotelDataList () {
       await this.$store.dispatch('operations/getHotelData', {
-        path: '/api/hotel',
+        path: '/api/shop',
       });
     },
     // get roles
     async getRoles() {
-      // const { data } = await this.form.get(
-      //   window.location.origin + "/api/all-roles"
-      // );
-      this.roles = [{'name':'Employeee','slug':'employee'}];
+      const { data } = await this.form.get(
+        window.location.origin + "/api/all-roles"
+      );
+      this.roles = data.data
+      // this.roles = [{'name':'Employeee','slug':'employee'}];
     },
 
     // vue file upload
@@ -551,11 +552,11 @@ export default {
     async saveEmployee() {
       if (this.form.allowLogin) {
         if (this.selectedHotels.length <= 0) return toast.fire({ type: 'error', title: 'select atleast one access hotel' })
-          this.form.hotel_id = _.map(this.selectedHotels, 'id');
+          this.form.shop_id = _.map(this.selectedHotels, 'id');
       }
       if (!this.chosenHotel) return toast.fire({ type: 'error', title: 'select hotel' })
 
-      this.form.hotel = this.chosenHotel?.id;
+      this.form.shop = this.chosenHotel?.id;
       await this.form
         .post(window.location.origin + "/api/employees")
         .then(() => {

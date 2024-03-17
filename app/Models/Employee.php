@@ -7,6 +7,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 
 class Employee extends Model
 {
@@ -18,7 +19,7 @@ class Employee extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'emp_id', 'slug', 'department_id', 'designation', 'salary', 'commission', 'mobile_number', 'birth_date', 'gender', 'blood_group', 'religion', 'appointment_date', 'joining_date', 'address', 'image_path', 'hotel_id', 'status', 'user_id',
+        'name', 'emp_id', 'slug', 'department_id', 'designation', 'salary', 'commission', 'mobile_number', 'birth_date', 'gender', 'blood_group', 'religion', 'appointment_date', 'joining_date', 'address', 'image_path', 'shop_id', 'status', 'user_id',
     ];
 
     /**
@@ -59,14 +60,14 @@ class Employee extends Model
         return $this->salary;
     }
 
-    public function hotels()
+    public function shops()
     {
-        return $this->user ? $this->user->hotels : null;
+        return $this->user ? $this->user->shops : null;
     }
 
-    public function hotel()
+    public function shop()
     {
-        return $this->belongsTo(Hotel::class);
+        return $this->belongsTo(Shop::class);
     }
 
     /**

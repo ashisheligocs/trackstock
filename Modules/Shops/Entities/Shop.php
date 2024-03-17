@@ -20,7 +20,7 @@ class Shop extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_hotel');
+        return $this->belongsToMany(User::class, 'user_shop');
     }
 
 
