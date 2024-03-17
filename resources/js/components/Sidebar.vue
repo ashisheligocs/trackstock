@@ -628,7 +628,7 @@ export default {
   display: none;
   background-color: #212529;
   color: white;
-  position: fixed;
+    ition: fixed;
   bottom: 5%;
 }
 
