@@ -81,7 +81,7 @@ class DemoProductsTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
                 'sub_cat_id' => 1,
-                'brand_id' => 2,
+                'brand_id' => 1,
                 'unit_id' => 1,
                 'tax_id' => 3,
             ],

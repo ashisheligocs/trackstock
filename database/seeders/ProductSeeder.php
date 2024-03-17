@@ -10,42 +10,7 @@ class ProductSeeder extends Seeder
 {
     public function run()
     {
-        if (DB::table('products')->count() == 0) {
-            DB::table('products')->insert([ 
-                [
-                 'name' => 'BP',
-                 'code' => '0001',
-                 'model' => '',
-                 'barcode_symbology' => 'CODE128',
-                 'sub_cat_id' => 7,
-                 'brand_id' => 1,
-                 'unit_id' => 8,
-                 'tax_id' => null,
-                 'tax_type' => '',
-                 'regular_price' => 456.00 ,
-                 'discount' => 0,
-                 'note' => '',
-                 'alert_qty' => 1,
-                 'status' => 1,
-                ], 
-                [
-                 'name' => 'RS',
-                 'code' => '0001',
-                 'model' => '',
-                 'barcode_symbology' => 'CODE128',
-                 'sub_cat_id' => 7,
-                 'brand_id' => 1,
-                 'unit_id' => 8,
-                 'tax_id' => null,
-                 'tax_type' => '',
-                 'regular_price' => 550.00 ,
-                 'discount' => 0,
-                 'note' => '',
-                 'alert_qty' => 1,
-                 'status' => 1,
-                ], 
-            ]);
-        }
+        
         if (DB::table('product_categories')->count() == 0) {
             DB::table('product_categories')->insert([ 
                 [
@@ -66,7 +31,7 @@ class ProductSeeder extends Seeder
                     'code' => '1',
                     'note' => null,
                     'status' => 1,
-                    'cat_id' => 2
+                    'cat_id' => 1
                 ],
                 [
                     'name' => 'Vodka',
@@ -74,7 +39,7 @@ class ProductSeeder extends Seeder
                     'code' => '1',
                     'note' => null,
                     'status' => 1,
-                    'cat_id' => 2
+                    'cat_id' => 1
                 ],
                 [
                     'name' => 'Rum',
@@ -82,7 +47,7 @@ class ProductSeeder extends Seeder
                     'code' => '1',
                     'note' => null,
                     'status' => 1,
-                    'cat_id' => 2
+                    'cat_id' => 1
                 ],
                 [
                     'name' => 'Wiskey',
@@ -90,7 +55,7 @@ class ProductSeeder extends Seeder
                     'code' => '1',
                     'note' => null,
                     'status' => 1,
-                    'cat_id' => 2
+                    'cat_id' => 1
                 ],
                 [
                     'name' => 'Beer',
@@ -98,9 +63,61 @@ class ProductSeeder extends Seeder
                     'code' => '1',
                     'note' => null,
                     'status' => 1,
-                    'cat_id' => 2
+                    'cat_id' => 1
                 ],
                 
+            ]);
+        }
+
+        \DB::table('brands')->insert([
+            0 => [
+                'id' => 1,
+                'name' => 'Blenders Pride',
+                'slug' => 'blenders-pride',
+                'code' => 'BP',
+                'image' => '1651321208.png',
+                'note' => '',
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            1 => [
+                'id' => 2,
+                'name' => 'Royal Stag',
+                'slug' => 'royal-stag',
+                'code' => 'RS',
+                'image' => '1651321265.jpeg',
+                'note' => '',
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        if (DB::table('products')->count() == 0) {
+            DB::table('products')->insert([ 
+                [
+                    'name' => 'BP', 
+                    'model' => '', 
+                    'code' => '000001',
+                    'model' => 'BP',
+                    'barcode_symbology' => 'CODE128',
+                    'tax_type' => 'Exclusive',
+                    'purchase_price' => 877.85,
+                    'regular_price' => 1000.0,
+                    'discount' => 5.0,
+                    'inventory_count' => 22.0,
+                    'alert_qty' => 10,
+                    'note' => '',
+                    'status' => 1,
+                    'image_path' => 'product-01.jpeg',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'sub_cat_id' => 1,
+                    'brand_id' => 2,
+                    'unit_id' => 1,
+                    'tax_id' => null,
+                ], 
             ]);
         }
     }

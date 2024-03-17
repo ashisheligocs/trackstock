@@ -34,7 +34,7 @@ class ProductListingResource extends JsonResource
             'note' => $this->note,
             'status' => (int) $this->status,
             'image' => $this->image_path ? asset('/images/products/' . $this->image_path) : '',
-            'taxRate' => $this->productTaxRate ? $this->productTaxRate[0]->rate : '',
+            'taxRate' => !empty($this->productTaxRate) ? $this->productTaxRate[0]->rate : '',
         ];
     }
 }
