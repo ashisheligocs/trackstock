@@ -494,11 +494,15 @@ export default {
         this.getAccounts();
         this.getTaxes();
 
-        this.prefix = this.appInfo.productPrefix;
+        this.prefix = this.appInfo.productPrefix; 
         if (this.selectedHotel && this.selectedHotel !== 'all') {
-            this.hotelItems.forEach((hotel) => {
-                if (hotel.id == this.selectedHotel) this.form.hotel_id = hotel
-            })
+            if (this.hotelItems) { 
+                console.log('this.hotelItems')
+                console.log(this.hotelItems)
+                this.hotelItems.forEach((hotel) => {
+                    if (hotel.id == this.selectedHotel) this.form.hotel_id = hotel
+                })
+            }
         }
         this.getFacilityItems();
 
