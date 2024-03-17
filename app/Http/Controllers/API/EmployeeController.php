@@ -47,6 +47,7 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->input());
         // validate request
         $this->validate($request, [
             'employeeName' => 'required|string|max:255',
@@ -65,9 +66,8 @@ class EmployeeController extends Controller
             'email' => $request->allowLogin == true ? 'required|string|email|max:255|unique:users,email' : 'nullable',
             'password' => $request->allowLogin == true ? 'required|string|max:255|min:8' : 'nullable',
             'role' => $request->allowLogin == true ? 'required' : 'nullable',
-            'hotel_id' => $request->allowLogin == true ? 'required | array' : 'nullable',
-            'hotel' => 'required',
-            'back_days' =>  'required',
+            'shop_id' => $request->allowLogin == true ? 'required | array' : 'nullable',
+            'shop' => 'required',
         ]);
 
         try {
@@ -95,11 +95,12 @@ class EmployeeController extends Controller
                     'email' => $request->email,
                     'password' => Hash::make($request->password),
                     'account_role' => 0,
-                    'back_days' => $request->back_days,
+                    'back_days' => 'All',
                 ]);
                 $user->roles()->attach($role->id);
                 $user->permissions()->attach($user->roles[0]->permissions);
-                !empty($request->hotel_id) && $user->hotels()->sync($request->hotel_id);
+                !empty($request->shop_id) && $user->shops()->sync($request->shop_id);
+                
             }
 
             // create employee
@@ -121,7 +122,7 @@ class EmployeeController extends Controller
                 'status' => $request->status,
                 'image_path' => $imageName,
                 'user_id' => isset($user) ? $user->id : null,
-                'hotel_id' => $request->hotel,
+                'shop_id' => $request->shop,
             ]);
 
             return $this->responseWithSuccess('Employee added successfully');
@@ -180,9 +181,9 @@ class EmployeeController extends Controller
             'email' => $request->allowLogin == true ? 'required|string|email|max:255|unique:users,email,'.$userId : 'nullable',
             'password' => ($request->allowLogin == true) && (isset($request->password) || empty($employee->user_id)) ? 'required|string|max:255|min:8' : 'nullable',
             'role' => $request->allowLogin == true ? 'required' : 'nullable',
-            'hotel_id' => $request->allowLogin == true ? 'required | array' : 'nullable',
-            'hotel' => 'required',
-            'back_days' =>  'required',
+            'shop_id' => $request->allowLogin == true ? 'required | array' : 'nullable',
+            'shop' => 'required',
+            // 'back_days' =>  'required',
         ]);
 
         try {
@@ -226,12 +227,12 @@ class EmployeeController extends Controller
                         'email' => $request->email,
                         'password' => Hash::make($request->password),
                         'account_role' => 0,
-                        'back_days' => $request->back_days,
+                        'back_days' => 'All',
                     ]);
                     $user->roles()->attach($role->id);
                     $user->permissions()->attach($user->roles[0]->permissions);
                 }
-                !empty($request->hotel_id) && $user->hotels()->sync($request->hotel_id);
+                !empty($request->shop_id) && $user->shops()->sync($request->shop_id);
             } else {
                 if (isset($employee->user)) {
                     $employee->user->update([
@@ -259,7 +260,7 @@ class EmployeeController extends Controller
                 'status' => $request->status,
                 'image_path' => $imageName,
                 'user_id' => isset($user) ? $user->id : null,
-                'hotel_id' => $request->hotel,
+                'shop_id' => $request->shop,
             ]);
 
             return $this->responseWithSuccess('Employee updated successfully');
