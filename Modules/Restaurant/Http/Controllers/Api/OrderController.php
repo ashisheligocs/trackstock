@@ -224,25 +224,25 @@ class OrderController extends Controller
                 'plutus_entries_id' => $plutusId,
             ]);
 
-            $outputGst = LedgerAccount::where('code', 'GST-OUTPUT')->first();
-            if ($outputGst) {
-                $outputGst = $outputGst->getAccoutnbalance;
-                $outputGst && $outputGst->balanceTransactions()->create([
-                    'amount' => $input['tax'],
-                    'reason' => '[' . $orderId . '] Restaurant invoice Payment GST',
-                    'type' => 1,
-                    'transaction_date' => now(),
-                    'cheque_no' => null,
-                    'receipt_no' => null,
-                    'created_by' => $userId,
-                    'status' => 1,
-                    'order_id' => @$input['invoice_id'],
-                    'reference' => 'order',
-                    'hotel_id' => $hotelId,
-                    'customer_id' => @$input['client'] ? @$input['client']['id'] : null,
-                    'plutus_entries_id' => $plutusId,
-                ]);
-            }
+            // $outputGst = LedgerAccount::where('code', 'GST-OUTPUT')->first();
+            // if ($outputGst) {
+            //     $outputGst = $outputGst->getAccoutnbalance;
+            //     $outputGst && $outputGst->balanceTransactions()->create([
+            //         'amount' => $input['tax'],
+            //         'reason' => '[' . $orderId . '] Restaurant invoice Payment GST',
+            //         'type' => 1,
+            //         'transaction_date' => now(),
+            //         'cheque_no' => null,
+            //         'receipt_no' => null,
+            //         'created_by' => $userId,
+            //         'status' => 1,
+            //         'order_id' => @$input['invoice_id'],
+            //         'reference' => 'order',
+            //         'hotel_id' => $hotelId,
+            //         'customer_id' => @$input['client'] ? @$input['client']['id'] : null,
+            //         'plutus_entries_id' => $plutusId,
+            //     ]);
+            // }
 
             //update Status in RestoOrder Table
             $updateStatus = Restroorder::where('id',$input['invoice_id'])->first();

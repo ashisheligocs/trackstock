@@ -212,7 +212,7 @@ export default {
             date: new Date().toISOString().slice(0, 10),
             note: '',
             status: 1,
-            hotel_id: '',
+            shop_id: '',
         }),
         loading: true,
         coa_account_id: '',
