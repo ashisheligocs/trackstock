@@ -21,7 +21,7 @@ use Modules\Restaurant\Entities\Restroorder;
 use Modules\Restaurant\Transformers\RestaurantOrderResource;
 use Modules\Restaurant\Transformers\RestaurantOrderShowResource;
 use Modules\Accounts\Entities\PlutusEntries;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 use App\Models\Product;
 
 class OrderController extends Controller
@@ -54,6 +54,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         try {
+            // dd($request->all());
             $this->storeOrder($request->all());
 
             return $this->responseWithSuccess('Order added successfully!');
@@ -101,30 +102,30 @@ class OrderController extends Controller
 
     public function storeOrder($data)
     {
-        // dd($data);
         $hotelId = $data['hotel_id'];
-        $prevOrder = Restroorder::where('hotel_id', $hotelId)->latest()->first();
+        $prevOrder = Restroorder::where('shop_id', $hotelId)->latest()->first();
         if (!empty($prevOrder)) {
             $previousBookingId = "RO-0000".$prevOrder->id;
         } else {
             $previousBookingId = "RO-00000";
         }
-
+        
         // $room = @$data['room'] ?? null;
         // $booking = null;
         // if ($room) {
-        //     $bookingDetail = BookingDetails::where('room_id', $room['id'])->whereNotIn('booking_status',
-        //         [1, 4])->whereHas('booking', function ($bookingQuery) {
-        //             $bookingQuery->whereDate('check_out_date', '>=', Carbon::now())->where('booking_status_main', Booking::CHECKIN);
-        //     })->first();
-        //     if ($bookingDetail) {
+            //     $bookingDetail = BookingDetails::where('room_id', $room['id'])->whereNotIn('booking_status',
+            //         [1, 4])->whereHas('booking', function ($bookingQuery) {
+                //             $bookingQuery->whereDate('check_out_date', '>=', Carbon::now())->where('booking_status_main', Booking::CHECKIN);
+                //     })->first();
+                //     if ($bookingDetail) {
         //         $booking = $bookingDetail->booking;
         //         $booking->paid_amount = floatval($booking->paid_amount) + floatval(@$data['netTotal'] ?? 0);
         //         $booking->total_price = floatval($booking->total_price) + floatval(@$data['netTotal'] ?? 0);
         //         $booking->save();
         //     }
         // }
-
+        
+        // dd(Carbon::now());
         $order = Restroorder::create([
             'order_id_uniq' => $this->generateBookingId($previousBookingId,$hotelId),
             'order_date'    => Carbon::now(),
@@ -132,25 +133,25 @@ class OrderController extends Controller
             'total_amount'  => @$data['netTotal'] ?? 0,
             'discount'      => @$data['discountAmount'] ?? 0,
             'tax'           => @$data['orderTax'] ?? @$data['tax'] ?? 0,
-            'room_id'       => $room ? @$room['id'] : null,
-            'booking_id'    => $booking ? @$booking->id : null,
-            'hotel_id'      => $hotelId,
-            'customer_id'   => @$data['client'] ? @$data['client']['id'] : null,
+            // 'room_id'       => $room ? @$room['id'] : null,
+            // 'booking_id'    => $booking ? @$booking->id : null,
+            'shop_id'      => $hotelId,
+            'customer_id'   => @$data['client'],
         ]);
 
-        $orderItems = $data['selectedProducts'];
+        // $orderItems = $data['selectedProducts'];
 
-        if ($orderItems && !empty($orderItems)) {
-            foreach ($orderItems as $item) {
-                $optionalItems = @$item['addon'] ? Arr::pluck($item['addon'], 'id') : [];
-                RestroItem::create([
-                    'order_id'           => $order->id,
-                    'restaurant_item_id' => $item['id'],
-                    'optional_item_ids'  => $optionalItems,
-                    'qty'                => $item['quantity'],
-                ]);
-            }
-        }
+        // if ($orderItems && !empty($orderItems)) {
+        //     foreach ($orderItems as $item) {
+        //         $optionalItems = @$item['addon'] ? Arr::pluck($item['addon'], 'id') : [];
+        //         RestroItem::create([
+        //             'order_id'           => $order->id,
+        //             'restaurant_item_id' => $item['id'],
+        //             'optional_item_ids'  => $optionalItems,
+        //             'qty'                => $item['quantity'],
+        //         ]);
+        //     }
+        // }
 
         return $order;
     }
@@ -158,7 +159,7 @@ class OrderController extends Controller
     public function payInvoice(Request $request)
     {
         $input = $request->all();
-        $hotelId = $input['hotel_id'];
+        $hotelId = $input['shop_id'];
         $orderId = $input['invoice_slug'];
         $userId = auth()->user()->id;
 
@@ -288,12 +289,12 @@ class OrderController extends Controller
     protected function generateBookingId($previousBookingId,$hotelId)
     {
 
-        $hotel1 = Hotel::where('id',$hotelId)->first();
+        $hotel1 = Shop::where('id',$hotelId)->first();
         
-        $hotel = str_replace('hotel', '', $hotel1->hotel_name);
-        $hotel = str_replace('Hotel', '', $hotel);
+        $hotel = str_replace('Shop', '', $hotel1->shop_name);
+        $hotel = str_replace('Shop', '', $hotel);
         
-        $hotel = ($hotel1->hotel_prefix !== null) ? $hotel1->hotel_prefix : Str::slug($hotel);
+        $hotel = ($hotel1->shop_prefix !== null) ? $hotel1->shop_prefix : Str::slug($hotel);
         
         
         // Extract the numeric part of the previous booking ID

@@ -12,8 +12,9 @@
                         <div class="row">
                             <div v-if="hotelItems.length" class="form-group col-md-6">
                                 <v-select class="flex-grow-1" v-model="hotel" :options="hotelItems" label="shop_name"
-                                    name="hotel" placeholder="Select a hotel" :clearable="false" />
+                                    name="hotel" placeholder="Select a Shops" :clearable="false" />
                                 <has-error :form="form" field="category" />
+
                             </div>
                             <div v-if="categoryOptions.length" class="form-group col-md-6">
                                 <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
@@ -48,8 +49,11 @@
                                             </div>
                                         </div>
                                         <div class="pos-box-content">
-                                            <p class="pos-box-text">{{ product.name }}  ({{product.inventoryCount ?? 0      }} In stock)</p>
-                                            <span class="text-bold text-lg">{{ product.regularPrice | withCurrency }}</span>
+                                            <p class="pos-box-text">{{ product.name }} ({{ product.inventoryCount ?? 0
+                                                }}
+                                                In stock)</p>
+                                            <span class="text-bold text-lg">{{ product.regularPrice | withCurrency
+                                                }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -80,15 +84,10 @@
                                     tag-placeholder="" :placeholder="$t('common.client_placeholder')" class="form-control"
                                     @select="form.room = null" :custom-label="({ name, phone }) => `${name} (${phone})`"
                                     label="name" track-by="id" style="min-width: 85%"></Multiselect> -->
-                                    <v-select
-                    v-model="form.client"
-                    :options="clients"
-                    label="name"
-                    :class="{ 'is-invalid': form.errors.has('client') }"
-                    name="client"
-                    :placeholder="$t('common.client_placeholder')"
-                  />
-                  <has-error :form="form" field="client" />
+                                <v-select v-model="form.client" :options="clients" label="name"
+                                    :class="{ 'is-invalid': form.errors.has('client') }" name="client"
+                                    :placeholder="$t('common.client_placeholder')" />
+                                <has-error :form="form" field="client" />
                                 <ClientCreateModal @reloadClients="getClients">
                                     <div class="input-group-text create-btn">
                                         <i class="fas fa-solid fa-plus-circle"></i>
@@ -126,21 +125,24 @@
                                         <td>
                                             {{ singleItem.name }}
                                             <span v-if="singleItem.addonString != ''" style="font-size: 11px;"><br />{{
-                                                singleItem.addonString }}</span>
+                                singleItem.addonString }}</span>
                                         </td>
                                         <!-- <td>{{ parseFloat(product.variant?.price) + parseFloat(product.addonAmount) | withCurrency }}</td> -->
                                         <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td>
                                         <td>
                                             <div class="d-flex custom-qty-input">
                                                 <input type="button" value="-"
-                                                    class="button-minus icon-shape icon-sm btn-danger" data-field="quantity"
+                                                    class="button-minus icon-shape icon-sm btn-danger"
+                                                    data-field="quantity"
                                                     @click="adjustQuantity($event, i, 'decrement')" />
-                                                <input type="number" step="any" :id="`Qty-${i}`" :value="singleItem.quantity"
-                                                    name="quantity" class="quantity-field border-0 incrementor" required
-                                                    @input="adjustQuantity($event, i)" @change="preventZeroValue($event, i)"
-                                                    placeholder="Quantity" />
+                                                <input type="number" step="any" :id="`Qty-${i}`"
+                                                    :value="singleItem.quantity" name="quantity"
+                                                    class="quantity-field border-0 incrementor" required
+                                                    @input="adjustQuantity($event, i)"
+                                                    @change="preventZeroValue($event, i)" placeholder="Quantity" />
                                                 <input type="button" value="+"
-                                                    class="button-plus icon-shape icon-sm btn-primary" data-field="quantity"
+                                                    class="button-plus icon-shape icon-sm btn-primary"
+                                                    data-field="quantity"
                                                     @click="adjustQuantity($event, i, 'increment')" />
                                             </div>
                                         </td>
@@ -167,8 +169,8 @@
                         <div class="row pt-3 pl-3 pr-3">
                             <div class="form-group col-md-6 col-lg-6">
                                 <label for="discountType">{{
-                                    $t("common.discount_type")
-                                }}</label>
+                                $t("common.discount_type")
+                            }}</label>
                                 <select id="discountType" v-model="form.discountType" step="any" class="form-control"
                                     :class="{ 'is-invalid': form.errors.has('discountType') }" name="discountType">
                                     <option value="0">{{ $t("common.fixed") }}</option>
@@ -186,8 +188,8 @@
                                         :placeholder="$t('common.discount_placeholder')" />
                                     <div v-if="form.discountType == 1" class="input-group-append">
                                         <span class="input-group-text">{{
-                                            foodItemDiscount | withCurrency
-                                        }}</span>
+                                foodItemDiscount | withCurrency
+                            }}</span>
                                     </div>
                                 </div>
                                 <has-error :form="form" field="discount" />
@@ -208,9 +210,6 @@
                             <div>
                                 GST: {{ foodItemTax | withCurrency }}
                             </div>
-                            <div>
-                                GST: {{ foodItemTax | withCurrency }}
-                            </div>
                             <div class="text-lg">
                                 Net Total: {{ foodItemNetTotal | withCurrency }}
                             </div>
@@ -226,10 +225,9 @@
                         </button>
                     </div>
                     <div class="col-12 col-lg-6 mb-1">
-                        <button class="btn btn-primary btn-block" @click="saveOrder($event, true)"
-                            :disabled="!form.client || selectedItemList.length <= 0">
+                        <button class="btn btn-primary btn-block" @click="saveOrder($event, true)" :disabled="selectedItemList.length <= 0">
                             <i class="fas fa-credit-card" />
-                            Save & Payment
+                            Save & Payment 
                         </button>
                     </div>
                 </div>
@@ -300,9 +298,9 @@
                         <span>{{ form.netTotal | forBalanceSheetCurrencyDecimalOnly }}</span>
                     </div>
                     <div class="row" v-if="accounts &&
-                        form.selectedProducts &&
-                        form.selectedProducts.length > 0
-                        ">
+                                form.selectedProducts &&
+                                form.selectedProducts.length > 0
+                                ">
                         <div class="form-group col-md-6">
                             <label for="account">{{ $t("common.account") }}
                                 <span class="required">*</span></label>
@@ -313,8 +311,8 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label>
-                            <input ref="paidAmountInput" id="paidAmount" v-model="form.paidAmount" type="number" step="any"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }"
+                            <input ref="paidAmountInput" id="paidAmount" v-model="form.paidAmount" type="number"
+                                step="any" class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }"
                                 name="paidAmount" min="1" :max="form.netTotal"
                                 :placeholder="$t('common.paid_amount_placeholder')" disabled />
                             <has-error :form="form" field="paidAmount" />
@@ -371,13 +369,15 @@
                             </div>
                             <p>
                                 <span>{{ $t("common.date") }} : {{ allData.date }} <br /></span>
-                                <span v-show="hotel.hotel_address">{{ $t("common.address") }} : {{ hotel.hotel_address }}
+                                <span v-show="hotel.hotel_address">{{ $t("common.address") }} : {{ hotel.hotel_address
+                                    }}
                                     <br /></span>
                                 <span v-show="hotel.hotel_email">{{ $t("common.phone") }} : {{ hotel.hotel_phone }}
                                     <br /></span>
                                 <span v-show="hotel.hotel_phone">{{ $t("common.email") }} : {{ hotel.hotel_email }}
                                     <br /></span>
-                                <span v-show="allData?.client?.name">{{ $t("common.client") }} : {{ allData.client.name }}
+                                <span v-show="allData?.client?.name">{{ $t("common.client") }} : {{ allData.client.name
+                                    }}
                                     <br /></span>
                             </p>
                         </div>
@@ -388,8 +388,9 @@
                                     <td colspan="3">
                                         <span>
                                             <span>{{ data.name }}</span><br />
-                                            <span class="pqty">{{ data.quantity }} x {{ data?.variant?.price | withCurrency
-                                            }}
+                                            <span class="pqty">{{ data.quantity }} x {{ data?.variant?.price |
+                                withCurrency
+                                                }}
                                                 {{ addonPrice(data) > 0 ? '+' + addonPrice(data) : '' }} </span>
                                         </span>
                                     </td>
@@ -431,7 +432,8 @@
                                 <tr>
                                     <td colspan="3" class="total">{{ $t("common.due") }}</td>
                                     <td style="text-align: right" class="total">
-                                        {{ parseFloat(allData.netTotal) - parseFloat(allData.paidAmount) | withCurrency }}
+                                        {{ parseFloat(allData.netTotal) - parseFloat(allData.paidAmount) | withCurrency
+                                        }}
                                     </td>
                                 </tr>
                             </tbody>
@@ -502,10 +504,9 @@
             ],
             showProductModal: false,
             form: new Form({
-                hotel_id: '',
                 search: '',
                 invoice_id: "",
-                client: "Walking Customer",
+                client: "1",
                 discount: null,
                 discountType: null,
                 category: "",
@@ -577,13 +578,12 @@
                 return addonTotal;
             },
             foodItemSubTotal() {
-                let amount = 0;
-                this.selectedItemList.forEach((item) => {
-                    amount += parseFloat(this.itemSubtotal(item));
-                })
-
-                return amount;
-            },
+    let amount = 0;
+    this.selectedItemList.forEach((item) => {
+        amount += parseFloat(item.quantity * item.price);
+    });
+    return amount;
+},
             foodItemDiscount() {
                 let discount = 0;
                 if (this.form.discount) {
@@ -606,9 +606,11 @@
                     price = this.foodItemSubTotal;
                     console.log(price);
                 }
-
-                return parseFloat(price)*parseFloat(this.taxRate)/100;
-                console.log(this.taxRate);
+                let taxRate = 12;
+                console.log("Price:", price);
+    console.log("Tax Rate:", taxRate);
+                return parseFloat(price)*parseFloat(taxRate)/100;
+                // console.log(this.taxRate);
             },
             foodItemNetTotal() {
                 let price = 0;
@@ -730,13 +732,10 @@
             },
             openProductModal(product) {
               console.log(product.inventoryCount);
-                if (product.inventoryCount >= 0){
-                    toast.fire({ type: "error", title: "Insuficient Stock" });
-                    return;
-                }
-                toast.fire({ type: "success", title: "Order Added Successfully" });
+
                 this.currentProduct = product;
                 console.log(product)
+                toast.fire({ type: "success", title: "Order Added Successfully" });
                 // this.currentVariant = product.variants[0]
                 // if (product.optionalItems.length <= 0 && product.variants.length <= 1) {
                     return this.addItemInList();
@@ -750,6 +749,7 @@
                 //         title: 'Select at-least one variant',
                 //     });
                 // }
+                console.log(this.selectedItemList)
                 let alreadyAddedItem = _.findIndex(this.selectedItemList, (item) => {
                     return item.id == this.currentProduct.id && item.variant == this.currentVariant
                 })
@@ -771,6 +771,7 @@
                         price: parseFloat(this.currentProduct?.regularPrice || 0),
                         total: parseFloat(this.currentProduct?.regularPrice || 0)
                     }
+                    
                 } else {
                     this.selectedItemList.push({
                         name: `${this.currentProduct?.name}`,
@@ -799,6 +800,7 @@
                 //     })
                 // }
                 // return parseFloat(item.quantity * (parseFloat(item.variant?.price) + parseFloat(addonTotal)) || 0);
+                
                 return parseFloat(item.quantity * parseFloat(item?.price));
             },
             addonPrice(item) {
@@ -1378,5 +1380,4 @@ span.pqty {
 .create-btn-2 {
     padding: 10px;
 }
-
 </style>

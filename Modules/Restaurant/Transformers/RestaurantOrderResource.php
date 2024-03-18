@@ -19,7 +19,7 @@ class RestaurantOrderResource extends JsonResource
         return [
             'id' => $this->id,
             'date' => $this->order_date,
-            'hotel' => $this->hotel,
+            'shop' => $this->shop,
             'orderId' => $this->order_id_uniq,
             'type' => $this->type ?? 'Customer order',
             'totalAmount' => $this->total_amount,

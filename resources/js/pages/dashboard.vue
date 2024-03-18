@@ -523,7 +523,7 @@
 </template>
 
 <script>
-import VueApexCharts from 'vue-apexcharts';
+//import VueApexCharts from 'vue-apexcharts';
 import Form from "vform";
 import axios from "axios";
 import { use } from "echarts/core";
