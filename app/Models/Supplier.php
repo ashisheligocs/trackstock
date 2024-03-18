@@ -177,6 +177,7 @@ class Supplier extends Model
         return $this->belongsTo(BookingType::class,'leadsSupplierType');
     }
 
+
     protected static function boot()
     {
         parent::boot();
