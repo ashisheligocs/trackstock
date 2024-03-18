@@ -757,7 +757,8 @@
         "return_no": "Return No",
         "purchase_no_placeholder": "Enter purchase no",
         "purchase_products": "Purchase Products",
-        "purchase_due": "Purchase Due"
+        "purchase_due": "Purchase Due",
+        "batch_id": "Batch Number"
       },
       "index": {
         "page_title": "Purchases",

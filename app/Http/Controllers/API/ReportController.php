@@ -500,11 +500,11 @@ class ReportController extends Controller
         ]);
 
         $allProducts = [];
-        if (($request->category['slug'] == 'all' && $request->subCategory['slug'] == 'all' && $request->itemName['slug'] == 'all')) {
+        if (((@$request->category['slug'] && $request->category['slug'] == 'all') && $request->subCategory['slug'] == 'all' && $request->itemName['slug'] == 'all')) {
             $products = Product::orderBy('code', 'ASC')->get();
             $allProducts = $this->generateItemsArray($products, $request);
-        } elseif (($request->category['slug'] != 'all' && $request->subCategory['slug'] == 'all' && $request->itemName['slug'] == 'all')) {
-            $catId = $request->category['id'];
+        } elseif (($request->category && $request->subCategory['slug'] == 'all' && $request->itemName['slug'] == 'all')) {
+            $catId = (@$request->category['id']) ? $request->category['id'] : $request->category;
             $products = Product::with('proSubCategory.category')->whereHas('proSubCategory', function ($newQuery) use ($catId) {
                 $newQuery->whereHas('category', function ($newQuery) use ($catId) {
                     $newQuery->where('id', $catId);
@@ -525,6 +525,7 @@ class ReportController extends Controller
     // generate invetory items array
     public function generateItemsArray($products, $request)
     {
+        
         $allProducts = [];
         foreach ($products as $key => $product) {
             // stock ins
@@ -536,9 +537,14 @@ class ReportController extends Controller
                 $newQuery->whereBetween('date', [$request->fromDate, $request->toDate]);
             })->sum('quantity');
 
-            $getHotel = AdjustmentProduct::with('inventoryAdjustment.hotel')->where('product_id', $product->id)->whereHas('inventoryAdjustment', function ($newQuery) use ($request) {
+            $getHotel = AdjustmentProduct::with('inventoryAdjustment.shop')->where('product_id', $product->id)->whereHas('inventoryAdjustment', function ($newQuery) use ($request) {
                 $newQuery->whereBetween('date', [$request->fromDate, $request->toDate]);
             })->get();
+            if(!empty($getHotel)){
+                $getHotel1 = PurchaseProduct::with('purchase.shop')->where('product_id', $product->id)->whereHas('purchase', function ($newQuery) use ($request) {
+                    $newQuery->whereBetween('purchase_date', [$request->fromDate, $request->toDate]);
+                })->get();
+            }
 
             $adjutmentIns = AdjustmentProduct::with('inventoryAdjustment')->where('product_id', $product->id)->where('type', 1)->whereHas('inventoryAdjustment', function ($newQuery) use ($request) {
                 $newQuery->whereBetween('date', [$request->fromDate, $request->toDate]);
@@ -567,7 +573,7 @@ class ReportController extends Controller
                 $allProducts[$key]['stockIn'] = $stockIns;
                 $allProducts[$key]['stockOut'] = $stockOuts;
                 $allProducts[$key]['availableStock'] = $product->inventory_count;
-                $allProducts[$key]['hotel_name'] = (@$getHotel[0]) ?$getHotel[0]->inventoryAdjustment->hotel->hotel_name : '';
+                $allProducts[$key]['hotel_name'] = (@$getHotel[0]) ? $getHotel[0]->inventoryAdjustment->shop->shop_name : ((@$getHotel1[0]) ? $getHotel1[0]->purchase->shop->shop_name : '');
             }
         }
 

@@ -5,7 +5,7 @@ use App\Models\Scopes\selectedHotelResource;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 
 class InventoryAdjustment extends Model
 {
@@ -17,7 +17,7 @@ class InventoryAdjustment extends Model
      * @var array
      */
     protected $fillable = [
-        'reason', 'slug', 'code',  'date', 'created_by', 'note', 'status', 'is_paid','hotel_id'
+        'reason', 'slug', 'code',  'date', 'created_by', 'note', 'status', 'is_paid','shop_id'
     ];
 
     /**
@@ -34,9 +34,9 @@ class InventoryAdjustment extends Model
         ];
     }
 
-    public function hotel()
+    public function shop()
     {
-        return $this->belongsTo(Hotel::class);
+        return $this->belongsTo(Shop::class);
     }
 
     /**

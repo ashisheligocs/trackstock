@@ -35,6 +35,7 @@
                     >{{ $t("common.sub_category_name") }}
                     <span class="required">*</span></label
                   >
+                  <!-- {{subCategories}} -->
                   <v-select
                     v-model="form.subCategory"
                     :options="subCategories"
@@ -319,14 +320,14 @@ export default {
 
     async getHotelDataList () {
         await this.$store.dispatch('operations/getHotelData', {
-            path: '/api/hotel',
+            path: '/api/shop',
         });
     },
 
     // get sub categories for a category
     async getSubCategories() {
       this.subCategories = [];
-      this.form.subCategory = "";
+      // this.form.subCategory = "";
 
       let slug = this.form.category.slug ?? 'liquor';
       const { data } = await axios.get(
@@ -355,7 +356,7 @@ export default {
     // get products for a sub category
     async getProducts() {
       this.products = [];
-      this.form.itemName = "";
+      // this.form.itemName = "";
       let catSlug = this.form.category.slug ?? 'liquor';
       let subCatSlug = this.form.subCategory.slug;
       const { data } = await axios.get(
