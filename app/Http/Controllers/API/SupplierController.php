@@ -59,6 +59,7 @@ class SupplierController extends Controller
      */
     public function store(SupplierStoreRequest $request)
     {
+        // dd($request->input());
         try {
             // generate code
             $code = 1;
@@ -93,7 +94,7 @@ class SupplierController extends Controller
                 'address' => $request->address,
                 'status' => $request->status,
                 'image_path' => $imageName,
-                'hotel_id' => @$request->hotel_id['id']
+                'shop_id' => @$request->shop_id['id']
             ]);
 
             //send welcome notification
@@ -148,7 +149,7 @@ class SupplierController extends Controller
             'email' => 'nullable|email|max:255|min:3|unique:users,email,' . $supplier->email,
             'companyName' => 'nullable|string|max:100|min:2',
             'address' => 'nullable|string|max:255',
-            'hotel_id' => 'required'
+            'shop_id' => 'required'
         ]);
         try {
             // upload thumbnail and set the name
@@ -161,7 +162,7 @@ class SupplierController extends Controller
                     '/',
                     explode(':', substr($request->image, 0, strpos($request->image, ';')))[1]
                 )[1];
-                
+
                 if (!file_exists(public_path('images/suppliers/'))) {
                     mkdir(public_path('images/suppliers/'), 666, true);
                 }
@@ -177,7 +178,7 @@ class SupplierController extends Controller
                 'address' => $request->address,
                 'status' => $request->status,
                 'image_path' => $imageName,
-                'hotel_id' => @$request->hotel_id['id']
+                'shop_id' => @$request->shop_id['id']
             ]);
 
             return $this->responseWithSuccess('Supplier updated successfully');
@@ -236,11 +237,11 @@ class SupplierController extends Controller
     // return all suppliers
     public function allSuppliers(Request $request)
     {
-        if($request->input('hotel_id') != ''){
-            $suppliers = Supplier::where('status', 1)->where('hotel_id',$request->input('hotel_id'))->latest()->get();
+        if($request->input('shop_id') != ''){
+            $suppliers = Supplier::where('status', 1)->where('shop_id',$request->input('shop_id'))->latest()->get();
         } else {
             $suppliers = Supplier::where('status', 1)->latest()->get();
-        }   
+        }
         return SupplierListResource::collection($suppliers);
     }
 

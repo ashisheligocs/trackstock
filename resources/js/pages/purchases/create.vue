@@ -29,10 +29,10 @@
                                 <div class="form-group col-md-12 col-xl-4">
                                     <label for="hotel" class="d-block">{{ $t('sidebar.hotel') }}
                                         <span class="required">*</span></label>
-                                    <v-select class="flex-grow-1" v-model="form.hotel_id" :options="hotelItems"
-                                        label="shop_name" :class="{ 'is-invalid': form.errors.has('hotel_id') }"
-                                        name="hotel_id" placeholder="Search a hotel" @input="getAccountsAndSupplier" />
-                                    <has-error :form="form" field="hotel_id" />
+                                    <v-select class="flex-grow-1" v-model="form.shop_id" :options="hotelItems"
+                                        label="shop_name" :class="{ 'is-invalid': form.errors.has('shop_id') }"
+                                        name="shop_id" placeholder="Search a hotel" @input="getAccountsAndSupplier" />
+                                    <has-error :form="form" field="shop_id" />
                                 </div>
                                 <div class="form-group col-md-12 col-xl-4">
                                     <label for="supplier">{{ $t("common.supplier") }}
@@ -423,7 +423,7 @@ export default {
             },
         ],
         form: new Form({
-            hotel_id: null,
+            shop_id: null,
             supplier: "",
             selectedProducts: [],
             subTotal: 0,
@@ -465,7 +465,7 @@ export default {
                 this.hotelItems.forEach((hotel) => {
                     console.log(hotel.id);
                     console.log(newvalue);
-                    if (hotel.id == newvalue) this.form.hotel_id = hotel
+                    if (hotel.id == newvalue) this.form.shop_id = hotel
                 })
             }
 
@@ -494,13 +494,13 @@ export default {
         this.getAccounts();
         this.getTaxes();
 
-        this.prefix = this.appInfo.productPrefix; 
+        this.prefix = this.appInfo.productPrefix;
         if (this.selectedHotel && this.selectedHotel !== 'all') {
-            if (this.hotelItems) { 
+            if (this.hotelItems) {
                 console.log('this.hotelItems')
                 console.log(this.hotelItems)
                 this.hotelItems.forEach((hotel) => {
-                    if (hotel.id == this.selectedHotel) this.form.hotel_id = hotel
+                    if (hotel.id == this.selectedHotel) this.form.shop_id = hotel
                 })
             }
         }
@@ -566,9 +566,9 @@ export default {
             });
         },
         async getSuppliers() {
-            console.log(this.form.hotel_id);
+            console.log(this.form.shop_id);
             await this.$store.dispatch("operations/allData", {
-                path: (typeof this.form.hotel_id?.id === 'undefined') ? '/api/all-suppliers' : '/api/all-suppliers?hotel_id=' + this.form.hotel_id?.id,
+                path: (typeof this.form.shop_id?.id === 'undefined') ? '/api/all-suppliers' : '/api/all-suppliers?shop_id=' + this.form.shop_id?.id,
             });
             this.suppliers = this.items;
             this.form.supplier = this.suppliers[0];
@@ -613,13 +613,13 @@ export default {
         },
         // get accounts
         async getAccounts() {
-            // console.log(this.form.hotel_id);
-            // console.log(this.form.hotel_id?.id);
+            // console.log(this.form.shop_id);
+            // console.log(this.form.shop_id?.id);
             // const { data } = await this.form.get(
-            //     window.location.origin + (typeof this.form.hotel_id?.id === 'undefined') ? "/api/all-accounts" : '/api/all-accounts?hotel_id='+this.form.hotel_id?.id,
+            //     window.location.origin + (typeof this.form.shop_id?.id === 'undefined') ? "/api/all-accounts" : '/api/all-accounts?shop_id='+this.form.shop_id?.id,
             // );
             await this.$store.dispatch('operations/allData', {
-                path: (typeof this.form.hotel_id?.id === 'undefined') ? '/api/all-accounts' : '/api/all-accounts?hotel_id=' + this.form.hotel_id?.id,
+                path: (typeof this.form.shop_id?.id === 'undefined') ? '/api/all-accounts' : '/api/all-accounts?shop_id=' + this.form.shop_id?.id,
             })
             this.accounts = this.items
             // this.accounts = data.data;
@@ -799,7 +799,7 @@ export default {
         async savePurchase() {
             this.form.images = [];
             this.form.images = this.images && this.images.length ? _.map(this.images, 'file') : [];
-            
+
             await this.form
                 .post(window.location.origin + "/api/purchases")
                 .then(({ data }) => {
