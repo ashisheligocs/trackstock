@@ -31,7 +31,7 @@ class CreatePurchasesTable extends Migration
             $table->unsignedBigInteger('supplier_id');
             $table->unsignedBigInteger('tax_id')->nullable();
             $table->unsignedBigInteger('created_by');
-
+            $table->text('batch_id')->required();
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade')->onUpdate('no action');
             $table->foreign('tax_id')->references('id')->on('vat_rates')->onDelete('set null')->onUpdate('no action');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('no action')->onUpdate('no action');

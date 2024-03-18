@@ -163,7 +163,7 @@
                   <tr>
                     <th>{{ $t("common.s_no") }}</th>
                     <th>{{ $t("common.code") }}</th>
-                    <th>{{ $t("hotel.common.name") }}</th>
+                    <th>{{ $t("common.shop") }}</th>
                     <th>{{ $t("common.name") }}</th>
                     <th>{{ $t("reports.stock_in") }}</th>
                     <th>{{ $t("reports.stock_out") }}</th>
