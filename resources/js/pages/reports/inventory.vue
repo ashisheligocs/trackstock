@@ -14,7 +14,7 @@
           >
             <div class="card-body">
               <div class="row">
-                <div v-if="items" class="form-group col-md-6">
+                <!-- <div v-if="items" class="form-group col-md-6">
                   <label for="category"
                     >{{ $t("common.category") }}
                     <span class="required">*</span></label
@@ -29,7 +29,7 @@
                     @input="getSubCategories"
                   />
                   <has-error :form="form" field="category" />
-                </div>
+                </div> -->
                 <div v-if="items" class="form-group col-md-6">
                   <label for="subCategory"
                     >{{ $t("common.sub_category_name") }}
@@ -46,8 +46,6 @@
                   />
                   <has-error :form="form" field="subCategory" />
                 </div>
-              </div>
-              <div class="row">
                 <div v-if="items" class="form-group col-md-6">
                   <label for="itemName"
                     >{{ $t("common.product_name") }}
@@ -63,6 +61,10 @@
                   />
                   <has-error :form="form" field="itemName" />
                 </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6   "> 
+                  </div>
                 <div class="col-md-6 d-flex align-items-center inv_filter_cont position-relative">
                   <div class="col w-100 text-right float-right mt-4 d-flex justify-content-end">
                   <span class="px-2 py-1">
@@ -266,9 +268,9 @@ export default {
     form: new Form({
       fromDate: moment().subtract(7,'d').format('YYYY-MM-DD'),
       toDate: moment().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSS'),
-      category: "",
-      subCategory: "",
-      itemName: "",
+      category: {id: 0, name: "All Categories", slug: "all"},
+      subCategory: {id: 0, name: "All Sub Categories", slug: "all"},
+      itemName: {id: 0, name: "All Items", slug: "all"},
     }),
     loading: false,
     subCategories: [],
@@ -297,7 +299,9 @@ export default {
       } else {
         this.currentHotel = '';
       }
-    this.prefix = this.appInfo.productPrefix;
+    this.prefix = this.appInfo.productPrefix; 
+    this.form.category = 1;
+    this.getProducts()
   },
   methods: {
     // get all categories
@@ -310,6 +314,7 @@ export default {
         name: "All Categories",
         slug: "all",
       });
+      this.getSubCategories();
     },
 
     async getHotelDataList () {
@@ -323,7 +328,7 @@ export default {
       this.subCategories = [];
       this.form.subCategory = "";
 
-      let slug = this.form.category.slug;
+      let slug = this.form.category.slug ?? 'liquor';
       const { data } = await axios.get(
         window.location.origin + "/api/pro-sub-categories-by-category/" + slug
       );
@@ -351,7 +356,7 @@ export default {
     async getProducts() {
       this.products = [];
       this.form.itemName = "";
-      let catSlug = this.form.category.slug;
+      let catSlug = this.form.category.slug ?? 'liquor';
       let subCatSlug = this.form.subCategory.slug;
       const { data } = await axios.get(
         window.location.origin +
