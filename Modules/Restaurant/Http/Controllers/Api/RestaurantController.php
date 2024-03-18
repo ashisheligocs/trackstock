@@ -21,21 +21,20 @@ class RestaurantController extends Controller
     public function index(Request $request)
     {
         $setting = GeneralSetting::where('key', 'selected_hotel')->first();
+
         if ($setting && $setting->value && $setting->value !== 'all') {
-            $restaurants = Restaurant::whereHas('hotel', function ($q) use ($setting) {
+            $restaurants = Restaurant::whereHas('shop', function ($q) use ($setting) {
                 $q->where('id', $setting->value);
             })->with([
-                'hotel' => function ($query) {
-                    $query->select('hotel_name', 'hotel_phone', 'hotel_email', 'id');
+                'shop' => function ($query) {
+                    $query->select('shop_name', 'shop_phone', 'shop_email', 'id');
                 },
-                'price',
             ])->latest()->paginate($request->perPage);
         } else {
             $restaurants = Restaurant::with([
-                'hotel' => function ($query) {
-                    $query->select('hotel_name', 'hotel_phone', 'hotel_email', 'id');
+                'shop' => function ($query) {
+                    $query->select('shop_name', 'shop_phone', 'shop_email', 'id');
                 },
-                'price',
             ])->latest()->paginate($request->perPage);
         }
 
@@ -170,13 +169,13 @@ class RestaurantController extends Controller
     }
 
     public function updateItemStatus(Request $request, Restaurant $restaurant){
-        
+
         DB::beginTransaction();
         try {
             RestaurantItem::where('restaurant_id', $restaurant->id)
                       ->where('item_id', $request->item_id)
                       ->update(['active' => $request->active]);
-  
+
             DB::commit();
             return $this->responseWithSuccess('Restaurant Item Status updated successfully.');
         } catch (Exception $e) {

@@ -55,14 +55,14 @@
               <p>Past Booking</p>
             </router-link>
           </li> -->
-          <li class="nav-item">
+          <li class="nav-item" v-if="$can('shops-create')">
             <router-link :to="{ name: 'shops' }" class="nav-link">
               <i class="fas fa-hotel nav-icon" />
               <p>{{ $t('sidebar.shops') }}</p>
             </router-link>
           </li>
           <!-------------sales-------------->
-          <li class="nav-header text-bold">SALES</li>
+          <li class="nav-header text-bold" v-if="$can('shops-create')">SALES</li>
           <li v-if="$can('client-list') ||
       $can('client-create') ||
       $can('client-view') ||
@@ -107,7 +107,7 @@
           <!--------------------------Accounting---------------------------------->
           <li class="nav-header text-bold">{{ $t("sidebar.accounting") }}</li>
 
-          <!-- <li class="nav-item" 
+          <!-- <li class="nav-item"
           v-if="$can('account-list') || $can('ledger-group-create') ||
             $can('account-create') || $can('ledger-group-list') ||
             $can('account-view') || $can('ledger-group-edit') ||

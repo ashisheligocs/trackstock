@@ -1,468 +1,434 @@
 <template>
-    <div id="pos">
-        <!-- breadcrumbs Start -->
-        <!-- <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" /> -->
-        <!-- breadcrumbs end -->
+  <div id="pos">
+    <!-- breadcrumbs Start -->
+    <!-- <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" /> -->
+    <!-- breadcrumbs end -->
 
-        <div class="row sm-col-reverse">
-            <!-- pos left area start -->
-            <div class="col-12 col-md-7">
-                <div class="card bg-transparent">
-                    <div class="pos-r-head bg-white">
-                        <div class="row">
-                            <div v-if="hotelItems.length" class="form-group col-md-6">
-                                <v-select class="flex-grow-1" v-model="hotel" :options="hotelItems" label="shop_name"
-                                    name="hotel" placeholder="Select a Shops" :clearable="false" />
-                                <has-error :form="form" field="category" />
+    <div class="row sm-col-reverse">
+      <!-- pos left area start -->
+      <div class="col-12 col-md-7">
+        <div class="card bg-transparent">
+          <div class="pos-r-head bg-white">
+            <div class="row">
+              <!-- <div v-if="hotelItems.length" class="form-group col-md-6">
+                <v-select class="flex-grow-1" v-model="hotel" :options="hotelItems" label="shop_name" name="hotel"
+                  placeholder="Select a Shops" :clearable="false" />
+                <has-error :form="form" field="category" />
 
-                            </div>
-                            <div v-if="categoryOptions.length" class="form-group col-md-6">
-                                <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
-                                    :class="{ 'is-invalid': form.errors.has('category') }" name="category"
-                                    placeholder="Select a category" />
-                                <has-error :form="form" field="category" />
-                            </div>
-                            <div v-if="products" class="col-md-12 form-group">
-                                <div class="d-flex w-100">
-                                    <search class="flex-grow-1" :isPosSearch="true" v-model="query"
-                                        @reset-pagination="resetPagination()" @reload="reload" />
-                                </div>
-                                <has-error :form="form" field="selectedProducts" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card-body bg-white mt-3 pos-body">
-                        <table-loading v-show="loading" />
-                        <div class="pos-item-grid">
-                            <div v-if="product.status == 1" v-for="product in products" :key="product.id">
-                                <div>
-                                    <div class="pos-box" @click="openProductModal(product)">
-                                        <div class="relative">
-                                            <div class="pos-box-img">
-                                                <div v-if="product?.image">
-                                                    <img class="pos-box-icon"
-                                                        :src="product?.image?.replace('storage/', '/storage/')"
-                                                        alt="product image" />
-                                                </div>
-                                                <div v-else>{{ $t("common.no_preview") }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="pos-box-content">
-                                            <p class="pos-box-text">{{ product.name }} ({{ product.inventoryCount ?? 0
-                                                }}
-                                                In stock)</p>
-                                            <span class="text-bold text-lg">{{ product.regularPrice | withCurrency
-                                                }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="row">
-                            <div class="col-12 d-flex justify-content-center">
-                                <!-- pagination-start -->
-                                <pagination v-if="pagination && pagination.last_page > 1" :pagination="pagination"
-                                    :offset="5" class="justify-flex-end mt-3" @paginate="paginate" />
-                                <!-- pagination-end -->
-                            </div>
-                        </div>
-                    </div>
+              </div> -->
+              <div v-if="categoryOptions.length" class="form-group col-md-12">
+                <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
+                  :class="{ 'is-invalid': form.errors.has('category') }" name="category"
+                  placeholder="Select a Brand" />
+                <has-error :form="form" field="category" />
+              </div>
+              <div v-if="products" class="col-md-12 form-group">
+                <div class="d-flex w-100">
+                  <search class="flex-grow-1" :isPosSearch="true" v-model="query" @reset-pagination="resetPagination()"
+                    @reload="reload" />
                 </div>
+                <has-error :form="form" field="selectedProducts" />
+              </div>
             </div>
-            <!-- pos left area end -->
+          </div>
 
-            <!-- POS Right area start -->
-            <div class="col-12 col-md-5">
-                <div class="card">
-                    <div class="card-body-l p-0">
-                        <div class="form-group pl-3 pt-3 pr-3 d-none">
-                            <div class="d-flex w-100">
-                                <!-- <Multiselect v-model="form.client" :options="clients" :taggable="false" :show-labels="false"
+          <div class="card-body bg-white mt-3 pos-body">
+            <table-loading v-show="loading" />
+            <div class="pos-item-grid">
+              <div v-if="product.status == 1" v-for="product in products" :key="product.id">
+                <div>
+                  <div class="pos-box" @click="openProductModal(product)">
+                    <div class="relative">
+                      <div class="pos-box-img">
+                        <div v-if="product?.image">
+                          <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
+                            alt="product image" />
+                        </div>
+                        <div v-else>{{ $t("common.no_preview") }}</div>
+                      </div>
+                    </div>
+                    <div class="pos-box-content">
+                      <p class="pos-box-text">{{ product.name }} ({{ product.inventoryCount ?? 0
+                        }}
+                        In stock)</p>
+                      <span class="text-bold text-lg">{{ product.regularPrice | withCurrency
+                        }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-12 d-flex justify-content-center">
+                <!-- pagination-start -->
+                <pagination v-if="pagination && pagination.last_page > 1" :pagination="pagination" :offset="5"
+                  class="justify-flex-end mt-3" @paginate="paginate" />
+                <!-- pagination-end -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- pos left area end -->
+
+      <!-- POS Right area start -->
+      <div class="col-12 col-md-5">
+        <div class="card">
+          <div class="card-body-l p-0">
+            <div class="form-group pl-3 pt-3 pr-3 d-none">
+              <div class="d-flex w-100">
+                <!-- <Multiselect v-model="form.client" :options="clients" :taggable="false" :show-labels="false"
                                     tag-placeholder="" :placeholder="$t('common.client_placeholder')" class="form-control"
                                     @select="form.room = null" :custom-label="({ name, phone }) => `${name} (${phone})`"
                                     label="name" track-by="id" style="min-width: 85%"></Multiselect> -->
-                                <v-select v-model="form.client" :options="clients" label="name"
-                                    :class="{ 'is-invalid': form.errors.has('client') }" name="client"
-                                    :placeholder="$t('common.client_placeholder')" />
-                                <has-error :form="form" field="client" />
-                                <ClientCreateModal @reloadClients="getClients">
-                                    <div class="input-group-text create-btn">
-                                        <i class="fas fa-solid fa-plus-circle"></i>
-                                    </div>
-                                </ClientCreateModal>
-                            </div>
-                            <has-error :form="form" field="client" />
-                            <!-- <div class="w-100 mt-2">
+                <v-select v-model="form.client" :options="clients" label="name"
+                  :class="{ 'is-invalid': form.errors.has('client') }" name="client"
+                  :placeholder="$t('common.client_placeholder')" />
+                <has-error :form="form" field="client" />
+                <ClientCreateModal @reloadClients="getClients">
+                  <div class="input-group-text create-btn">
+                    <i class="fas fa-solid fa-plus-circle"></i>
+                  </div>
+                </ClientCreateModal>
+              </div>
+              <has-error :form="form" field="client" />
+              <!-- <div class="w-100 mt-2">
                                 <Multiselect v-model="form.room" :options="occupiedRooms" :taggable="false"
                                     :show-labels="false" tag-placeholder="" placeholder="Select a room" class="form-control"
                                     @select="form.client = null" label="room_name" track-by="id" style="min-width: 80%">
                                 </Multiselect>
                             </div> -->
-                        </div>
-
-                        <div class="table-responsive table-wrap">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">{{ $t("common.product") }}</th>
-                                        <th scope="col">{{ $t("common.price") }}</th>
-                                        <th scope="col" class="text-center">
-                                            {{ $t("common.quantity") }}
-                                        </th>
-                                        <th scope="col" class="text-center">
-                                            Total
-                                        </th>
-                                        <th scope="col" class="text-center">
-                                            {{ $t("common.action") }}
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody v-if="selectedItemList && selectedItemList.length > 0">
-                                    <tr v-for="(singleItem, i) in selectedItemList" :key="i">
-                                        <td>
-                                            {{ singleItem.name }}
-                                            <span v-if="singleItem.addonString != ''" style="font-size: 11px;"><br />{{
-                                singleItem.addonString }}</span>
-                                        </td>
-                                        <!-- <td>{{ parseFloat(product.variant?.price) + parseFloat(product.addonAmount) | withCurrency }}</td> -->
-                                        <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td>
-                                        <td>
-                                            <div class="d-flex custom-qty-input">
-                                                <input type="button" value="-"
-                                                    class="button-minus icon-shape icon-sm btn-danger"
-                                                    data-field="quantity"
-                                                    @click="adjustQuantity($event, i, 'decrement')" />
-                                                <input type="number" step="any" :id="`Qty-${i}`"
-                                                    :value="singleItem.quantity" name="quantity"
-                                                    class="quantity-field border-0 incrementor" required
-                                                    @input="adjustQuantity($event, i)"
-                                                    @change="preventZeroValue($event, i)" placeholder="Quantity" />
-                                                <input type="button" value="+"
-                                                    class="button-plus icon-shape icon-sm btn-primary"
-                                                    data-field="quantity"
-                                                    @click="adjustQuantity($event, i, 'increment')" />
-                                            </div>
-                                        </td>
-                                        <td class="text-right">{{ itemSubtotal(singleItem) | withCurrency }}</td>
-                                        <td class="text-right">
-                                            <button type="button" class="btn btn-danger" @click="removeItem(i)">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tbody v-else>
-                                    <tr class="text-center">
-                                        <td colspan="5">{{ $t("no_data_found") }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pos-card-footer bg-white">
-                    <div>
-                        <div class="row pt-3 pl-3 pr-3">
-                            <div class="form-group col-md-6 col-lg-6">
-                                <label for="discountType">{{
-                                $t("common.discount_type")
-                            }}</label>
-                                <select id="discountType" v-model="form.discountType" step="any" class="form-control"
-                                    :class="{ 'is-invalid': form.errors.has('discountType') }" name="discountType">
-                                    <option value="0">{{ $t("common.fixed") }}</option>
-                                    <option value="1">{{ $t("common.percentage") }}(%)</option>
-                                </select>
-                                <has-error :form="form" field="discountType" />
-                            </div>
-                            <div class="form-group col-md-6 col-lg-6">
-                                <label for="discount">{{ $t("common.discount") }}
-                                    <span v-if="form.discountType == 1">(%)</span></label>
-                                <div class="input-group">
-                                    <input id="discount" v-model="form.discount" type="number" step="any" min="1"
-                                        :max="form.discountType == 1 ? 100 : foodItemSubTotal" class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('discount') }" name="discount"
-                                        :placeholder="$t('common.discount_placeholder')" />
-                                    <div v-if="form.discountType == 1" class="input-group-append">
-                                        <span class="input-group-text">{{
-                                foodItemDiscount | withCurrency
-                            }}</span>
-                                    </div>
-                                </div>
-                                <has-error :form="form" field="discount" />
-                            </div>
-                            <div class="form-group col-md-6 col-lg-6">
-                                <input id="include_gst" type="checkbox" v-model="tax_included">
-                                <label for="include_gst">Inclusive GST</label>
-                            </div>
-                        </div>
-
-                        <div class="pos-net-total noi-print">
-                            <div>
-                                Subtotal: {{ foodItemFinalSubtotal | withCurrency }}
-                            </div>
-                            <div>
-                                Discount: {{ foodItemDiscount | withCurrency }}
-                            </div>
-                            <div>
-                                GST: {{ foodItemTax | withCurrency }}
-                            </div>
-                            <div class="text-lg">
-                                Net Total: {{ foodItemNetTotal | withCurrency }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row no-print">
-                    <div class="col-12 col-lg-6 mb-1">
-                        <button class="btn btn-primary btn-block" @click="saveOrder($event, false)"
-                            @keydown="form.onKeydown($event)" :disabled="selectedItemList.length <= 0">
-                            <i class="fas fa-save" /> Save
-                        </button>
-                    </div>
-                    <div class="col-12 col-lg-6 mb-1">
-                        <button class="btn btn-primary btn-block" @click="saveOrder($event, true)" :disabled="selectedItemList.length <= 0">
-                            <i class="fas fa-credit-card" />
-                            Save & Payment 
-                        </button>
-                    </div>
-                </div>
             </div>
-            <!-- POS Right area end -->
+
+            <div class="table-responsive table-wrap">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">{{ $t("common.product") }}</th>
+                    <th scope="col">{{ $t("common.price") }}</th>
+                    <th scope="col" class="text-center">
+                      {{ $t("common.quantity") }}
+                    </th>
+                    <th scope="col" class="text-center">
+                      Total
+                    </th>
+                    <th scope="col" class="text-center">
+                      {{ $t("common.action") }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody v-if="selectedItemList && selectedItemList.length > 0">
+                  <tr v-for="(singleItem, i) in selectedItemList" :key="i">
+                    <td>
+                      {{ singleItem.name }}
+                      <span v-if="singleItem.addonString != ''" style="font-size: 11px;"><br />{{
+                singleItem.addonString }}</span>
+                    </td>
+                    <!-- <td>{{ parseFloat(product.variant?.price) + parseFloat(product.addonAmount) | withCurrency }}</td> -->
+                    <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td>
+                    <td>
+                      <div class="d-flex custom-qty-input">
+                        <input type="button" value="-" class="button-minus icon-shape icon-sm btn-danger"
+                          data-field="quantity" @click="adjustQuantity($event, i, 'decrement')" />
+                        <input type="number" step="any" :id="`Qty-${i}`" :value="singleItem.quantity" name="quantity"
+                          class="quantity-field border-0 incrementor" required @input="adjustQuantity($event, i)"
+                          @change="preventZeroValue($event, i)" placeholder="Quantity" />
+                        <input type="button" value="+" class="button-plus icon-shape icon-sm btn-primary"
+                          data-field="quantity" @click="adjustQuantity($event, i, 'increment')" />
+                      </div>
+                    </td>
+                    <td class="text-right">{{ itemSubtotal(singleItem) | withCurrency }}</td>
+                    <td class="text-right">
+                      <button type="button" class="btn btn-danger" @click="removeItem(i)">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody v-else>
+                  <tr class="text-center">
+                    <td colspan="5">{{ $t("no_data_found") }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
-        <!-- use the modal component, pass in the prop -->
+        <div class="pos-card-footer bg-white">
+          <div>
 
-        <VModal v-if="showProductModal" v-model="showProductModal" @close="showProductModal = false">
-            <h3 slot="title">{{ currentProduct.name }}</h3>
-            <div>
-                <div v-if="currentProduct?.image" style="width: 100%; height: 17rem">
-                    <img class="card-img-top p-3 rounded" :src="currentProduct?.image?.replace('storage/', '/storage/')"
-                        alt="product image" style="width:100%;height: 100%;object-fit:contain" />
-                </div>
-                <div v-else>{{ $t("common.no_preview") }}</div>
-                <div class="card-body border-top p-4">
-                    <div>{{ currentProduct.name }}</div>
-                    <span class="text-bold text-lg">{{ currentProduct.price | withCurrency }}</span>
-
-                    <div v-if="currentProduct?.variants?.length > 0" class="mt-4">
-                        <h5 class="card-text text-bold mb-2">Select Variant</h5>
-                        <div class="form-check" v-for="variant in currentProduct?.variants" :key="variant.id">
-                            <input type="radio" class="form-check-input" v-model="currentVariant"
-                                :id="`variant${variant.id}`" name="" :value="variant">
-                            <label class="form-check-label d-flex justify-content-between" :for="`variant${variant.id}`"
-                                style="max-width: 60%">
-                                <span>{{ variant.name }}</span>
-                                <span>{{ variant.price }}</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div v-if="currentProduct?.optionalItems?.length > 0" class="mt-4">
-                        <h5 class="card-text text-bold mb-2">Select Addon (Optional)</h5>
-                        <div class="form-check" v-for="optionalItem in currentProduct?.optionalItems"
-                            :key="optionalItem.id">
-                            <input type="checkbox" class="form-check-input" :id="`optionalItem${optionalItem.id}`"
-                                name="option1" :value="optionalItem" v-model="currentAddon">
-                            <label class="form-check-label d-flex justify-content-between"
-                                :for="`optionalItem${optionalItem.id}`" style="max-width: 60%">
-                                <span>{{ optionalItem.name }}</span>
-                                <span>+{{ optionalItem.price }}</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <h5 class="card-text text-bold mb-2">Amount</h5>
-                        <h4 class="my-2">{{ currentItemAmount | withCurrency }}</h4>
-                    </div>
-
-                </div>
-            </div>
-            <div slot="modal-footer">
-                <button @click="addItemInList" class="btn btn-primary">Add Now</button>
-                <button @click="showProductModal = false" class="btn btn-primary">Cancel</button>
-            </div>
-        </VModal>
-
-        <Modal class="pay-modal" v-if="showModal" :form="form">
-            <h5 slot="header" style="margin: 1rem">{{ $t("pos.add_payment") }}</h5>
-            <div class="w-100" slot="body">
-                <div>
-                    <div class="font-weight-bold">
-                        <span>Net payable amount :</span>
-                        <span>{{ form.netTotal | forBalanceSheetCurrencyDecimalOnly }}</span>
-                    </div>
-                    <div class="row" v-if="accounts &&
-                                form.selectedProducts &&
-                                form.selectedProducts.length > 0
-                                ">
-                        <div class="form-group col-md-6">
-                            <label for="account">{{ $t("common.account") }}
-                                <span class="required">*</span></label>
-                            <v-select v-model="form.account" :options="accounts" label="ledgerName"
-                                :class="{ 'is-invalid': form.errors.has('account') }" name="account"
-                                :placeholder="$t('common.account_placeholder')" />
-                            <has-error :form="form" field="account" />
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label>
-                            <input ref="paidAmountInput" id="paidAmount" v-model="form.paidAmount" type="number"
-                                step="any" class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }"
-                                name="paidAmount" min="1" :max="form.netTotal"
-                                :placeholder="$t('common.paid_amount_placeholder')" disabled />
-                            <has-error :form="form" field="paidAmount" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label for="receiptNo">Order No.</label>
-                            <input id="receiptNo" v-model="form.receiptNo" type="text" class="form-control"
-                                :class="{ 'is-invalid': form.errors.has('receiptNo') }" name="receiptNo"
-                                :placeholder="$t('common.receipt_no_placeholder')" disabled />
-                            <has-error :form="form" field="receiptNo" />
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="date">{{ $t("common.date") }}</label>
-                            <input id="date" v-model="form.date" type="date" class="form-control"
-                                :class="{ 'is-invalid': form.errors.has('date') }" name="date" />
-                            <has-error :form="form" field="date" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="note">{{ $t("common.note") }}</label>
-                        <textarea id="note" v-model="form.note" class="form-control"
-                            :class="{ 'is-invalid': form.errors.has('note') }"
-                            :placeholder="$t('common.note_placeholder')" />
-                        <has-error :form="form" field="note" />
-                    </div>
-                </div>
-            </div>
-            <div class="payment-modal-footer" slot="modal-footer">
-                <div class="pos-modal-footer no-print">
-                    <button class="btn btn-primary" @click="addPayment" @keydown="form.onKeydown($event)">
-                        <i class="fas fa-save" /> {{ $t("common.save") }}
-                    </button>
-                    <button class="modal-default-button btn btn-danger" @click="closeModalAndClearFormData">
-                        {{ $t("common.close") }}
-                    </button>
-                </div>
-            </div>
-        </Modal>
-
-        <Modal v-if="showSmallInvoiceModal && allData">
-            <h5 slot="header" class="no-print">Order Receipt</h5>
-            <div class="w-100" slot="body">
-                <div id="invoice-POS">
-                    <div style="max-width: 400px; margin: 0px auto">
-                        <div class="info">
-                            <div v-if="appInfo.blackLogo" class="pos-logo">
-                                <img :src="appInfo.blackLogo" width="100px" />
-                            </div>
-                            <h2 v-else class="text-center">{{ appInfo.companyName }}</h2>
-                            <div class="text-bold text-center text-lg" v-show="hotel.hotel_name"> {{ hotel.hotel_name }}
-                                <br />
-                            </div>
-                            <p>
-                                <span>{{ $t("common.date") }} : {{ allData.date }} <br /></span>
-                                <span v-show="hotel.hotel_address">{{ $t("common.address") }} : {{ hotel.hotel_address
-                                    }}
-                                    <br /></span>
-                                <span v-show="hotel.hotel_email">{{ $t("common.phone") }} : {{ hotel.hotel_phone }}
-                                    <br /></span>
-                                <span v-show="hotel.hotel_phone">{{ $t("common.email") }} : {{ hotel.hotel_email }}
-                                    <br /></span>
-                                <span v-show="allData?.client?.name">{{ $t("common.client") }} : {{ allData.client.name
-                                    }}
-                                    <br /></span>
-                            </p>
-                        </div>
-
-                        <table class="table_data">
-                            <tbody>
-                                <tr v-for="(data, i) in allData.selectedProducts" :key="i">
-                                    <td colspan="3">
-                                        <span>
-                                            <span>{{ data.name }}</span><br />
-                                            <span class="pqty">{{ data.quantity }} x {{ data?.variant?.price |
-                                withCurrency
-                                                }}
-                                                {{ addonPrice(data) > 0 ? '+' + addonPrice(data) : '' }} </span>
-                                        </span>
-                                    </td>
-                                    <td style="text-align: right; vertical-align: bottom">
-                                        {{ itemSubtotal(data) | withCurrency }}
-                                    </td>
-                                </tr>
-
-                                <tr style="margin-top: 10px">
-                                    <td colspan="3" class="total">{{ $t("common.subtotal") }}</td>
-                                    <td style="text-align: right" class="total">
-                                        {{ allData.subTotal | withCurrency }}
-                                    </td>
-                                </tr>
-                                <tr v-if="allData.discountAmount" style="margin-top: 10px">
-                                    <td colspan="3" class="total">{{ $t("common.discount") }}</td>
-                                    <td style="text-align: right" class="total">
-                                        {{ allData.discountAmount | withCurrency }}
-                                    </td>
-                                </tr>
-                                <tr v-if="allData.tax" style="margin-top: 10px">
-                                    <td colspan="3" class="total">{{ $t("common.tax") }}</td>
-                                    <td style="text-align: right" class="total">
-                                        {{ allData.tax }}
-                                    </td>
-                                </tr>
-                                <tr style="margin-top: 10px">
-                                    <td colspan="3" class="total">{{ $t("common.total") }}</td>
-                                    <td style="text-align: right" class="total">
-                                        {{ allData.netTotal | withCurrency }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3" class="total">{{ $t("common.paid") }}</td>
-                                    <td style="text-align: right" class="total">
-                                        -{{ allData.paidAmount | withCurrency }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3" class="total">{{ $t("common.due") }}</td>
-                                    <td style="text-align: right" class="total">
-                                        {{ parseFloat(allData.netTotal) - parseFloat(allData.paidAmount) | withCurrency
-                                        }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div id="legalcopy" class="ml-2 mb-4">
-                            <p class="legal">
-                                <strong>{{ $t("pos.receipt_text") }}</strong>
-                            </p>
-                            <div id="bar" style="overflow: hidden">
-                                <barcode width="2" height="25" fontSize="15" :value="allData.invoice_slug">
-                                    {{ $t("common.rendering_fails") }}
-                                </barcode>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="pos-modal-footer no-print" slot="modal-footer">
-                <div>
-                    <button @click="printInvoice" class="modal-default-button btn btn-info">
-                        {{ $t("common.print") }}
-                    </button>
-                </div>
-                <button class="modal-default-button btn btn-danger" @click="closeReceiptModal">
-                    {{ $t("common.close") }}
+            <div class="pos-net-total noi-print">
+              <!-- <div>
+                Subtotal: {{ foodItemFinalSubtotal | withCurrency }}
+              </div>
+              <div>
+                Discount: {{ foodItemDiscount | withCurrency }}
+              </div>
+              <div>
+                GST: {{ foodItemTax | withCurrency }}
+              </div> -->
+              <div class="row">
+                <button class="btn btn-primary btn-block col-6" @click="saveOrder($event, true)"
+                  :disabled="selectedItemList.length <= 0">
+                  <i class="fas fa-credit-card" />
+                  Save & Payment
                 </button>
+                <div class="col-6">
+                  Net Total: {{ foodItemNetTotal | withCurrency }}
+                </div>
+              </div>
+
             </div>
-        </Modal>
+          </div>
+        </div>
+
+        <!-- <div class="row no-print">
+          <div class="col-12 col-lg-6 mb-1">
+            <button class="btn btn-primary btn-block" @click="saveOrder($event, false)"
+              @keydown="form.onKeydown($event)" :disabled="selectedItemList.length <= 0">
+              <i class="fas fa-save" /> Save
+            </button>
+          </div>
+          <div class="col-12 col-lg-6 mb-1">
+            <button class="btn btn-primary btn-block" @click="saveOrder($event, true)"
+              :disabled="selectedItemList.length <= 0">
+              <i class="fas fa-credit-card" />
+              Save & Payment
+            </button>
+          </div>
+        </div> -->
+      </div>
+      <!-- POS Right area end -->
     </div>
+
+    <!-- use the modal component, pass in the prop -->
+
+    <VModal v-if="showProductModal" v-model="showProductModal" @close="showProductModal = false">
+      <h3 slot="title">{{ currentProduct.name }}</h3>
+      <div>
+        <div v-if="currentProduct?.image" style="width: 100%; height: 17rem">
+          <img class="card-img-top p-3 rounded" :src="currentProduct?.image?.replace('storage/', '/storage/')"
+            alt="product image" style="width:100%;height: 100%;object-fit:contain" />
+        </div>
+        <div v-else>{{ $t("common.no_preview") }}</div>
+        <div class="card-body border-top p-4">
+          <div>{{ currentProduct.name }}</div>
+          <span class="text-bold text-lg">{{ currentProduct.price | withCurrency }}</span>
+
+          <div v-if="currentProduct?.variants?.length > 0" class="mt-4">
+            <h5 class="card-text text-bold mb-2">Select Variant</h5>
+            <div class="form-check" v-for="variant in currentProduct?.variants" :key="variant.id">
+              <input type="radio" class="form-check-input" v-model="currentVariant" :id="`variant${variant.id}`" name=""
+                :value="variant">
+              <label class="form-check-label d-flex justify-content-between" :for="`variant${variant.id}`"
+                style="max-width: 60%">
+                <span>{{ variant.name }}</span>
+                <span>{{ variant.price }}</span>
+              </label>
+            </div>
+          </div>
+
+          <div v-if="currentProduct?.optionalItems?.length > 0" class="mt-4">
+            <h5 class="card-text text-bold mb-2">Select Addon (Optional)</h5>
+            <div class="form-check" v-for="optionalItem in currentProduct?.optionalItems" :key="optionalItem.id">
+              <input type="checkbox" class="form-check-input" :id="`optionalItem${optionalItem.id}`" name="option1"
+                :value="optionalItem" v-model="currentAddon">
+              <label class="form-check-label d-flex justify-content-between" :for="`optionalItem${optionalItem.id}`"
+                style="max-width: 60%">
+                <span>{{ optionalItem.name }}</span>
+                <span>+{{ optionalItem.price }}</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <h5 class="card-text text-bold mb-2">Amount</h5>
+            <h4 class="my-2">{{ currentItemAmount | withCurrency }}</h4>
+          </div>
+
+        </div>
+      </div>
+      <div slot="modal-footer">
+        <button @click="addItemInList" class="btn btn-primary">Add Now</button>
+        <button @click="showProductModal = false" class="btn btn-primary">Cancel</button>
+      </div>
+    </VModal>
+
+    <Modal class="pay-modal" v-if="showModal" :form="form">
+      <h5 slot="header" style="margin: 1rem">{{ $t("pos.add_payment") }}</h5>
+      <div class="w-100" slot="body">
+        <div>
+          <div class="font-weight-bold">
+            <span>Net payable amount :</span>
+            <span>{{ form.netTotal | forBalanceSheetCurrencyDecimalOnly }}</span>
+          </div>
+          <div class="row" v-if="accounts &&
+                form.selectedProducts &&
+                form.selectedProducts.length > 0
+                ">
+            <div class="form-group col-md-6">
+              <label for="account">{{ $t("common.account") }}
+                <span class="required">*</span></label>
+              <v-select v-model="form.account" :options="accounts" label="ledgerName"
+                :class="{ 'is-invalid': form.errors.has('account') }" name="account"
+                :placeholder="$t('common.account_placeholder')" />
+              <has-error :form="form" field="account" />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label>
+              <input ref="paidAmountInput" id="paidAmount" v-model="form.paidAmount" type="number" step="any"
+                class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1"
+                :max="form.netTotal" :placeholder="$t('common.paid_amount_placeholder')" disabled />
+              <has-error :form="form" field="paidAmount" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="receiptNo">Order No.</label>
+              <input id="receiptNo" v-model="form.receiptNo" type="text" class="form-control"
+                :class="{ 'is-invalid': form.errors.has('receiptNo') }" name="receiptNo"
+                :placeholder="$t('common.receipt_no_placeholder')" disabled />
+              <has-error :form="form" field="receiptNo" />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="date">{{ $t("common.date") }}</label>
+              <input id="date" v-model="form.date" type="date" class="form-control"
+                :class="{ 'is-invalid': form.errors.has('date') }" name="date" />
+              <has-error :form="form" field="date" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="note">{{ $t("common.note") }}</label>
+            <textarea id="note" v-model="form.note" class="form-control"
+              :class="{ 'is-invalid': form.errors.has('note') }" :placeholder="$t('common.note_placeholder')" />
+            <has-error :form="form" field="note" />
+          </div>
+        </div>
+      </div>
+      <div class="payment-modal-footer" slot="modal-footer">
+        <div class="pos-modal-footer no-print">
+          <button class="btn btn-primary" @click="addPayment" @keydown="form.onKeydown($event)">
+            <i class="fas fa-save" /> {{ $t("common.save") }}
+          </button>
+          <button class="modal-default-button btn btn-danger" @click="closeModalAndClearFormData">
+            {{ $t("common.close") }}
+          </button>
+        </div>
+      </div>
+    </Modal>
+
+    <Modal v-if="showSmallInvoiceModal && allData">
+      <h5 slot="header" class="no-print">Order Receipt</h5>
+      <div class="w-100" slot="body">
+        <div id="invoice-POS">
+          <div style="max-width: 400px; margin: 0px auto">
+            <div class="info">
+              <div v-if="appInfo.blackLogo" class="pos-logo">
+                <img :src="appInfo.blackLogo" width="100px" />
+              </div>
+              <h2 v-else class="text-center">{{ appInfo.companyName }}</h2>
+              <div class="text-bold text-center text-lg" v-show="hotel.hotel_name"> {{ hotel.hotel_name }}
+                <br />
+              </div>
+              <p>
+                <span>{{ $t("common.date") }} : {{ allData.date }} <br /></span>
+                <span v-show="hotel.hotel_address">{{ $t("common.address") }} : {{ hotel.hotel_address
+                  }}
+                  <br /></span>
+                <span v-show="hotel.hotel_email">{{ $t("common.phone") }} : {{ hotel.hotel_phone }}
+                  <br /></span>
+                <span v-show="hotel.hotel_phone">{{ $t("common.email") }} : {{ hotel.hotel_email }}
+                  <br /></span>
+                <span v-show="allData?.client?.name">{{ $t("common.client") }} : {{ allData.client.name
+                  }}
+                  <br /></span>
+              </p>
+            </div>
+
+            <table class="table_data">
+              <tbody>
+                <tr v-for="(data, i) in allData.selectedProducts" :key="i">
+                  <td colspan="3">
+                    <span>
+                      <span>{{ data.name }}</span><br />
+                      <span class="pqty">{{ data.quantity }} x {{ data?.variant?.price |
+                withCurrency
+                        }}
+                        {{ addonPrice(data) > 0 ? '+' + addonPrice(data) : '' }} </span>
+                    </span>
+                  </td>
+                  <td style="text-align: right; vertical-align: bottom">
+                    {{ itemSubtotal(data) | withCurrency }}
+                  </td>
+                </tr>
+
+                <tr style="margin-top: 10px">
+                  <td colspan="3" class="total">{{ $t("common.subtotal") }}</td>
+                  <td style="text-align: right" class="total">
+                    {{ allData.subTotal | withCurrency }}
+                  </td>
+                </tr>
+                <tr v-if="allData.discountAmount" style="margin-top: 10px">
+                  <td colspan="3" class="total">{{ $t("common.discount") }}</td>
+                  <td style="text-align: right" class="total">
+                    {{ allData.discountAmount | withCurrency }}
+                  </td>
+                </tr>
+                <tr v-if="allData.tax" style="margin-top: 10px">
+                  <td colspan="3" class="total">{{ $t("common.tax") }}</td>
+                  <td style="text-align: right" class="total">
+                    {{ allData.tax }}
+                  </td>
+                </tr>
+                <tr style="margin-top: 10px">
+                  <td colspan="3" class="total">{{ $t("common.total") }}</td>
+                  <td style="text-align: right" class="total">
+                    {{ allData.netTotal | withCurrency }}
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3" class="total">{{ $t("common.paid") }}</td>
+                  <td style="text-align: right" class="total">
+                    -{{ allData.paidAmount | withCurrency }}
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3" class="total">{{ $t("common.due") }}</td>
+                  <td style="text-align: right" class="total">
+                    {{ parseFloat(allData.netTotal) - parseFloat(allData.paidAmount) | withCurrency
+                    }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div id="legalcopy" class="ml-2 mb-4">
+              <p class="legal">
+                <strong>{{ $t("pos.receipt_text") }}</strong>
+              </p>
+              <div id="bar" style="overflow: hidden">
+                <barcode width="2" height="25" fontSize="15" :value="allData.invoice_slug">
+                  {{ $t("common.rendering_fails") }}
+                </barcode>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pos-modal-footer no-print" slot="modal-footer">
+        <div>
+          <button @click="printInvoice" class="modal-default-button btn btn-info">
+            {{ $t("common.print") }}
+          </button>
+        </div>
+        <button class="modal-default-button btn btn-danger" @click="closeReceiptModal">
+          {{ $t("common.close") }}
+        </button>
+      </div>
+    </Modal>
+  </div>
 </template>
 <script>
 
@@ -730,12 +696,12 @@
             doThis() {
                 console.log("do this");
             },
-            openProductModal(product) { 
-              if(product.inventoryCount == 0 || product.inventoryCount == null){ 
+            openProductModal(product) {
+              if(product.inventoryCount == 0 || product.inventoryCount == null){
                     return toast.fire({
                         type: "error",
                         title: 'Insufficient Stock !',
-                    }); 
+                    });
               }
 
 
@@ -778,7 +744,7 @@
                         total: parseFloat(this.currentProduct?.regularPrice || 0),
                         inventoryCount: this.currentProduct?.inventoryCount ?? 0,
                     }
-                    
+
                 } else {
                     this.selectedItemList.push({
                         name: `${this.currentProduct?.name}`,
@@ -807,7 +773,7 @@
                 //     })
                 // }
                 // return parseFloat(item.quantity * (parseFloat(item.variant?.price) + parseFloat(addonTotal)) || 0);
-                
+
                 return parseFloat(item.quantity * parseFloat(item?.price));
             },
             addonPrice(item) {
@@ -1069,322 +1035,322 @@
 <style src="../../../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style lang="scss" scoped>
 :deep(.multiselect__tags) {
-    min-height: 38px !important;
-    border: none !important;
-    padding: 4px 40px 0 4px !important;
+  min-height: 38px !important;
+  border: none !important;
+  padding: 4px 40px 0 4px !important;
 }
 
 :deep(.multiselect__placeholder) {
-    margin-bottom: 4px !important;
-    padding-top: 4px !important;
+  margin-bottom: 4px !important;
+  padding-top: 4px !important;
 }
 
 :deep(.multiselect__single) {
-    margin-bottom: 0px !important;
-    margin-top: 4px !important;
+  margin-bottom: 0px !important;
+  margin-top: 4px !important;
 }
 
 :deep(.multiselect) {
-    width: auto;
-    padding-bottom: 0px !important;
-    padding-top: 0px !important;
-    min-height: 38px !important;
+  width: auto;
+  padding-bottom: 0px !important;
+  padding-top: 0px !important;
+  min-height: 38px !important;
 }
 
 .pos-r-head {
-    box-shadow: 0px 0px 3px #0003;
-    padding: 20px;
-    box-sizing: border-box;
-    border-radius: 5px;
-    border-bottom: 1px solid #f3f3f3;
+  box-shadow: 0px 0px 3px #0003;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border-bottom: 1px solid #f3f3f3;
 }
 
 .pos-logo {
-    text-align: center;
+  text-align: center;
 }
 
 .pos-item-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 10px;
 }
 
 .pos-item-grid>div {
-    border: 0;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px 1px rgb(0 0 0 / 6%), 0 1px 4px rgb(0 0 0 / 8%);
-    overflow: hidden;
-    cursor: pointer;
-    border: 1px solid #fff;
-    position: relative;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px 1px rgb(0 0 0 / 6%), 0 1px 4px rgb(0 0 0 / 8%);
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #fff;
+  position: relative;
 }
 
 .pos-item-grid>div:hover {
-    border-color: #6366f1;
+  border-color: #6366f1;
 }
 
 .pos-item-grid>div .box-qty {
-    position: absolute;
-    width: 50px;
-    height: 30px;
-    display: block;
-    background: #6366f1;
-    top: 0;
-    left: 0px;
-    text-align: center;
-    line-height: 30px;
-    font-size: 12px;
-    font-weight: bold;
-    color: #fff;
-    border-bottom-right-radius: 10px;
+  position: absolute;
+  width: 50px;
+  height: 30px;
+  display: block;
+  background: #6366f1;
+  top: 0;
+  left: 0px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  border-bottom-right-radius: 10px;
 }
 
 .qty-red {
-    background: red !important;
+  background: red !important;
 }
 
 .pos-body {
-    border-radius: 5px;
-    min-height: 240px;
+  border-radius: 5px;
+  min-height: 240px;
 }
 
 .pos-box-img {
-    width: 100%;
-    height: 100px;
-    border-bottom: 1px solid #f1f1f1;
-    background: #ebebeb;
-    line-height: 100px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: bold;
+  width: 100%;
+  height: 100px;
+  border-bottom: 1px solid #f1f1f1;
+  background: #ebebeb;
+  line-height: 100px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
 }
 
 .pos-box-img img {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
 }
 
 .pos-box-content p {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 0px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 0px;
 }
 
 .pos-box-content span {
-    font-size: 12px;
-    margin-bottom: 2px;
+  font-size: 12px;
+  margin-bottom: 2px;
 }
 
 .pos-box-content {
-    padding: 5px 10px;
+  padding: 5px 10px;
 }
 
 .pos-item-grid-red {
-    border-color: red !important;
+  border-color: red !important;
 }
 
 .card-client-search {
-    padding: 20px;
-    border-bottom: 1px solid #ddd;
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
 }
 
 .table-wrap {
-    padding: 15px;
+  padding: 15px;
 }
 
 .table-responsive.table-wrap>table {
-    border: 1px solid #ddd;
+  border: 1px solid #ddd;
 }
 
 .table-wrap .table thead tr {
-    border-bottom: 0;
-    background: #6366f11f !important;
+  border-bottom: 0;
+  background: #6366f11f !important;
 }
 
 .table-wrap .incrementor {
-    width: 80px;
+  width: 80px;
 }
 
 .table-wrap .custom-qty-input {
-    display: inline-flex !important;
-    justify-content: center;
-    border: 1px solid #ececfdb8;
-    padding: 0;
-    border-radius: 18px;
-    /* background: #ddd; */
+  display: inline-flex !important;
+  justify-content: center;
+  border: 1px solid #ececfdb8;
+  padding: 0;
+  border-radius: 18px;
+  /* background: #ddd; */
 }
 
 .table-wrap .btn-danger {
-    width: 25px;
-    height: 25px;
-    font-size: 10px;
-    padding: 0px;
+  width: 25px;
+  height: 25px;
+  font-size: 10px;
+  padding: 0px;
 }
 
 .table-wrap .icon-sm {
-    width: 25px;
-    height: 25px;
-    line-height: 23px;
+  width: 25px;
+  height: 25px;
+  line-height: 23px;
 }
 
 .pos-card-footer {
-    border: 1px solid #ddd;
-    background: #fff;
-    border-radius: 4px;
-    margin-bottom: 15px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 4px;
+  margin-bottom: 15px;
 }
 
 .pos-net-total {
-    background: #6366f133;
-    width: 100%;
-    padding: 10px 10px;
-    text-align: right;
-    font-size: 18px;
-    font-weight: bold;
-    display: flex;
-    flex-direction: column;
-    gap: 5px
+  background: #6366f133;
+  width: 100%;
+  padding: 10px 10px;
+  text-align: right;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  gap: 5px
 }
 
 .product {
-    cursor: pointer;
+  cursor: pointer;
 
-    .info-box {
-        &:hover {
-            background: #e0e0e0;
-        }
+  .info-box {
+    &:hover {
+      background: #e0e0e0;
     }
+  }
 }
 
 .dark-mode .pos-body,
 .dark-mode .pos-r-head {
-    background: #111827 !important;
-    border-color: #000;
+  background: #111827 !important;
+  border-color: #000;
 }
 
 .dark-mode .pos-item-grid>div {
-    border-color: #6c757d !important;
+  border-color: #6c757d !important;
 }
 
 .dark-mode .pos-box-content {
-    padding: 5px 10px;
-    color: #fff;
+  padding: 5px 10px;
+  color: #fff;
 }
 
 .dark-mode .pos-item-grid>div.pos-item-grid-red {
-    border-color: red !important;
+  border-color: red !important;
 }
 
 .dark-mode .card-client-search {
-    border-color: #6c757d;
+  border-color: #6c757d;
 }
 
 .dark-mode .table-striped tbody tr:nth-of-type(odd) {
-    background-color: #1f2937;
+  background-color: #1f2937;
 }
 
 .dark-mode .table-responsive.table-wrap>table {
-    border: 1px solid #6c757d;
+  border: 1px solid #6c757d;
 }
 
 .dark-mode .table-wrap .incrementor {
-    border: none !important;
+  border: none !important;
 }
 
 .dark-mode .pos-card-footer.bg-white {
-    background: #111827 !important;
-    border-color: #6c757d;
+  background: #111827 !important;
+  border-color: #6c757d;
 }
 
 .dark-mode .pos-card-footer label {
-    color: #fff;
+  color: #fff;
 }
 
 .dark-mode .pos-net-total {
-    background: rgb(99 169 241);
-    color: #fff;
+  background: rgb(99 169 241);
+  color: #fff;
 }
 
 #invoice-POS td,
 #invoice-POS th,
 #invoice-POS tr,
 #invoice-POS table {
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 #invoice-POS tr {
-    border-bottom: 2px dotted #05070b;
+  border-bottom: 2px dotted #05070b;
 }
 
 #invoice-POS table {
-    width: 100%;
+  width: 100%;
 }
 
 #invoice-POS tfoot tr th:first-child {
-    text-align: left;
+  text-align: left;
 }
 
 #invoice-POS .info {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #invoice-POS .info>p {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 #legalcopy {
-    margin-top: 5mm;
+  margin-top: 5mm;
 }
 
 #legalcopy p {
-    text-align: center;
+  text-align: center;
 }
 
 #bar {
-    text-align: center;
+  text-align: center;
 }
 
 .total {
-    font-weight: bold;
-    font-size: 12px;
+  font-weight: bold;
+  font-size: 12px;
 }
 
 span.pqty {
-    display: block;
-    line-height: 15px;
-    font-size: 12px;
-    font-weight: 500;
-    margin-bottom: 5px;
+  display: block;
+  line-height: 15px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 5px;
 }
 
 @media only screen and (max-width: 1250px) {
-    .pos-item-grid {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
+  .pos-item-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 }
 
 @media only screen and (max-width: 991px) {
-    .pos-item-grid {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
+  .pos-item-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
 
 @media only screen and (max-width: 767px) {
-    .sm-col-reverse {
-        flex-direction: column-reverse;
-    }
+  .sm-col-reverse {
+    flex-direction: column-reverse;
+  }
 
-    .pos-item-grid {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
+  .pos-item-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 }
 
 .create-btn {
-    padding: 11px;
+  padding: 11px;
 }
 
 .create-btn-2 {
-    padding: 10px;
+  padding: 10px;
 }
 </style>

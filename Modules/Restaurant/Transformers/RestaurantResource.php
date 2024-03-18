@@ -16,11 +16,11 @@ class RestaurantResource extends JsonResource
     {
         return [
             'restaurant_id' => $this->id,
-            'hotel_id' => $this->hotel_id,
+            'hotel_id' => $this->shop_id,
             'taxes' => $this->taxes,
-            'restaurant_name' => $this->hotel->hotel_name,
-            'restaurant_phone' => $this->hotel->hotel_phone,
-            'restaurant_email' => $this->hotel->hotel_email,
+            'restaurant_name' => $this->Shop->shop_name,
+            'restaurant_phone' => $this->Shop->shop_phone,
+            'restaurant_email' => $this->Shop->shop_email,
         ];
     }
 }

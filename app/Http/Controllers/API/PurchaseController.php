@@ -64,7 +64,7 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
         // validate request
-       
+
         $this->validate($request, [
             'supplier' => 'required',
             'selectedProducts' => 'required|array|min:1',
@@ -148,7 +148,7 @@ class PurchaseController extends Controller
                         // Check if there were no errors during the upload
                 }
             }
-
+// dd($request->all());
             // create purchase
             $purchase = Purchase::create([
                 'purchase_no' => $code,

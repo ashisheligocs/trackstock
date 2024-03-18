@@ -12,11 +12,11 @@ class Restaurant extends Model
     use HasFactory;
     protected $table = 'restaurants';
     protected $primaryKey = 'id';
-    protected $fillable = ['id', 'hotel_id'];
+    protected $fillable = ['id', 'shop_id'];
 
-    public function hotel() : BelongsTo
+    public function shop() : BelongsTo
     {
-        return $this->belongsTo(\Modules\Shops\Entities\Hotel::class, 'hotel_id');
+        return $this->belongsTo(\Modules\Shops\Entities\Shop::class, 'shop_id');
     }
 
     public function price(): HasMany
@@ -29,8 +29,8 @@ class Restaurant extends Model
         return $this->belongsToMany(VatRate::class, 'item_taxes', 'restaurant_id', 'tax_id');
     }
 
-    public function restaurantItems()
-    {
-        return $this->hasMany(RestaurantItem::class);
-    }
+    // public function restaurantItems()
+    // {
+    //     return $this->hasMany(RestaurantItem::class);
+    // }
 }

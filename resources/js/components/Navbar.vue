@@ -25,7 +25,7 @@
 <!--            <locale-dropdown/>-->
             <hotel-dropdown/>
         </ul>
-        
+
         <!-- Right nav links -->
         <!-- <ul class="navbar-nav ml-auto" v-if="$can('restaurant-order')">
             <li>
@@ -151,7 +151,7 @@
                 <!-- </div>
             </li>
             </ul>  -->
-            <ul class="navbar-nav ml-auto align-items-center"  v-if="$can('restaurant-order')"> 
+            <ul class="navbar-nav ml-auto align-items-center"  v-if="$can('restaurant-order')">
             <!-- Notifications Dropdown Menu -->
             <li>
                 <router-link :to="{ name: 'pos.create' }" class="btn pos-btn d-sm-block d-none">
@@ -339,7 +339,7 @@
                 </div>
             </li>
 
-            <li class="nav-item full_scr">
+            <!-- <li class="nav-item full_scr">
                 <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -356,9 +356,9 @@
                         />
                     </svg>
                 </a>
-            </li>
+            </li> -->
             <li class="nav-item">
-                <a class="nav-link" @click="sideBarControl" href="javascript:void(0)">
+                <a class="nav-link" @click="sideBarControl" href="javascript:void(0)" v-if="$can('expense-create')">
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
                             class="h-6 w-6"
