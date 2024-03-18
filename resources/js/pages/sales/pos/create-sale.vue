@@ -280,7 +280,7 @@
               <has-error :form="form" field="account" /> -->
             </div>
             <div class="form-group col-md-6">
-              <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label>
+              <!-- <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label> -->
               <input ref="paidAmountInput" id="paidAmount" v-model="form.paidAmount" type="number" step="any"
                 class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1"
                 :max="form.netTotal" :placeholder="$t('common.paid_amount_placeholder')" />
@@ -299,7 +299,7 @@
                 Bank : 
             </div>
             <div class="form-group col-md-6">
-              <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label>
+              <!-- <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label> -->
               <input type="number" step="any" class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1"
                 :max="form.netTotal" :placeholder="$t('common.paid_amount_placeholder')" disabled/>
               <has-error :form="form" field="paidAmount" />
