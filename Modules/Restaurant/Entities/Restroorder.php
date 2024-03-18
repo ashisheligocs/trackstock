@@ -8,7 +8,7 @@ use App\Models\Invoice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Shops\Entities\Booking;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 use Modules\Shops\Entities\Room;
 
 class Restroorder extends Model
@@ -16,14 +16,14 @@ class Restroorder extends Model
     use HasFactory;
     protected $table = 'item_restro_orders';
     protected $primaryKey = 'id';
-    protected $fillable = ['id', 'order_id_uniq','invoice_id', 'customer_id', 'order_date', 'order_status', 'total_amount', 'discount', 'tax', 'room_id', 'booking_id', 'hotel_id'];
+    protected $fillable = ['id', 'order_id_uniq','invoice_id', 'customer_id', 'order_date', 'order_status', 'total_amount', 'discount', 'tax','shop_id'];
     protected $appends = ['type'];
     // public function items(){
     //     return $this->hasMany(RestroItem::class,'order_id');
     // }
 
-    public function hotel(){
-        return $this->belongsTo(Hotel::class);
+    public function shop(){
+        return $this->belongsTo(Shop::class);
     }
 
     public function getTypeAttribute()
@@ -36,10 +36,10 @@ class Restroorder extends Model
         return $this->belongsTo(Client::class, 'customer_id');
     }
 
-    public function room()
-    {
-        return $this->belongsTo(Room::class, 'room_id');
-    }
+    // public function room()
+    // {
+    //     return $this->belongsTo(Room::class, 'room_id');
+    // }
 
     public function booking()
     {

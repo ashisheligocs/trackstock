@@ -6,7 +6,7 @@ use App\Models\Scopes\selectedHotelResource;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 
 class Purchase extends Model
 {
@@ -18,7 +18,7 @@ class Purchase extends Model
      * @var array
      */
     protected $fillable = [
-        'purchase_no', 'slug', 'hotel_id', 'supplier_id', 'discount', 'transport', 'sub_total', 'po_reference', 'payment_terms', 'po_date', 'purchase_date', 'created_by', 'note', 'status', 'is_paid','tax_amount','images'
+        'purchase_no', 'slug', 'shop_id', 'supplier_id', 'discount', 'transport', 'sub_total', 'po_reference', 'payment_terms', 'po_date', 'purchase_date', 'created_by', 'note', 'status', 'is_paid','tax_amount','images'
     ];
 
     protected $appends = ['calculated_due', 'calculated_tax', 'calculated_total'];
@@ -47,9 +47,9 @@ class Purchase extends Model
         return $this->totalDue();
     }
 
-    public function hotel()
+    public function shop()
     {
-        return $this->belongsTo(Hotel::class);
+        return $this->belongsTo(Shop::class);
     }
 
     /**

@@ -29,14 +29,14 @@
                                         <span class="required">*</span></label>
                                     <v-select
                                             class="flex-grow-1"
-                                            v-model="form.hotel_id"
+                                            v-model="form.shop_id"
                                             :options="hotelItems"
-                                            label="hotel_name"
-                                            :class="{ 'is-invalid': form.errors.has('hotel_id') }"
-                                            name="hotel_id"
-                                            placeholder="Search a hotel"
+                                            label="shop_name"
+                                            :class="{ 'is-invalid': form.errors.has('shop_id') }"
+                                            name="shop_id"
+                                            placeholder="Search a Shop"
                                     />
-                                    <has-error :form="form" field="hotel_id"/>
+                                    <has-error :form="form" field="shop_id"/>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="name"
@@ -227,7 +227,7 @@
                 status: 1,
                 isSendEmail: false,
                 isSendSMS: false,
-                hotel_id: ''
+                shop_id: ''
             }),
             loading: true,
             url: null,
@@ -241,14 +241,19 @@
             await this.getHotelDataList();
             if (this.selectedHotel && this.selectedHotel !== 'all') {
                 this.hotelItems.forEach((hotel) => {
-                    if (hotel.id == this.selectedHotel) this.form.hotel_id = hotel
+                    if (hotel.id == this.selectedHotel) this.form.shop_id = hotel
                 })
             }
+        },
+        watch:{
+          selectedHotel(){
+            this.getHotelDataList();
+          }
         },
         methods: {
             async getHotelDataList () {
                 await this.$store.dispatch('operations/getHotelData', {
-                    path: '/api/hotel',
+                    path: '/api/shop',
                 });
             },
             // vue file upload

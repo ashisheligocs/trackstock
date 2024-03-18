@@ -46,11 +46,11 @@ class PurchaseController extends Controller
     {
         $setting = GeneralSetting::where('key', 'selected_hotel')->first();
         if ($setting && $setting->value && $setting->value !== 'all') {
-            $purchase = Purchase::whereHas('hotel', function ($q) use ($setting) {
+            $purchase = Purchase::whereHas('shop', function ($q) use ($setting) {
                 $q->where('id', $setting->value);
-            })->with('supplier', 'purchasePayments', 'purchaseTaxes', 'hotel')->latest()->paginate($request->perPage);
+            })->with('supplier', 'purchasePayments', 'purchaseTaxes', 'shop')->latest()->paginate($request->perPage);
         } else {
-            $purchase = Purchase::with('supplier', 'purchasePayments', 'purchaseTaxes', 'hotel')->latest()->paginate($request->perPage);
+            $purchase = Purchase::with('supplier', 'purchasePayments', 'purchaseTaxes', 'shop')->latest()->paginate($request->perPage);
         }
         return PurchaseListResource::collection($purchase);
     }
@@ -64,7 +64,7 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
         // validate request
-        // dd($request->input());
+       
         $this->validate($request, [
             'supplier' => 'required',
             'selectedProducts' => 'required|array|min:1',
@@ -83,7 +83,7 @@ class PurchaseController extends Controller
             'purchaseDate' => 'nullable|date_format:Y-m-d',
             'poDate' => 'nullable|date_format:Y-m-d',
             'note' => 'nullable|string|max:255',
-            'hotel_id' => 'required'
+            'shop_id' => 'required'
         ]);
 
         try {
@@ -130,7 +130,7 @@ class PurchaseController extends Controller
                     /*Handle Multiple File Upload*/
 
                     for ($i = 0; $i < count($fileDetails['name']); $i++) {
-                            
+
                             $name    = $fileDetails['name'][$i];
                             $tmpName = $fileDetails['tmp_name'][$i];
                             $type    = $fileDetails['type'][$i];
@@ -165,7 +165,7 @@ class PurchaseController extends Controller
                 'note' => clean($request->note),
                 'status' => $request->status,
                 'created_by' => $userId,
-                'hotel_id' => @$request->hotel_id['id'],
+                'shop_id' => @$request->shop_id['id'],
                 'tax_amount' =>$request->totalProductTax,
             ]);
 
@@ -175,7 +175,7 @@ class PurchaseController extends Controller
             // }
             /*----------add in calculated gst-----------*/
             $reason = '['.config('config.purchasePrefix').'-'.$purchase->purchase_no.'] Purchase Payment sent from ['.$request->account['accountNumber'].'] Entry done by '.auth()->user()->name.'';
-            $plutusId = $this->createPlutusEntry($request->hotel_id['id'],$reason,now(),$request->subTotal);
+            $plutusId = $this->createPlutusEntry($request->shop_id['id'],$reason,now(),$request->subTotal);
             $this->storeTax($purchase,$plutusId,$request->totalTax);
 
             // store purchase products
@@ -221,7 +221,7 @@ class PurchaseController extends Controller
                     'receipt_no' => $request->receiptNo,
                     'created_by' => $userId,
                     'status' => $request->status,
-                    'hotel_id' => @$request->hotel_id['id'],
+                    'shop_id' => @$request->shop_id['id'],
                     'purchase_id' => $purchase->id,
                     'plutus_entries_id' => $plutusId,
                 ]);
@@ -257,12 +257,12 @@ class PurchaseController extends Controller
                     'created_by' => auth()->user()->id,
                     'status' => 1,
                     'purchase_id' => $purchase->id,
-                    'hotel_id' => @$request->hotel_id['id'],
+                    'shop_id' => @$request->shop_id['id'],
                     'plutus_entries_id' => $plutusId,
                 ]);
             }
 
-            $this->manageInventoryLedger($purchase, @$request->hotel_id['id'],$plutusId);
+            $this->manageInventoryLedger($purchase, @$request->shop_id['id'],$plutusId);
 
             // update purchase
             if ($purchase->totalDue() == 0) {
@@ -308,7 +308,7 @@ class PurchaseController extends Controller
             'created_by' => auth()->user()->id,
             'status' => 1,
             'purchase_id' => $purchase->id,
-            'hotel_id' => $hotelId,
+            'shop_id' => $hotelId,
             'plutus_entries_id' => $plutusId,
         ]);
     }
@@ -346,7 +346,7 @@ class PurchaseController extends Controller
                         'created_by' => auth()->user()->id,
                         'status' => 1,
                         'purchase_id' => $purchase->id,
-                        'hotel_id' => $purchase->hotel_id,
+                        'shop_id' => $purchase->shop_id,
                         'plutus_entries_id' => $plutusId,
                     ]);
                 }
@@ -376,13 +376,13 @@ class PurchaseController extends Controller
                 'purchaseProducts.product.proSubCategory.category',
                 'user'
             )->where('slug', $slug)->first();
-    
+
             // Fetch tax-related data (assuming 'tax' is a relationship or attribute in the Purchase model)
             $tax = Purchase::where('slug', $slug)->first();
-    
+
             // Add tax-related data to the purchase data
             $purchase->tax = $tax;
-    
+
             // Return the data using a resource
             return new PurchaseProductsResource($purchase);
 
@@ -391,7 +391,7 @@ class PurchaseController extends Controller
             return $this->responseWithError($e->getMessage());
         }
     }
-    
+
 
     /**
      * Update the specified resource in storage.
@@ -406,7 +406,7 @@ class PurchaseController extends Controller
         $purchase = Purchase::where('slug', $slug)->with('purchaseProducts.product')->first();
         $totalPaid = $purchase->purchaseTotalPaid();
         $minAmount = ! isset($purchase->purchaseReturn) ? $totalPaid : $totalPaid - $purchase->purchaseReturn->returnTransaction->amount;
-        
+
         // validate request
         $this->validate($request, [
             'supplier' => 'required',
@@ -500,7 +500,7 @@ class PurchaseController extends Controller
 
     public function updateAccountTransaction($purchase){
         $getAccountTransaction = AccountTransaction::where('purchase_id',$purchase->id)->get();
-        
+
         if(!empty($getAccountTransaction)){
             foreach($getAccountTransaction as $transaction){
                 $payableAccount = LedgerAccount::where('code', 'ACCOUNT-PAYABLE')->first();
@@ -693,12 +693,12 @@ class PurchaseController extends Controller
     protected function createPlutusEntry($hotelId, $note, $date, $amount)
     {
         $createPlutus = PlutusEntries::create([
-            'hotel_id' => $hotelId,
+            'shop_id' => $hotelId,
             'note' => $note,
             'date' => $date,
             'amount' => $amount,
         ]);
-        
+
         return $createPlutus->id;
     }
 }

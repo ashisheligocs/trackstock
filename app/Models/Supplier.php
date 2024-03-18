@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Shops\Entities\BookingType;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 use App\Models\Scopes\selectedHotelResource;
 
 class Supplier extends Model
@@ -20,7 +20,7 @@ class Supplier extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'slug', 'supplier_id', 'email', 'phone', 'company_name', 'address', 'status', 'image_path', 'leadsSupplierType', 'hotel_id'
+        'name', 'slug', 'supplier_id', 'email', 'phone', 'company_name', 'address', 'status', 'image_path', 'leadsSupplierType', 'shop_id'
     ];
 
     /**
@@ -47,9 +47,9 @@ class Supplier extends Model
         return $total;
     }
 
-    public function hotel()
+    public function shop()
     {
-        return $this->belongsTo(Hotel::class);
+        return $this->belongsTo(Shop::class);
     }
 
     // get the supplier purchase return total
@@ -176,6 +176,7 @@ class Supplier extends Model
     public function gettypeName(){
         return $this->belongsTo(BookingType::class,'leadsSupplierType');
     }
+
 
     protected static function boot()
     {
