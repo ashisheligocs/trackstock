@@ -494,7 +494,7 @@
     "system_info": "System Info",
     "profile": "Profile",
     "logout": "Logout",
-    "hotel": "Hotel", 
+    "hotel": "Hotel",
     "facility": "Facility",
     "room": "Rooms",
     "hotel_cat_lsit": "Hotel Category ",
@@ -687,7 +687,7 @@
         "success_msg": "Shop updated successfully 👍"
       }
     },
-    
+
     "list": {
       "common": {
         "expense_reason": "Expense Reason",
@@ -730,8 +730,10 @@
     }
   },
   "purchases": {
+
     "list": {
       "common": {
+        "batch_id": "Batch ID",
         "pending": "Pending amount",
         "po_reference": "PO Reference",
         "po_reference_placeholder": "Enter PO reference",

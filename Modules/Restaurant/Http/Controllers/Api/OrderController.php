@@ -34,14 +34,20 @@ class OrderController extends Controller
             'items.restaurantItem')->when($startDate, function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('order_date', [$startDate, $endDate]);
         })->latest()->paginate(15));
+
+
+        // return (ItemRestroOrder::select('id', 'order_id_uniq', 'invoice_id', 'customer_id', 'order_date', 'order_status', 'payment_status', 'total_amount', 'discount', 'tax', 'shop_id', 'created_at', 'updated_at')
+        //             ->get());
+
+
     }
 
     public function show($id)
     {
         try {
             $orderDetails = Restroorder::where('id', $id)->with('booking.customer')->first();
-            
-            if (@$orderDetails) { 
+
+            if (@$orderDetails) {
                 return new RestaurantOrderShowResource($orderDetails);
             } else {
                 return $this->responseWithError('Sorry your request can\'t Process!');
@@ -79,13 +85,13 @@ class OrderController extends Controller
                 'discount'      => @$data['discountAmount'] ?? 0,
                 'tax'           => @$data['orderTax'] ?? @$data['tax'] ?? 0,
             ]);
-    
+
             $orderItems = $data['selectedProducts'];
-    
+
             if ($orderItems && !empty($orderItems)) {
                 /*delete Old Records*/
                 $deleteOld = RestroItem::where('order_id',$id)->delete();
-    
+
                 foreach ($orderItems as $item) {
                     $optionalItems = @$item['addon'] ? Arr::pluck($item['addon'], 'id') : [];
                     RestroItem::create([
@@ -109,7 +115,7 @@ class OrderController extends Controller
         } else {
             $previousBookingId = "RO-00000";
         }
-        
+
         // $room = @$data['room'] ?? null;
         // $booking = null;
         // if ($room) {
@@ -124,7 +130,7 @@ class OrderController extends Controller
         //         $booking->save();
         //     }
         // }
-        
+
         // dd(Carbon::now());
         $order = Restroorder::create([
             'order_id_uniq' => $this->generateBookingId($previousBookingId,$hotelId),
@@ -139,19 +145,18 @@ class OrderController extends Controller
             'customer_id'   => @$data['client'],
         ]);
 
-        // $orderItems = $data['selectedProducts'];
+        $orderItems = $data['selectedProducts'];
 
-        // if ($orderItems && !empty($orderItems)) {
-        //     foreach ($orderItems as $item) {
-        //         $optionalItems = @$item['addon'] ? Arr::pluck($item['addon'], 'id') : [];
-        //         RestroItem::create([
-        //             'order_id'           => $order->id,
-        //             'restaurant_item_id' => $item['id'],
-        //             'optional_item_ids'  => $optionalItems,
-        //             'qty'                => $item['quantity'],
-        //         ]);
-        //     }
-        // }
+        if ($orderItems && !empty($orderItems)) {
+            foreach ($orderItems as $item) {
+                // $optionalItems = @$item['addon'] ? Arr::pluck($item['addon'], 'id') : [];
+                RestroItem::create([
+                    'order_id'           => $order->id,
+                    'restaurant_item_id' => $item['id'],
+                    'qty'                => $item['quantity'],
+                ]);
+            }
+        }
 
         return $order;
     }
@@ -167,7 +172,7 @@ class OrderController extends Controller
 
         $note = '[' . $orderId . '] Order payment';
         $plutusId = $this->createPlutusEntry($hotelId,$note,now(),floatval($request->paidAmount ?? 0));
-        
+
         if (floatval($request->paidAmount ?? 0)) {
             if($request->account['id'] == 0){
                 $account = $payableAccount = LedgerAccount::where('code', 'ACCOUNT-RECEIVABLE')->first();
@@ -248,7 +253,7 @@ class OrderController extends Controller
     }
 
     protected function cancelOrder(Request $request,$id){
-        
+
         try {
             $updateStatus = Restroorder::where('id',$id)->first();
             $updateStatus->order_status = 2;
@@ -262,7 +267,7 @@ class OrderController extends Controller
     }
 
     protected function updateOrderStatus(Request $request,$id){
-       
+
         try {
             $updateStatus = Restroorder::where('id',$id)->first();
             $updateStatus->order_status = $request->order_status['id'];
@@ -282,7 +287,7 @@ class OrderController extends Controller
             'date' => $date,
             'amount' => $amount,
         ]);
-       
+
         return $createPlutus->id;
     }
 
@@ -290,13 +295,13 @@ class OrderController extends Controller
     {
 
         $hotel1 = Shop::where('id',$hotelId)->first();
-        
+
         $hotel = str_replace('Shop', '', $hotel1->shop_name);
         $hotel = str_replace('Shop', '', $hotel);
-        
+
         $hotel = ($hotel1->shop_prefix !== null) ? $hotel1->shop_prefix : Str::slug($hotel);
-        
-        
+
+
         // Extract the numeric part of the previous booking ID
         $previousNumber = substr($previousBookingId, 3);
         $nextNumber = intval($previousNumber) + 1;
@@ -337,7 +342,7 @@ class OrderController extends Controller
 
     public function updateInvoice(Request $request,$id)
     {
-        
+
         try {
             $order = $this->updateOrder($request->all(),$id);
 
@@ -345,8 +350,8 @@ class OrderController extends Controller
             if(!empty($nonInvoicePayment)){
                foreach($nonInvoicePayment as $nonInvoicePayment){
                 NonInvoicePayment::updateOrCreate(
-                    ['id' => $nonInvoicePayment->id], 
-                    ['amount' => $order->total_amount] 
+                    ['id' => $nonInvoicePayment->id],
+                    ['amount' => $order->total_amount]
                 );
                }
             }
@@ -356,7 +361,7 @@ class OrderController extends Controller
         }
     }
 
-    
+
 
     public function destroy($id)
     {

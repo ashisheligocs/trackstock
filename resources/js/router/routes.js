@@ -72,7 +72,7 @@ export default [
         name: "home",
         component: page("dashboard.vue")
     },
-    // tasks route 
+    // tasks route
     // Dashboard stock alert
     {
         path: "/stock-alert-products",
@@ -411,7 +411,7 @@ export default [
     },
     // POS routes
     {
-        path: "/sales/restaurant/:order?",
+        path: "/sales/POS/:order?",
         name: "pos.create",
         component: page("sales/pos/create.vue"),
         meta: { permissions: ["invoice-create"] }
@@ -1164,7 +1164,7 @@ export default [
     },
 
     /*** room category  */
-   
+
 
     /*** variant  */
     {

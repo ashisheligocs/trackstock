@@ -18,9 +18,9 @@ class Restroorder extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['id', 'order_id_uniq','invoice_id', 'customer_id', 'order_date', 'order_status', 'total_amount', 'discount', 'tax','shop_id'];
     protected $appends = ['type'];
-    // public function items(){
-    //     return $this->hasMany(RestroItem::class,'order_id');
-    // }
+    public function items(){
+        return $this->hasMany(RestroItem::class,'order_id');
+    }
 
     public function shop(){
         return $this->belongsTo(Shop::class);
@@ -65,7 +65,7 @@ class Restroorder extends Model
                 break;
             case '3':
                 $status = '<span class="badge badge-info float-right">In Process</spnan>';
-                break;    
+                break;
         }
 
         return $status;
