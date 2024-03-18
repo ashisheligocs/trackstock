@@ -318,6 +318,8 @@ class OrderController extends Controller
     public function createInvoice(Request $request)
     {
         try {
+            
+
             $order = $this->storeOrder($request->all());
 
             NonInvoicePayment::create([
@@ -331,7 +333,7 @@ class OrderController extends Controller
                 'status' => 1,
                 'created_by' => auth()->user()->id,
                 'order_id' => $order->id,
-                'hotel_id' => $order->hotel_id,
+                'shop_id' => $order->shop_id,
             ]);
 
             return CommonResource::make($order);

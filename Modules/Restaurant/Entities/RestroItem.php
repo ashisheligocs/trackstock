@@ -2,6 +2,7 @@
 
 namespace Modules\Restaurant\Entities;
 
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -18,7 +19,7 @@ class RestroItem extends Model
 
     public function restaurantItem()
     {
-        return $this->belongsTo(RestaurantItem::class, 'restaurant_item_id');
+        return $this->belongsTo(Product::class, 'restaurant_item_id');
     }
     
 }
