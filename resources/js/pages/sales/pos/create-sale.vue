@@ -731,7 +731,9 @@
                 console.log("do this");
             },
             openProductModal(product) {
+
               console.log(product.inventoryCount);
+
 
                 this.currentProduct = product;
                 console.log(product)
@@ -769,7 +771,8 @@
                         quantity: 1,
                         // total: parseFloat(this.currentProduct?.sellingPrice || 0) + this.currentAddonAmount
                         price: parseFloat(this.currentProduct?.regularPrice || 0),
-                        total: parseFloat(this.currentProduct?.regularPrice || 0)
+                        total: parseFloat(this.currentProduct?.regularPrice || 0),
+                        inventoryCount: this.currentProduct.inventoryCount,
                     }
                     
                 } else {
@@ -783,7 +786,7 @@
                         quantity: 1,
                         // total: parseFloat(this.currentProduct?.sellingPrice || 0) + this.currentAddonAmount
                         price: parseFloat(this.currentProduct?.regularPrice || 0),
-                        total: parseFloat(this.currentProduct?.regularPrice || 0)
+                        inventoryCount: this.currentProduct.inventoryCount,
                     })
                 }
                 this.currentVariant = null;
