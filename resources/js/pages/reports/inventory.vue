@@ -267,7 +267,8 @@ export default {
       },
     ],
     form: new Form({
-      fromDate: moment().subtract(7,'d').format('YYYY-MM-DD'),
+      // fromDate: moment().subtract(7,'d').format('YYYY-MM-DD'),
+      fromDate: moment().subtract(1,'d').format('YYYY-MM-DD'),
       toDate: moment().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSS'),
       category: {id: 0, name: "All Categories", slug: "all"},
       subCategory: {id: 0, name: "All Sub Categories", slug: "all"},
