@@ -10,16 +10,16 @@
         <form role="form" class="w-100" @keydown="form.onKeydown($event)">
           <div class="row">
             <div class="form-group col-md-12">
-                <label for="hotel" class="d-block">{{ $t('sidebar.hotel') }}
+                <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                     <span class="required">*</span></label>
                 <v-select
                         class="flex-grow-1"
-                        v-model="form.hotel_id"
+                        v-model="form.shop_id"
                         :options="hotelItems"
-                        label="hotel_name"
-                        :class="{ 'is-invalid': form.errors.has('hotel_id') }"
-                        name="hotel_id"
-                        placeholder="Search a hotel"
+                        label="shop_name"
+                        :class="{ 'is-invalid': form.errors.has('shop_id') }"
+                        name="shop_id"
+                        placeholder="Search a shop"
                 />
                 <has-error :form="form" field="hotel_id"/>
             </div>

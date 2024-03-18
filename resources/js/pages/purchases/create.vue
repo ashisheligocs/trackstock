@@ -27,11 +27,11 @@
                         <div class="card-body">
                             <div class="row" v-if="items && products">
                                 <div class="form-group col-md-12 col-xl-4">
-                                    <label for="hotel" class="d-block">{{ $t('sidebar.hotel') }}
+                                    <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                                         <span class="required">*</span></label>
                                     <v-select class="flex-grow-1" v-model="form.shop_id" :options="hotelItems"
                                         label="shop_name" :class="{ 'is-invalid': form.errors.has('shop_id') }"
-                                        name="shop_id" placeholder="Search a hotel" @input="getAccountsAndSupplier" />
+                                        name="shop_id" placeholder="Search a shop" @input="getAccountsAndSupplier" />
                                     <has-error :form="form" field="shop_id" />
                                 </div>
                                 <div class="form-group col-md-12 col-xl-4">
