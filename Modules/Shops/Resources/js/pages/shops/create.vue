@@ -89,7 +89,7 @@
                                 </div>
                                 <div class="form-group col-md-12">
                                   
-                                    <label class="image_label" for="file-upload">  <i class="fa fa-upload" aria-hidden="true"></i> Upload Hotel Image</label>
+                                    <label class="image_label" for="file-upload">  <i class="fa fa-upload" aria-hidden="true"></i> Upload Image</label>
                                     <input type="file" id="file-upload" multiple @change="handleFileUpload">
 
                                     <div class="image-container">
