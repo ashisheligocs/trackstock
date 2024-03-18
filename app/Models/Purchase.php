@@ -18,7 +18,7 @@ class Purchase extends Model
      * @var array
      */
     protected $fillable = [
-        'purchase_no', 'slug', 'shop_id', 'supplier_id', 'discount', 'transport', 'sub_total', 'po_reference', 'payment_terms', 'po_date', 'purchase_date', 'created_by', 'note', 'status', 'is_paid','tax_amount','images'
+        'purchase_no', 'slug', 'shop_id', 'supplier_id', 'discount', 'transport', 'sub_total', 'po_reference', 'payment_terms', 'po_date', 'purchase_date', 'created_by', 'note', 'status', 'is_paid','tax_amount','images','batch_id'
     ];
 
     protected $appends = ['calculated_due', 'calculated_tax', 'calculated_total'];
