@@ -18,7 +18,7 @@
           <!-- form start -->
           <form role="form" @submit.prevent="saveTransfer" @keydown="form.onKeydown($event)">
             <div class="card-body">
-              <div class="row">
+              <div class="row" v-if="!readonly">
                 <div class="form-group col-md-6">
                   <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                     <span class="required">*</span></label>
@@ -41,13 +41,13 @@
                   <has-error :form="form" field="transferReason" />
                 </div>
               </div>
-              <div class="row" v-if="items">
+              <div class="row" v-if="items && !readonly">
                 <div class="form-group col-md-6">
                   <label for="fromAccount">{{ $t('cashbook.common.from_account') }}
                     <span class="required">*</span></label>
                   <v-select v-model="form.fromAccount" :options="items" label="ledgerName"
                     :class="{ 'is-invalid': form.errors.has('fromAccount') }" name="fromAccount"
-                    :placeholder="$t('common.account_placeholder')" @input="updateBalance" />
+                    :placeholder="$t('common.account_placeholder')" @input="updateBalance"/>
                   <has-error :form="form" field="fromAccount" />
                 </div>
                 <div class="form-group col-md-6">
@@ -55,7 +55,7 @@
                     <span class="required">*</span></label>
                   <v-select v-model="form.toAccount" :options="items" label="ledgerName"
                     :class="{ 'is-invalid': form.errors.has('toAccount') }" name="toAccount"
-                    :placeholder="$t('common.account_placeholder')" />
+                    :placeholder="$t('common.account_placeholder')"/>
                   <has-error :form="form" field="toAccount" />
                 </div>
               </div>
@@ -82,10 +82,10 @@
                 <div class="form-group col-md-6">
                   <label for="date">{{ $t('common.date') }}</label>
                   <input id="date" v-model="form.date" type="date" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('date') }" name="date" min=""/>
+                    :class="{ 'is-invalid': form.errors.has('date') }" name="date" min="" :readonly="readonly"/>
                   <has-error :form="form" field="date" />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6" v-if="!readonly">
                   <label for="status">{{ $t('common.status') }}</label>
                   <select id="status" v-model="form.status" class="form-control"
                     :class="{ 'is-invalid': form.errors.has('status') }">
@@ -99,7 +99,7 @@
                   <has-error :form="form" field="status" />
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group" v-if="!readonly">
                 <label for="note">{{ $t('common.note') }}</label>
                 <textarea id="note" v-model="form.note" class="form-control"
                   :class="{ 'is-invalid': form.errors.has('note') }" :placeholder="$t('common.note_placeholder')" />
@@ -119,17 +119,61 @@
         </div>
       </div>
     </div>
+
+    <Modal v-if="showPrintModal">
+            <h5 slot="header" class="no-print">Receipt</h5>
+            <div class="w-100" slot="body">
+                <div id="invoice-POS">
+                    <div style="max-width: 400px; margin: 0px auto">
+                        <div class="info">
+                           
+                            <div class="text-bold text-md">
+                              Shop Name : {{ selectedHotelId.shop_name }}
+                                <br />
+                            </div>
+                            <div class="text-bold text-md">
+                              Date : {{ form.date }}
+                                <br />
+                            </div>
+                            <div class="text-bold text-md">
+                              Cash Received : {{ form.amount }}
+                                <br />
+                            </div>
+                            <div class="text-bold text-md">
+                              By : {{ user.name }}
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pos-modal-footer no-print" slot="modal-footer">
+                <div>
+                    <button @click="printInvoice" class="modal-default-button btn btn-info">
+                        {{ $t("common.print") }}
+                    </button>
+                </div>
+                <button class="modal-default-button btn btn-danger" @click="closeReceiptModal">
+                    {{ $t("common.close") }}
+                </button>
+            </div>
+        </Modal>
   </div>
 </template>
 
 <script>
 import Form from 'vform'
 import { mapGetters } from 'vuex'
+import VModal from "../../../components/VModal";
+
 
 export default {
   middleware: ['auth', 'check-permissions'],
   metaInfo() {
     return { title: this.$t('cashbook.transfers.create.page_title') }
+  },
+  components: {
+    VModal,
   },
   data: () => ({
     breadcrumbsCurrent: 'cashbook.transfers.create.breadcrumbs_current',
@@ -164,6 +208,8 @@ export default {
     }),
     selectedHotelId: null,
     loading: true,
+    readonly: false,
+    showPrintModal:true,
   }),
   watch:{
       selectedHotel: function () {
@@ -179,7 +225,7 @@ export default {
         }),
   },
   async created() {
-    await this.getAccoutns();
+   
     await this.getHotelDataList();
     if (this.selectedHotel && this.selectedHotel !== 'all') {
         this.hotelItems.forEach((hotel) => {
@@ -193,6 +239,10 @@ export default {
             minDate.setDate(today.getDate() - this.user.back_days);
             document.getElementById("date").min = minDate.toISOString().split("T")[0];
         }
+      if(this.user?.roles[0] == "incharge"){
+        this.readonly = true;
+    } 
+    await this.getAccoutns();   
   },
   methods: {
     async getHotelDataList () {
@@ -208,7 +258,10 @@ export default {
       // assign default account
       if (this.items && this.items.length > 0) {
         let defaultAccountSlug = this.appInfo.defaultAccountSlug;
+        
         this.form.fromAccount = this.items.find(account => account.slug == defaultAccountSlug);
+        this.form.toAccount = this.items.find(account => account.slug == 'in-charge');
+                
         this.updateBalance()
       }
     },
@@ -221,7 +274,11 @@ export default {
 
     // save transfer
     async saveTransfer() {
-      if (!this.selectedHotelId) toast.fire({ type: 'error', title: 'Please select hotel' })
+      if (!this.selectedHotelId) return toast.fire({ type: 'error', title: 'Please select hotel' })
+      if(this.form.amount > this.form.availableBalance){
+        return toast.fire({ type: 'error', title: 'Please enter valid amount' })
+      }
+
       this.form.shop_id = this.selectedHotelId?.id;
       await this.form
         .post(window.location.origin + '/api/balance-transfers')
@@ -230,13 +287,63 @@ export default {
             type: 'success',
             title: this.$t('cashbook.transfers.create.success_msg'),
           })
-          this.$router.push({ name: 'transferBalances.index' })
+          this.showPrintModal = true;
+          // this.$router.push({ name: 'transferBalances.index' })
         })
         .catch((err) => {
           let message = err.response?.data?.message || this.$t('common.error_msg');
           toast.fire({ type: 'error', title: message })
         })
     },
+
+    printInvoice() {
+                var divContents = document.getElementById("invoice-POS").innerHTML;
+                var a = window.open("", "", "height=500, width=500");
+                a.document.write(
+                    '<link rel="stylesheet" href="/css/pos_print.css"><html>'
+                );
+                a.document.write("<body >");
+                a.document.write(divContents);
+                a.document.write("</body></html>");
+                a.document.close();
+                a.print();
+            },
+
+            closeReceiptModal() {
+              this.showPrintModal = false;
+              this.$router.push({ name: 'transferBalances.index' })
+            },
   },
+
+  
 }
 </script>
+<style scoped>
+
+#invoice-POS td,
+#invoice-POS th,
+#invoice-POS tr,
+#invoice-POS table {
+    border-collapse: collapse;
+}
+
+#invoice-POS tr {
+    border-bottom: 2px dotted #05070b;
+}
+
+#invoice-POS table {
+    width: 100%;
+}
+
+#invoice-POS tfoot tr th:first-child {
+    text-align: left;
+}
+
+#invoice-POS .info {
+    margin-bottom: 20px;
+}
+
+#invoice-POS .info>p {
+    margin-top: 20px;
+}
+</style>

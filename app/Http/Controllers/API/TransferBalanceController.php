@@ -47,15 +47,15 @@ class TransferBalanceController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->input());
         // validate request
+        // dd($request->input());
         $this->validate($request, [
-            'transferReason' => 'required|string|max:255',
+            // 'transferReason' => 'required|string|max:255',
             'fromAccount' => 'required',
             'toAccount' => 'required|different:fromAccount',
             'amount' => 'required|numeric|min:1|max:'.$request->availableBalance,
             'date' => 'nullable|date_format:Y-m-d',
-            'note' => 'nullable|string|max:255',
+            // 'note' => 'nullable|string|max:255',
             'shop_id' => 'required'
         ]);
 
@@ -69,7 +69,6 @@ class TransferBalanceController extends Controller
             $note = "Balance transfer to [$toAccountNumber] by ".auth()->user()->name;
             $plutusId = $this->createPlutusEntry($request->shop_id,$note,now(),$request->amount);
 
-            
             
             $debitReason = "Balance transfer from [$fromAccountNumber]";
             // store debit transaction
@@ -102,7 +101,7 @@ class TransferBalanceController extends Controller
 
             // create transfer
             BalanceTansfer::create([
-                'reason' => $request->transferReason,
+                'reason' => ($request->transferReason != null) ? $request->transferReason : 'Cash Collect',
                 'debit_id' => $debitTransaction->id,
                 'credit_id' => $creditTransaction->id,
                 'amount' => $request->amount,
@@ -147,12 +146,12 @@ class TransferBalanceController extends Controller
         $transfer = BalanceTansfer::with('debitTransaction', 'creditTransaction', 'user')->where('slug', $slug)->first();
         // validate request
         $this->validate($request, [
-            'transferReason' => 'required|string|max:255',
+            // 'transferReason' => 'required|string|max:255',
             'fromAccount' => 'required',
             'amount' => 'required|numeric|min:1|max:'.$request->availableBalance,
             'date' => 'nullable|date_format:Y-m-d',
-            'note' => 'nullable|string|max:255',
-            'hotel_id' => 'required'
+            // 'note' => 'nullable|string|max:255',
+            'shop_id' => 'required'
         ]);
 
         try {
@@ -162,7 +161,7 @@ class TransferBalanceController extends Controller
                 'amount' => $request->amount,
                 'transaction_date' => $request->date,
                 'status' => $request->status,
-                'hotel_id' => $request->hotel_id
+                'shop_id' => $request->shop_id
             ]);
 
             // update debit transaction
@@ -170,17 +169,17 @@ class TransferBalanceController extends Controller
                 'amount' => $request->amount,
                 'transaction_date' => $request->date,
                 'status' => $request->status,
-                'hotel_id' => $request->hotel_id
+                'shop_id' => $request->shop_id
             ]);
 
             // update transfer
             $transfer->update([
-                'reason' => $request->transferReason,
+                'reason' => ($request->transferReason != null) ? $request->transferReason : 'Cash Collect',
                 'amount' => $request->amount,
                 'date' => $request->date,
                 'note' => clean($request->note),
                 'status' => $request->status,
-                'hotel_id' => $request->hotel_id
+                'shop_id' => $request->shop_id
             ]);
 
             return $this->responseWithSuccess('Transfer updated successfully');
