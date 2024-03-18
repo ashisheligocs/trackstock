@@ -720,7 +720,8 @@
                 console.log("do this");
             },
             openProductModal(product) {
-                if (product.inventoryCount >= 0){
+            console.log(product)
+                if (product.inventoryCount == 0){
                     toast.fire({ type: "error", title: "Insuficient Stock" });
                     return;
                 }
@@ -759,7 +760,8 @@
                         quantity: 1,
                         // total: parseFloat(this.currentProduct?.sellingPrice || 0) + this.currentAddonAmount
                         price: parseFloat(this.currentProduct?.regularPrice || 0),
-                        total: parseFloat(this.currentProduct?.regularPrice || 0)
+                        total: parseFloat(this.currentProduct?.regularPrice || 0),
+                        inventoryCount: this.currentProduct.inventoryCount,
                     }
                 } else {
                     this.selectedItemList.push({
@@ -772,7 +774,7 @@
                         quantity: 1,
                         // total: parseFloat(this.currentProduct?.sellingPrice || 0) + this.currentAddonAmount
                         price: parseFloat(this.currentProduct?.regularPrice || 0),
-                        total: parseFloat(this.currentProduct?.regularPrice || 0)
+                        inventoryCount: this.currentProduct.inventoryCount,
                     })
                 }
                 this.currentVariant = null;
