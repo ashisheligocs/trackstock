@@ -6,6 +6,7 @@
 
 
     <div class="container-fluid">
+      
       <!-- ALert for demo version -->
       <!-- <div class="alert alert-danger">
               <strong class="text-capitalize"
@@ -23,6 +24,7 @@
             </div> -->
 
       <!-- cashbook -->
+     
       <div v-if="$can('account-summery') && dashboardSummery" class="row">
         <div class="col-md-12">
           <div class="my-4">
@@ -523,13 +525,13 @@
 </template>
 
 <script>
-//import VueApexCharts from 'vue-apexcharts';
+import VueApexCharts from 'vue-apexcharts';
 import Form from "vform";
 import axios from "axios";
 import { use } from "echarts/core";
 import "echarts/lib/component/grid";
 import { BarChart, LineChart, PieChart } from "echarts/charts";
-// import VChart, { THEME_KEY } from "vue-echarts";
+import VChart, { THEME_KEY } from "vue-echarts";
 import { CanvasRenderer } from "echarts/renderers";
 import moment from "moment";
 import { LegendComponent, TitleComponent, TooltipComponent, } from "echarts/components";
@@ -722,6 +724,7 @@ export default {
     ...mapGetters("operations", ["selectedHotel", "hotelCategoryItems", "appInfo"]),
   },
   created() {
+    
     this.loading = true;
     // this.getRoomCategoryAvailability();
     let currentDate = new Date();
@@ -737,8 +740,8 @@ export default {
     // this.roomCategories = [...new Map(this.roomCategories.map(item => [item['id'], item])).values()];
 
     this.inr = this.appInfo.currency.symbol;
-    if (this.$can("account-summery")) {
-      this.getSummery();
+        if (this.$can("account-summery")) {
+            this.getSummery();
     }
     if (this.$can("top-selling-products")) {
       this.getTopSellingProducts();
