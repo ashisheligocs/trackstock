@@ -15,6 +15,14 @@
             <div class="col-xl-8 col-8 float-right text-right">
               <div class="btn-group c-w-100">
                 <a
+                  href="#"
+                  @click="uploadCsvModalShow()"
+                  v-tooltip="'Import'"
+                  class="btn btn-dark"
+                >
+                  <i class="fas fa-upload"></i>
+                </a>
+                <a
                   @click="refreshTable()"
                   href="#"
                   v-tooltip="'Refresh'"
@@ -22,14 +30,6 @@
                 >
                   <i class="fas fa-sync"></i>
                 </a>
-                <!-- <a
-                  href="#"
-                  @click="uploadCsvModalShow()"
-                  v-tooltip="'Import'"
-                  class="btn btn-dark"
-                >
-                  <i class="fas fa-upload"></i>
-                </a> -->
                 <!--upload csv button end-->
                 <a
                   href="/products/export"

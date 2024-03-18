@@ -80,9 +80,10 @@ class Product extends Model
         $price = 0;
         if ($this->tax_type == 'Exclusive') {
             $price = $this->regular_price - $this->discountAmount() + $this->taxAmount();
-        } else {
-            // dd($this);
-            $price = (($this->regular_price - $this->discountAmount()) / (1 + ($this->productTaxRate[0]->rate * 2) / 100)) + $this->taxAmount();
+        } else { 
+            if(!empty($this->productTaxRate) && count($this->productTaxRate) > 0){
+                $price = (($this->regular_price - $this->discountAmount()) / (1 + ($this->productTaxRate[0]->rate * 2) / 100)) + $this->taxAmount();
+            }
             
         }
 
