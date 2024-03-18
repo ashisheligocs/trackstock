@@ -219,7 +219,7 @@
 
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="batch_id">{{ $t("purchases.list.common.batch_id") }}</label>
+                                    <label for="batch_id">{{ $t("common.batch_id") }}</label>
                                     <input id="batch_id" v-model="form.batch_id" type="text" class="form-control"
                                         :class="{ 'is-invalid': form.errors.has('batch_id') }" name="batch_id"
                                           />
