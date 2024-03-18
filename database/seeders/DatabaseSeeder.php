@@ -29,7 +29,8 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,
             ExpenseCategorySeeder::class,
             ExpenseSubCategorySeeder::class,
-            ProductSeeder::class
+            ProductSeeder::class,
+            DemoSuppliersTableSeeder::class
             // for demo
             //DemoDatabaseSeeder::class,
         ]);
