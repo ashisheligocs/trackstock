@@ -485,6 +485,7 @@ class ProductController extends Controller
                 } 
                 $item->alert_qty = 10;  
                 $item->status = 1;  
+                $item->tax_type = 'Exclusive';  
                 $validator = Validator::make($item, $rules);
                 if ($validator->passes()) {
                     Product::create(
