@@ -245,6 +245,11 @@
                 })
             }
         },
+        watch:{
+          selectedHotel(){
+            this.getHotelDataList();
+          }
+        },
         methods: {
             async getHotelDataList () {
                 await this.$store.dispatch('operations/getHotelData', {
