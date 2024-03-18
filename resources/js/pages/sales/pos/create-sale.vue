@@ -185,7 +185,7 @@
           </div>
         </div>
 
-        <!-- <div class="row no-print">
+        <div class="row no-print">
           <div class="col-12 col-lg-6 mb-1">
             <button class="btn btn-primary btn-block" @click="saveOrder($event, false)"
               @keydown="form.onKeydown($event)" :disabled="selectedItemList.length <= 0">
@@ -199,7 +199,7 @@
               Save & Payment
             </button>
           </div>
-        </div> -->
+        </div>
       </div>
       <!-- POS Right area end -->
     </div>

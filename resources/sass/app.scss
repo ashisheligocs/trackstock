@@ -52,25 +52,25 @@
     --warningbtnColor: #ffc107;
     --warningbtnTP: #ffc1072a;
     --ff: 'Roboto', sans-serif;
-    // /Purple 
+    // /Purple
     --purple-100: #7209b7;
     --purple-200: #560bad;
     --purple-300: #480ca8;
-    // Gray 
+    // Gray
     --gray-100: #ffffff;
-    // Blue 
+    // Blue
     --blue-100: #4895ef;
-    // Blue violet 
+    // Blue violet
     --blueViolet-100: #4361ee;
-    // Bluish cyan 
+    // Bluish cyan
     --bluishCyan-100: #4cc9f0;
-    // Crimson 
+    // Crimson
     --crimson-100: #b5179e;
-    // Purple violet 
+    // Purple violet
     --purpleViolet-100: #3a0ca3;
-    // Scarlet 
+    // Scarlet
     --scarlet-100: #f72585;
-    // Violet 
+    // Violet
     --violet-100: #3f37c9;
 }
 
@@ -132,7 +132,7 @@ a {
 }
 
 .bg-image {
-    background: url('/images/trackhlog.jpg') center no-repeat;
+    background: url('/images/jaeger.jpg') center no-repeat;
     background-size: cover;
     background-position: right center;
 }
@@ -2156,7 +2156,7 @@ nav.main-header {
     }
 }
 
-// coustom css 
+// coustom css
 // primary button css
 .btn-primary {
     background: var(--primaryColor) !important;

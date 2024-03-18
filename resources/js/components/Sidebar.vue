@@ -212,18 +212,18 @@
           <!-- ------------------------Community-------------------------------- -->
           <li v-if="$can('purchase-payment-list') ||
       $can('purchase-payment-create') ||
-      $can('purchase-payment-edit') ||
-      $can('purchase-payment-view') ||
+      // $can('purchase-payment-edit') ||
+      // $can('purchase-payment-view') ||
       $can('purchase-payment-delete') ||
-      $can('non-purchase-payment-list') ||
+      // $can('non-purchase-payment-list') ||
       $can('non-purchase-payment-create') ||
       $can('non-purchase-payment-edit') ||
       $can('non-purchase-payment-view') ||
       $can('non-purchase-payment-delete') ||
-      $can('purchase-list') ||
+      // $can('purchase-list') ||
       $can('purchase-create') ||
       $can('purchase-edit') ||
-      $can('purchase-view') ||
+      // $can('purchase-view') ||
       $can('purchase-delete') ||
       $can('purchase-return-list') ||
       $can('purchase-return-create') ||
@@ -231,22 +231,23 @@
       $can('purchase-return-view') ||
       $can('purchase-return-delete')
       " class="nav-header text-bold">COMMUNITY</li>
-          <li v-if="$can('purchase-payment-list') ||
+          <li v-if="
+          // $can('purchase-payment-list') ||
       $can('purchase-payment-create') ||
-      $can('purchase-payment-edit') ||
-      $can('purchase-payment-view') ||
+      // $can('purchase-payment-edit') ||
+      // $can('purchase-payment-view') ||
       $can('purchase-payment-delete') ||
-      $can('non-purchase-payment-list') ||
+      // $can('non-purchase-payment-list') ||
       $can('non-purchase-payment-create') ||
       $can('non-purchase-payment-edit') ||
-      $can('non-purchase-payment-view') ||
+      // $can('non-purchase-payment-view') ||
       $can('non-purchase-payment-delete') ||
-      $can('purchase-list') ||
+      // $can('purchase-list') ||
       $can('purchase-create') ||
       $can('purchase-edit') ||
-      $can('purchase-view') ||
+      // $can('purchase-view') ||
       $can('purchase-delete') ||
-      $can('purchase-return-list') ||
+      // $can('purchase-return-list') ||
       $can('purchase-return-create') ||
       $can('purchase-return-edit') ||
       $can('purchase-return-view') ||
@@ -270,8 +271,8 @@
       ">
               <li v-if="$can('supplier-list') ||
       $can('supplier-create') ||
-      $can('supplier-view') ||
-      $can('supplier-edit') ||
+      // $can('supplier-view') ||
+      // $can('supplier-edit') ||
       $can('supplier-delete')
       " class="nav-item">
                 <router-link :to="{ name: 'suppliers.index' }" href="#" class="nav-link">
@@ -279,10 +280,11 @@
                   <p>{{ $t("sidebar.suppliers") }}</p>
                 </router-link>
               </li>
-              <li v-if="$can('purchase-payment-list') ||
+              <li v-if="
+              // $can('purchase-payment-list') ||
       $can('purchase-payment-create') ||
-      $can('purchase-payment-edit') ||
-      $can('purchase-payment-view') ||
+      // $can('purchase-payment-edit') ||
+      // $can('purchase-payment-view') ||
       $can('purchase-payment-delete')
       " class="nav-item">
                 <router-link :to="{ name: 'purchasePayments.index' }" class="nav-link">
@@ -290,10 +292,11 @@
                   <p>{{ $t("sidebar.purchase") }}</p>
                 </router-link>
               </li>
-              <li v-if="$can('purchase-list') ||
+              <li v-if="
+              // $can('purchase-list') ||
       $can('purchase-create') ||
-      $can('purchase-edit') ||
-      $can('purchase-view') ||
+      // $can('purchase-edit') ||
+      // $can('purchase-view') ||
       $can('purchase-delete')
       " class="nav-item">
                 <router-link :to="{ name: 'purchases.index' }" class="nav-link">
