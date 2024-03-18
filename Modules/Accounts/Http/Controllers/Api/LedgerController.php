@@ -139,7 +139,7 @@ class LedgerController extends Controller
                 'ledger_type' =>  'required',
                 'code' =>  'required',
                 'system_name' =>  'required|string|max:100|unique:ledgers_accounts,system_name,' . $request->cat_id,
-                'hotel_id' => 'nullable'
+                'shop_id' => 'nullable'
             ]);
             try {
                 $hotelcategory = LedgerAccount::where('id', $request->cat_id)->first();

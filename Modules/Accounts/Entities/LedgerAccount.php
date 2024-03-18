@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use \App\Models\Account;
 use \App\Models\AccountTransaction;
-use Modules\Shops\Entities\Hotel;
+use Modules\Shops\Entities\Shop;
 class LedgerAccount extends Model
 {
     use HasFactory;
     protected $table = 'ledgers_accounts';
     protected $primaryKey = 'id';
-    protected $fillable = ['ledger_type', 'ledger_group', 'ledger_name', 'system_name', 'code', 'is_bank', 'show_in_day_book', 'del_status', 'hotel_id', 'expense_sub_category_id'];
+    protected $fillable = ['ledger_type', 'ledger_group', 'ledger_name', 'system_name', 'code', 'is_bank', 'show_in_day_book', 'del_status', 'shop_id', 'expense_sub_category_id'];
     protected $appends = ['disabled', 'editable'];
 
     public function ledger()
@@ -21,9 +21,9 @@ class LedgerAccount extends Model
         return $this->belongsTo(Ledger::class, 'ledger_type');
     }
 
-    public function hotel()
+    public function shop()
     {
-        return $this->belongsTo(Hotel::class);
+        return $this->belongsTo(Shop::class);
     }
 
     public function ledgerCategory()
