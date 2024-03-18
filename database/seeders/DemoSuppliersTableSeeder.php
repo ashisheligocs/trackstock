@@ -22,7 +22,7 @@ class DemoSuppliersTableSeeder extends Seeder
                 'slug' => 'warehouse',
                 'supplier_id' => '1',
                 'email' => null,
-                'phone' => null,
+                'phone' => '1111111111',
                 'company_name' => '',
                 'address' => '',
                 'status' => 1,

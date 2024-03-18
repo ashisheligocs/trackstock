@@ -460,32 +460,32 @@ class ProductController extends Controller
                 // 'alert_qty' => ['nullable','numeric','min:1'],
             ];
 
-            foreach ($data as $key => $item) {
-                if(strToLower($item->sub_cat_id) == 'wine'){
-                    $item->sub_cat_id = 1;
-                }else if(strToLower($item->sub_cat_id) == 'vodka'){
-                    $item->sub_cat_id = 2; 
-                }else if(strToLower($item->sub_cat_id) == 'rum'){
-                    $item->sub_cat_id = 3; 
-                }else if(strToLower($item->sub_cat_id) == 'wisky'){
-                    $item->sub_cat_id = 4; 
-                }else if(strToLower($item->sub_cat_id) == 'beer'){
-                    $item->sub_cat_id = 5; 
-                }else if(strToLower($item->sub_cat_id) == 'gin'){
-                    $item->sub_cat_id = 6; 
-                }else if(strToLower($item->sub_cat_id) == 'breezer'){
-                    $item->sub_cat_id = 7; 
-                }else if(strToLower($item->sub_cat_id) == 'tequila'){
-                    $item->sub_cat_id = 8; 
-                }else if(strToLower($item->sub_cat_id) == 'brandy'){
-                    $item->sub_cat_id = 9; 
+            foreach ($data as $key => $item) { 
+                if(strToLower($item['sub_cat_id']) == 'wine'){
+                    $item['sub_cat_id'] = 1;
+                }else if(strToLower($item['sub_cat_id']) == 'vodka'){
+                    $item['sub_cat_id'] = 2; 
+                }else if(strToLower($item['sub_cat_id']) == 'rum'){
+                    $item['sub_cat_id'] = 3; 
+                }else if(strToLower($item['sub_cat_id']) == 'whiskey'){
+                    $item['sub_cat_id'] = 4; 
+                }else if(strToLower($item['sub_cat_id']) == 'beer'){
+                    $item['sub_cat_id'] = 5; 
+                }else if(strToLower($item['sub_cat_id']) == 'gin'){
+                    $item['sub_cat_id'] = 6; 
+                }else if(strToLower($item['sub_cat_id']) == 'breezer'){
+                    $item['sub_cat_id'] = 7; 
+                }else if(strToLower($item['sub_cat_id']) == 'tequila'){
+                    $item['sub_cat_id'] = 8; 
+                }else if(strToLower($item['sub_cat_id']) == 'brandy'){
+                    $item['sub_cat_id'] = 9; 
                 }
-                if(strToLower($item->unit_id) == 'nos.'){
-                    $item->unit_id = 1; 
+                if(strToLower($item['unit_id']) == 'nos.'){
+                    $item['unit_id'] = 1; 
                 } 
-                $item->alert_qty = 10;  
-                $item->status = 1;  
-                $item->tax_type = 'Exclusive';  
+                $item['alert_qty'] = 10;  
+                $item['status'] = 1;  
+                $item['tax_type'] = 'Exclusive';   
                 $validator = Validator::make($item, $rules);
                 if ($validator->passes()) {
                     Product::create(
