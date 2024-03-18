@@ -83,7 +83,8 @@ class PurchaseController extends Controller
             'purchaseDate' => 'nullable|date_format:Y-m-d',
             'poDate' => 'nullable|date_format:Y-m-d',
             'note' => 'nullable|string|max:255',
-            'shop_id' => 'required'
+            'shop_id' => 'required',
+            'batch_id' => 'required',
         ]);
 
         try {
@@ -167,6 +168,7 @@ class PurchaseController extends Controller
                 'created_by' => $userId,
                 'shop_id' => @$request->shop_id['id'],
                 'tax_amount' =>$request->totalProductTax,
+                'batch_id' =>$request->batch_id,
             ]);
 
             // if (!empty($taxes)) {
@@ -428,7 +430,7 @@ class PurchaseController extends Controller
             'purchaseDate' => 'nullable|date_format:Y-m-d',
             'poDate' => 'nullable|date_format:Y-m-d',
             'note' => 'nullable|string|max:255',
-            // 'hotel_id' => 'required'
+            'batch_id' => 'required'
         ]);
 
 
@@ -480,6 +482,7 @@ class PurchaseController extends Controller
                 'status' => $request->status,
                 'hotel_id' => @$request->hotel_id['id'],
                 'tax_amount' =>$request->totalProductTax,
+                'batch_id' =>$request->batch_id,
             ]);
 
             $purchase->refresh();
