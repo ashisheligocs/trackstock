@@ -19,6 +19,7 @@ class CreatePurchaseProductsTable extends Migration
             $table->double('purchase_price', 12, 2)->nullable();
             $table->double('unit_cost', 12, 2)->nullable();
             $table->double('tax_amount', 12, 2)->nullable();
+            $table->text('batch_id')->required();
             $table->timestamps();
             $table->unsignedBigInteger('purchase_id');
             $table->unsignedBigInteger('product_id');

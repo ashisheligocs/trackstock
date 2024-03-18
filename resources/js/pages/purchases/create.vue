@@ -218,6 +218,14 @@
                                     <has-error :form="form" field="totalTax" />
 
                                 </div>
+                                <div class="form-group col-md-4">
+                                    <label for="batch_id">{{ $t("purchases.list.common.total_tax") }}</label>
+                                    <input id="batch_id" v-model="form.batch_id" type="text" class="form-control"
+                                        :class="{ 'is-invalid': form.errors.has('batch_id') }" name="batch_id"
+                                        readonly />
+                                    <has-error :form="form" field="batch_id" />
+
+                                </div>
 
                                 <div class="form-group col-md-4">
                                     <!-- <label class="image_label" for="file-upload">Choose Image</label> -->
@@ -655,6 +663,7 @@ export default {
                 //     ? purchasePrice * (product.taxRate / 100)
                 //     : purchasePrice - purchasePrice / (1 + product.taxRate / 100);
                 let totalTax = productTax * quantity;
+                let batch_id = product.batch_id;
                 // store product
                 this.form.selectedProducts.unshift({
                     id: product.id,
@@ -665,6 +674,7 @@ export default {
                     taxType: product.taxType,
                     taxRate: product.taxRate,
                     productTax: productTax,
+                    batch_id: batch_id,
                     // totalTax: productTax * quantity,
                     totalTax: parseFloat(purchasePrice) * parseFloat(quantity) * parseFloat(product.productTaxRate[0].rate * 2) / 100,
                     unitPrice: purchasePrice,

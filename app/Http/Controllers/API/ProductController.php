@@ -452,7 +452,7 @@ class ProductController extends Controller
                 'sub_cat_id' => ['required'],
                 // 'brand_id' => ['nullable'],
                 'unit_id' => ['required'],
-                // 'tax_id' => ['required'],
+                'tax_id' => ['required'],
                 // 'tax_type' => ['required'],
                 // 'regular_price' => ['required','numeric','min:0'],
                 'discount' => ['nullable','numeric','min:0','max:100'],
@@ -486,12 +486,31 @@ class ProductController extends Controller
                 $item['alert_qty'] = 10;  
                 $item['status'] = 1;  
                 $item['tax_type'] = 'Exclusive';   
+                $item['tax_id'] = 1;   
                 $validator = Validator::make($item, $rules);
                 if ($validator->passes()) {
-                    Product::create(
+                    $pro = Product::create(
                         $this->incrementCode() +
                         $validator->validated()
                     );
+                    if(!empty($pro)){  
+                        ProductTax::create([ 
+                            'product_id' => $pro->id,
+                            'tax_id' => 1,
+                            'name' => 'SGST 0%',
+                            'rate' => 0,
+                            'code' => 'SGST@0',
+                            'amount' => 0.00,
+                        ]);
+                        ProductTax::create([ 
+                            'product_id' => $pro->id,
+                            'tax_id' => 2,
+                            'name' => 'CGST 0%',
+                            'rate' => 0,
+                            'code' => 'CGST@0',
+                            'amount' => 0.00,
+                        ]); 
+                    }
                 } else {
                     return response()->json([
                         'message' => $validator->errors()->first(),
