@@ -15,10 +15,8 @@
                         <h3 class="card-title">
                             {{ $t("purchases.list.create.form_title") }}
                         </h3>
-
                         <router-link :to="{ name: 'purchases.index' }" class="btn btn-secondary float-right">
                             <i class="fas fa-long-arrow-alt-left" /> {{ $t("common.back") }}
-
                         </router-link>
                     </div>
                     <!-- /.card-header -->
@@ -62,8 +60,8 @@
                                             <div class="d-flex w-100">
                                                 <v-select v-model="form.product" :options="products" label="label"
                                                     class="flex-grow-1" :class="{
-            'is-invalid': form.errors.has('selectedProducts'),
-        }" name="product" :placeholder="$t('common.select_products_placeholder')"
+                                                   'is-invalid': form.errors.has('selectedProducts'),
+                                                    }" name="product" :placeholder="$t('common.select_products_placeholder')"
                                                     @input="storeProduct(form.product)" />
                                                 <ProductCreateModal @reloadProducts="getProducts">
                                                     <div class="input-group-text create-btn">
