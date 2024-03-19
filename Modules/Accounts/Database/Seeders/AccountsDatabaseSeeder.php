@@ -362,6 +362,14 @@ class AccountsDatabaseSeeder extends Seeder
                     'code' => "warehouse",
                     'is_bank' => 1,
                 ],
+                [
+                    'ledger_type' => 1,
+                    'ledger_group' => 13,
+                    'ledger_name' => "Bank",
+                    'system_name' => "bank",
+                    'code' => "bank",
+                    'is_bank' => 1,
+                ],
                 
             ]);
         }
@@ -583,6 +591,18 @@ class AccountsDatabaseSeeder extends Seeder
                     'date' => now(),
                     'note' => null,
                     'account_id' => $lastAccountId + 18
+                ],
+                [
+                    'bank_name' => 'Bank',
+                    'branch_name' => 'Bank',
+                    'account_number' => 'bank',
+                    'slug' => 'bank',
+                    'created_by' => '1',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'date' => now(),
+                    'note' => null,
+                    'account_id' => $lastAccountId + 19
                 ],
             ]);
         }

@@ -28,6 +28,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
+       
         $startDate = $request->startDate ? Carbon::parse($request->startDate) : null;
         $endDate = $request->endDate ? Carbon::parse($request->endDate)->addDay() : null;
         return RestaurantOrderResource::collection(Restroorder::with('items',
@@ -45,7 +46,7 @@ class OrderController extends Controller
     public function show($id)
     {
         try {
-            $orderDetails = Restroorder::where('id', $id)->with('booking.customer')->first();
+            $orderDetails = Restroorder::where('id', $id)->first();
 
             if (@$orderDetails) {
                 return new RestaurantOrderShowResource($orderDetails);
@@ -163,40 +164,72 @@ class OrderController extends Controller
 
     public function payInvoice(Request $request)
     {
+      
         $input = $request->all();
-        $hotelId = $input['shop_id'];
+        $hotelId = $input['hotel_id'];
         $orderId = $input['invoice_slug'];
         $userId = auth()->user()->id;
 
         /*Create Plutus Entry ABhi(11-12-23)*/
 
         $note = '[' . $orderId . '] Order payment';
-        $plutusId = $this->createPlutusEntry($hotelId,$note,now(),floatval($request->paidAmount ?? 0));
+        $plutusId = $this->createPlutusEntry($hotelId,$note,now(),floatval($request->subtotal ?? 0));
 
         if (floatval($request->paidAmount ?? 0)) {
-            if($request->account['id'] == 0){
-                $account = $payableAccount = LedgerAccount::where('code', 'ACCOUNT-RECEIVABLE')->first();
+            
+            if($request->paidAmount == $request->subtotal){
+                $bankAmount = $request->paidAmount;
+                $cashAmount = 0;
+            } else if($request->paidAmount == 0){
+                $bankAmount = 0;
+                $cashAmount = $request->paidAmount;
+            } else {
+                $bankAmount = $request->paidAmount;
+                $cashAmount = $request->subtotal - $request->paidAmount;
             }
-            $transaction = AccountTransaction::create([
-                'account_id' => ($request->account['id'] == 0) ? $account->id : $request->account['id'],
-                'amount' => floatval($request->paidAmount ?? 0),
-                'reason' => ($request->account['id'] == 0) ? '[' . $orderId . '] Restaurant invoice payment Pending' : '[' . $orderId . '] Restaurant invoice payment',
-                'type' => 1,
-                'transaction_date' => Carbon::now(),
-                'cheque_no' => $request->chequeNo,
-                'receipt_no' => $request->receiptNo,
-                'created_by' => $userId,
-                'status' => 1,
-                'hotel_id' => $hotelId,
-                'order_id' => @$input['invoice_id'],
-                'customer_id' => @$input['client'] ? @$input['client']['id'] : null,
-                'plutus_entries_id' => $plutusId,
-            ]);
+
+            if($bankAmount != 0){
+                $bankLedger = LedgerAccount::where('code', 'bank')->first();
+                $transaction = AccountTransaction::create([
+                    'account_id' => $bankLedger->id,
+                    'amount' => floatval($bankAmount ?? 0),
+                    'reason' => '[' . $orderId . '] Invoice payment Received In Bank',
+                    'type' => 1,
+                    'transaction_date' => Carbon::now(),
+                    'cheque_no' => $request->chequeNo,
+                    'receipt_no' => $request->receiptNo,
+                    'created_by' => $userId,
+                    'status' => 1,
+                    'shop_id' => $hotelId,
+                    'order_id' => @$input['invoice_id'],
+                    'customer_id' => @$input['client'] ? @$input['client'] : null,
+                    'plutus_entries_id' => $plutusId,
+                ]);
+            }
+            
+            if($cashAmount != 0){
+                $transaction = AccountTransaction::create([
+                    'account_id' => $request->account['id'],
+                    'amount' => floatval($cashAmount ?? 0),
+                    'reason' => '[' . $orderId . '] Invoice payment Received In Cash',
+                    'type' => 1,
+                    'transaction_date' => Carbon::now(),
+                    'cheque_no' => $request->chequeNo,
+                    'receipt_no' => $request->receiptNo,
+                    'created_by' => $userId,
+                    'status' => 1,
+                    'shop_id' => $hotelId,
+                    'order_id' => @$input['invoice_id'],
+                    'customer_id' => @$input['client'] ? @$input['client'] : null,
+                    'plutus_entries_id' => $plutusId,
+                ]);
+            }
+            
 
             NonInvoicePayment::create([
                 'slug' => uniqid(),
-                'client_id' => @$input['client'] ? @$input['client']['id'] : null,
-                'amount' => floatval($request->paidAmount ?? 0),
+                'client_id' => @$input['client'] ? @$input['client'] : null,
+                'amount' => floatval($request->subtotal ?? 0),
                 'type' => 1,
                 'transaction_id' => $transaction->id,
                 'date' => Carbon::now(),
@@ -204,13 +237,13 @@ class OrderController extends Controller
                 'status' => 1,
                 'created_by' => $userId,
                 'order_id' => @$input['invoice_id'],
-                'hotel_id' => $hotelId,
+                'shop_id' => $hotelId,
             ]);
 
             $payableAccount = LedgerAccount::where('code', 'RESTAURANT-REVENUE')->first();
             $payableAccount = $payableAccount->getAccoutnbalance;
             $payableAccount->balanceTransactions()->create([
-                'amount' => floatval($request->paidAmount ?? 0) - floatval($input['tax'] ?? 0),
+                'amount' => floatval($request->subtotal ?? 0),
                 'reason' => '[' . $orderId . '] Restaurant invoice Payment',
                 'type' => 1,
                 'transaction_date' => now(),
@@ -219,35 +252,16 @@ class OrderController extends Controller
                 'created_by' => $userId,
                 'status' => 1,
                 'order_id' => @$input['invoice_id'],
-                'hotel_id' => $hotelId,
-                'customer_id' => @$input['client'] ? @$input['client']['id'] : null,
+                'shop_id' => $hotelId,
+                'customer_id' => @$input['client'] ? @$input['client'] : null,
                 'plutus_entries_id' => $plutusId,
             ]);
 
-            // $outputGst = LedgerAccount::where('code', 'GST-OUTPUT')->first();
-            // if ($outputGst) {
-            //     $outputGst = $outputGst->getAccoutnbalance;
-            //     $outputGst && $outputGst->balanceTransactions()->create([
-            //         'amount' => $input['tax'],
-            //         'reason' => '[' . $orderId . '] Restaurant invoice Payment GST',
-            //         'type' => 1,
-            //         'transaction_date' => now(),
-            //         'cheque_no' => null,
-            //         'receipt_no' => null,
-            //         'created_by' => $userId,
-            //         'status' => 1,
-            //         'order_id' => @$input['invoice_id'],
-            //         'reference' => 'order',
-            //         'hotel_id' => $hotelId,
-            //         'customer_id' => @$input['client'] ? @$input['client']['id'] : null,
-            //         'plutus_entries_id' => $plutusId,
-            //     ]);
-            // }
 
             //update Status in RestoOrder Table
             $updateStatus = Restroorder::where('id',$input['invoice_id'])->first();
             $updateStatus->order_status = 1;
-            $updateStatus->payment_status = ($request->account['id'] == 0) ? 0 : 1;
+            $updateStatus->payment_status = 1;
             $updateStatus->save();
         }
     }
@@ -282,7 +296,7 @@ class OrderController extends Controller
     protected function createPlutusEntry($hotelId,$note,$date,$amount){
 
         $createPlutus = PlutusEntries::create([
-            'hotel_id' => $hotelId,
+            'shop_id' => $hotelId,
             'note' => $note,
             'date' => $date,
             'amount' => $amount,
