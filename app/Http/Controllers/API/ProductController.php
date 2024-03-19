@@ -507,12 +507,58 @@ class ProductController extends Controller
                 // $item['tax_id'] = 1;
                 $validator = Validator::make($item, $rules);
                 if ($validator->passes()) {
+<<<<<<< HEAD
                     $pro = Product::create(
                         $this->incrementCode() +
                         $validator->validated()
                     );
                     if(!empty($pro)){
                         ProductTax::create([
+=======
+                    $exist = Product::where('model',$item['model'])->first();
+                    if(!empty($exist)){
+                        $pro = Product::where('model',$item['model'])->update([
+                            'selling_price' => $item['selling_price'] ?? 0
+                        ]);
+                    }else{
+                        $pro = Product::create(
+                            $this->incrementCode() +
+                            $validator->validated()
+                        );
+                    }
+
+
+                    $code = 1;
+                    $prevCode = Purchase::latest()->first();
+                    if ($prevCode) {
+                        $code = $prevCode->id + 1;
+                    }
+                    $userId = auth()->user()->id;
+                    if($item['quantity'] > 0){
+                        if(!empty($item['shop'])){
+                            $shop = Shop::where('name',$item['shop'])->first();
+
+                            $exist = Purchase::where('batch_id',$item['batch_id'])->first();
+                            if(empty($exist)){ 
+                                $purchase = Purchase::create([
+                                    'purchase_no' => $code,
+                                    'slug' => uniqid(), 
+                                    'supplier_id' => 1, 
+                                    'sub_total' => $item['quantity'] * $item['selling_price'],   
+                                    'purchase_date' => $item['purchaseDate'], 
+                                    'status' => 1,
+                                    'created_by' => $userId,
+                                    'shop_id' => $shop->id, 
+                                    'batch_id' =>$item['batch_id'],
+                                    'quantity'=> $item['quantity'] ?? 0
+                                    // "jhdf"
+                                ]);
+                            }
+                        }
+                    }
+                    if(!empty($pro)){  
+                        ProductTax::create([ 
+>>>>>>> cdcc04eaf13ac417bbf3c9eafdd9368882630673
                             'product_id' => $pro->id,
                             'tax_id' => 1,
                             'name' => 'SGST 0%',
