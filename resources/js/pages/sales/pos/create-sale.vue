@@ -1060,7 +1060,7 @@ console.log(this.products);
                 // await this.saveInvoice(false);
                 if (this.form.invoice_id != null) {
                     this.showModal = true;
-                    this.form.paidAmount = _.clone(this.form.netTotal.toFixed(2));
+                    this.form.paidAmount = _.clone(this.form.netTotal);
 
                     this.$nextTick(() => this.$refs.paidAmountInput && this.$refs.paidAmountInput.focus());
                 }
