@@ -332,20 +332,7 @@
               <has-error :form="form" field="paidAmount" />
             </div>
           </div>
-          <div class="row">
-            <div class="form-group col-md-6">
-              <!-- <label for="receiptNo"></label> -->
-              Order No :
-              <!-- <input id="receiptNo" v-model="form.receiptNo" type="text" class="form-control"
-                :class="{ 'is-invalid': form.errors.has('receiptNo') }" name="receiptNo"
-                :placeholder="$t('common.receipt_no_placeholder')" disabled />
-              <has-error :form="form" field="receiptNo" /> -->
-            </div>
-            <div class="form-group col-md-6">
-              {{ form.receiptNo }}
-              <input id="receiptNo" v-model="form.receiptNo" type="hidden" class="form-control" />
-            </div>
-          </div>
+          
           <div class="row">
             <div class="form-group col-md-6">
               Date :
@@ -355,12 +342,6 @@
               <input id="date" v-model="form.date" type="hidden" class="form-control" />
             </div>
           </div>
-          <!-- <div class="form-group">
-            <label for="note">{{ $t("common.note") }}</label>
-            <textarea id="note" v-model="form.note" class="form-control"
-              :class="{ 'is-invalid': form.errors.has('note') }" :placeholder="$t('common.note_placeholder')" />
-            <has-error :form="form" field="note" />
-          </div> -->
         </div>
       </div>
       <div class="payment-modal-footer" slot="modal-footer">
@@ -1000,54 +981,68 @@ console.log(this.products);
             },
 
             // save invoice
-            async saveInvoice(isDirect = true) {
-                await this.form
+            // async saveInvoice(isDirect = true) {
+            //     await this.form
+            //         .post(window.location.origin + "/api/food/order/invoice")
+            //         .then(({ data }) => {
+            //             this.form.invoice_id = data.data.id;
+            //             this.form.invoice_slug = data.data.order_id_uniq;
+            //             this.form.receiptNo = data.data.order_id_uniq;
+            //             if (isDirect) {
+            //                 this.showInvoiceAndPrint();
+            //                 this.resetForm();
+            //             }
+            //         })
+            //         .catch(() => {
+            //             toast.fire({ type: "error", title: this.$t("common.error_msg") });
+            //         });
+            // },
+
+            // save payment
+            async addPayment() {
+
+              if(this.form.paidAmount > this.form.netTotal){
+                return toast.fire({ type: "error", title: "Max Amount should be "+this.form.netTotal });
+              }
+
+              await this.form
                     .post(window.location.origin + "/api/food/order/invoice")
                     .then(({ data }) => {
                         this.form.invoice_id = data.data.id;
                         this.form.invoice_slug = data.data.order_id_uniq;
                         this.form.receiptNo = data.data.order_id_uniq;
-                        if (isDirect) {
-                            this.showInvoiceAndPrint();
-                            this.resetForm();
+
+                        if (this.form.invoice_id != null) {
+                           this.form
+                            .post(window.location.origin + "/api/food/order/invoice/pay")
+                            .then(() => {
+                               toast.fire({ type: "success", title: 'Order Place Successfully' });
+                                this.showModal = false;
+                                this.allData = _.cloneDeep(this.form);
+                                // await this.showInvoiceAndPrint();
+                                this.resetForm();
+                                this.form.reset();
+                                this.againDefaultSettings();
+                                
+                            })
+                            .catch(() => {
+                                toast.fire({ type: "error", title: this.$t("common.error_msg") });
+                            });
                         }
                     })
                     .catch(() => {
                         toast.fire({ type: "error", title: this.$t("common.error_msg") });
                     });
-            },
 
-            // save payment
-            async addPayment() {
-              if(this.form.paidAmount > this.form.netTotal){
-                return toast.fire({ type: "error", title: "Max Amount should be "+this.form.netTotal });
-              }
-                if (this.form.invoice_id != null) {
-                    await this.form
-                        .post(window.location.origin + "/api/food/order/invoice/pay")
-                        .then(async () => {
-                            this.showModal = false;
-                            this.allData = _.cloneDeep(this.form);
-                            await this.showInvoiceAndPrint();
-                            this.resetForm();
-                            this.form.reset();
-                            this.againDefaultSettings();
-                        })
-                        .catch(() => {
-                            toast.fire({ type: "error", title: this.$t("common.error_msg") });
-                        });
-                } else {
-                    await toast.fire({ type: "error", title: this.$t("common.error_msg") });
-                }
             },
 
             // close add payment modal and clear form data
             closeModalAndClearFormData() {
                 this.showModal = false;
-                this.generateOrder = false;
-                this.resetForm();
-                this.form.reset();
-                this.againDefaultSettings();
+                // this.generateOrder = false;
+                // this.resetForm();
+                // this.form.reset();
+                // this.againDefaultSettings();
             },
 
             // close receipt modal
@@ -1062,7 +1057,7 @@ console.log(this.products);
 
             // complete order and add payment
             async completeOrderAndAddPayment() {
-                await this.saveInvoice(false);
+                // await this.saveInvoice(false);
                 if (this.form.invoice_id != null) {
                     this.showModal = true;
                     this.form.paidAmount = _.clone(this.form.netTotal.toFixed(2));
