@@ -543,6 +543,7 @@ class ProductController extends Controller
                                     'shop_id' => $shop->id, 
                                     'batch_id' =>$item['batch_id'],
                                     'quantity'=> $item['quantity'] ?? 0
+                                    // "jhdf"
                                 ]);
                             }
                         }
