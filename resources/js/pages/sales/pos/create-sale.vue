@@ -16,12 +16,6 @@
                 <has-error :form="form" field="category" />
 
               </div> -->
-              <div v-if="categoryOptions.length" class="form-group col-md-12">
-                <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
-                  :class="{ 'is-invalid': form.errors.has('category') }" name="category"
-                  placeholder="Select a Brand" />
-                <has-error :form="form" field="category" />
-              </div>
               <div v-if="products" class="col-md-12 form-group">
                 <div class="d-flex w-100">
                   <search class="flex-grow-1" :isPosSearch="true" v-model="query" @reset-pagination="resetPagination()"
@@ -29,6 +23,18 @@
                 </div>
                 <has-error :form="form" field="selectedProducts" />
               </div>
+              <div v-if="categoryOptions.length" class="form-group col-md-6">
+                <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
+                  :class="{ 'is-invalid': form.errors.has('category') }" name="category" placeholder="Select a Brand" />
+                <has-error :form="form" field="category" />
+              </div>
+
+              <div v-if="categoryOptions.length" class="form-group col-md-6">
+                <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
+                  :class="{ 'is-invalid': form.errors.has('category') }" name="category" placeholder="Select a Brand" />
+                <has-error :form="form" field="category" />
+              </div>
+
             </div>
           </div>
 
@@ -572,7 +578,7 @@
                     price = this.foodItemSubTotal;
                     console.log(price);
                 }
-                let taxRate = 12;
+                let taxRate = 0;
                 console.log("Price:", price);
     console.log("Tax Rate:", taxRate);
                 return parseFloat(price)*parseFloat(taxRate)/100;
