@@ -101,30 +101,71 @@ class ProductSeeder extends Seeder
             ]);
         }
 
-        // \DB::table('brands')->insert([
-        //     0 => [
-        //         'id' => 1,
-        //         'name' => 'Blenders Pride',
-        //         'slug' => 'blenders-pride',
-        //         'code' => 'BP',
-        //         'image' => '1651321208.png',
-        //         'note' => '',
-        //         'status' => 1,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     1 => [
-        //         'id' => 2,
-        //         'name' => 'Royal Stag',
-        //         'slug' => 'royal-stag',
-        //         'code' => 'RS',
-        //         'image' => '1651321265.jpeg',
-        //         'note' => '',
-        //         'status' => 1,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        // ]);
+        \DB::table('brands')->insert([
+            [
+                'name' => 'Wine',
+                'slug' => 'wine',
+                'code' => '1',
+                'note' => null,
+                'status' => 1, 
+            ],
+            [
+                'name' => 'Vodka',
+                'slug' => 'vodka',
+                'code' => '1',
+                'note' => null,
+                'status' => 1, 
+            ],
+            [
+                'name' => 'Rum',
+                'slug' => 'rum',
+                'code' => '1',
+                'note' => null,
+                'status' => 1, 
+            ],
+            [
+                'name' => 'Wiskey',
+                'slug' => 'wisky',
+                'code' => '1',
+                'note' => null,
+                'status' => 1, 
+            ],
+            [
+                'name' => 'Beer',
+                'slug' => 'beer',
+                'code' => '1',
+                'note' => null,
+                'status' => 1, 
+            ],
+            [
+                'name' => 'Gin',
+                'slug' => 'gin',
+                'code' => '1',
+                'note' => null,
+                'status' => 1, 
+            ],
+            [
+                'name' => 'Breezer',
+                'slug' => 'breezer',
+                'code' => '1',
+                'note' => null,
+                'status' => 1, 
+            ],
+            [
+                'name' => 'Tequila',
+                'slug' => 'tequila',
+                'code' => '1',
+                'note' => null,
+                'status' => 1, 
+            ],
+            [
+                'name' => 'Brandy',
+                'slug' => 'brandy',
+                'code' => '1',
+                'note' => null,
+                'status' => 1, 
+            ],
+        ]);
 
         // if (DB::table('products')->count() == 0) {
         //     DB::table('products')->insert([ 

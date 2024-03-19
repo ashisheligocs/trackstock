@@ -5,10 +5,13 @@ namespace App\Http\Controllers\API;
 use Exception;
 use ZipArchive;
 use App\Models\Unit;
+use Modules\Shops\Entities\Shop;
 use App\Models\Brand;
 use App\Models\Product;
+use App\Models\Purchase;
 use App\Models\VatRate;
 use Illuminate\Http\Request;
+use App\Models\PurchaseProduct;
 use App\Models\GeneralSetting;
 use App\Models\ProductCategory;
 use App\Models\ProductSubCategory;
@@ -19,6 +22,8 @@ use Spatie\SimpleExcel\SimpleExcelReader;
 use App\Http\Resources\ProductSelectResource;
 use App\Http\Resources\ProductListingResource;
 use App\Models\ProductTax;
+use Modules\Accounts\Entities\PlutusEntries;
+use Modules\Accounts\Entities\LedgerAccount;
 use Intervention\Image\Facades\Image as Image;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -53,7 +58,7 @@ class ProductController extends Controller
             $q->orWhere('slug', 'LIKE', '%'.$search.'%');
             $q->orWhere('model', 'LIKE', '%'.$search.'%');
             $q->orWhere('code', 'LIKE', '%'.$search.'%');
-            $q->orWhere('regular_price', 'LIKE', '%'.$search.'%');
+            $q->orWhere('selling_price', 'LIKE', '%'.$search.'%');
             $q->orWhere('purchase_price', 'LIKE', '%'.$search.'%');
             $q->orWhereHas('proSubCategory', function ($newQuery) use ($search) {
                 $newQuery->where('name', 'LIKE', '%'.$search.'%')
@@ -464,7 +469,7 @@ class ProductController extends Controller
             $data = SimpleExcelReader::create($file, 'csv')->getRows();
 
             $rules = [
-                'name' => ['required','string','max:255','unique:products,name'],
+                'name' => ['required','string','max:255'],
                 'model' => ['nullable','string','min:2','max:255'],
                 'barcode_symbology' => ['required','string','max:20'],
                 'sub_cat_id' => ['required'],
@@ -474,29 +479,48 @@ class ProductController extends Controller
                 'selling_price' => ['required','numeric','min:0'],
                 'quantity' => ['nullable'],
                 'alert_qty' => ['nullable','numeric','min:1'],
-                'purchase_date' => ['nullable','numeric','min:1'],
+                'purchase_date' => ['nullable'],
                 'batch_id' => ['nullable'],
             ];
 
             foreach ($data as $key => $item) { 
+
+                
+                $shop = Shop::where('shop_name',$item['shop'])->first();
+                if(empty($shop)){
+                    $shop = Shop::create([
+                        "shop_name" => $item['shop'] ?? '',
+                        "shop_address" => $item['shop_address'] ?? '', 
+                    ]);
+                }
+
                 if(strToLower($item['sub_cat_id']) == 'wine'){
                     $item['sub_cat_id'] = 1;
+                    $item['brand_id'] = 1;
                 }else if(strToLower($item['sub_cat_id']) == 'vodka'){
                     $item['sub_cat_id'] = 2; 
+                    $item['brand_id'] = 2; 
                 }else if(strToLower($item['sub_cat_id']) == 'rum'){
                     $item['sub_cat_id'] = 3; 
+                    $item['brand_id'] = 3; 
                 }else if(strToLower($item['sub_cat_id']) == 'whiskey'){
                     $item['sub_cat_id'] = 4; 
+                    $item['brand_id'] = 4; 
                 }else if(strToLower($item['sub_cat_id']) == 'beer'){
                     $item['sub_cat_id'] = 5; 
+                    $item['brand_id'] = 5; 
                 }else if(strToLower($item['sub_cat_id']) == 'gin'){
                     $item['sub_cat_id'] = 6; 
+                    $item['brand_id'] = 6; 
                 }else if(strToLower($item['sub_cat_id']) == 'breezer'){
                     $item['sub_cat_id'] = 7; 
+                    $item['brand_id'] = 7; 
                 }else if(strToLower($item['sub_cat_id']) == 'tequila'){
                     $item['sub_cat_id'] = 8; 
+                    $item['brand_id'] = 8; 
                 }else if(strToLower($item['sub_cat_id']) == 'brandy'){
                     $item['sub_cat_id'] = 9; 
+                    $item['brand_id'] = 9; 
                 }
                 if(strToLower($item['unit_id']) == 'nos.'){
                     $item['unit_id'] = 1; 
@@ -509,14 +533,31 @@ class ProductController extends Controller
                 if ($validator->passes()) {
                     $exist = Product::where('model',$item['model'])->first();
                     if(!empty($exist)){
-                        $pro = Product::where('model',$item['model'])->update([
+                        Product::where('model',$item['model'])->update([
                             'selling_price' => $item['selling_price'] ?? 0
                         ]);
+                        $pro = Product::where('model',$item['model'])->first();
                     }else{
-                        $pro = Product::create(
-                            $this->incrementCode() +
-                            $validator->validated()
-                        );
+                        $codeNo = 1;
+                        $lastProduct = Product::latest('id')->first();
+                        if ($lastProduct) {
+                            $codeNo = (int) $lastProduct->code + 1;
+                        }
+                        $pro = Product::create([
+                            'name' => @$item['name'],
+                            'code' => @$codeNo,
+                            'model' => @$item['model'],
+                            'barcode_symbology' => @$item['barcode_symbology'],
+                            'sub_cat_id' => @$item['sub_cat_id'],
+                            'brand_id' => @$item['brand_id'],
+                            'unit_id' => @$item['unit_id'], 
+                            'tax_type' => @$item['taxType'],
+                            'selling_price' => isset($item['selling_price']) ? $item['selling_price'] : 0,  
+                            'alert_qty' => $item['alert_qty'],
+                            'quantity' => $item['quantity'],
+                            'status' => $item['status'],
+                            'purchase_date' => $item['purchase_date'], 
+                        ]);
                     }
 
 
@@ -526,27 +567,34 @@ class ProductController extends Controller
                         $code = $prevCode->id + 1;
                     }
                     $userId = auth()->user()->id;
-                    if($item['quantity'] > 0){
-                        if(!empty($item['shop'])){
-                            $shop = Shop::where('name',$item['shop'])->first();
-
-                            $exist = Purchase::where('batch_id',$item['batch_id'])->first();
-                            if(empty($exist)){ 
-                                $purchase = Purchase::create([
-                                    'purchase_no' => $code,
-                                    'slug' => uniqid(), 
-                                    'supplier_id' => 1, 
-                                    'sub_total' => $item['quantity'] * $item['selling_price'],   
-                                    'purchase_date' => $item['purchaseDate'], 
-                                    'status' => 1,
-                                    'created_by' => $userId,
-                                    'shop_id' => $shop->id, 
-                                    'batch_id' =>$item['batch_id'],
-                                    'quantity'=> $item['quantity'] ?? 0
-
-                                ]);
-                            }
-                        }
+                    if($item['quantity'] > 0){ 
+                        $purchase = Purchase::where('batch_id',$item['batch_id'])->first();
+                        if(empty($purchase)){ 
+                            $purchase = Purchase::create([
+                                'purchase_no' => $code,
+                                'slug' => uniqid(), 
+                                'supplier_id' => 1, 
+                                'sub_total' => $item['selling_price'],   
+                                'purchase_date' => date('Y-m-d',strToTime($item['purchase_date'])), 
+                                'po_date' => date('Y-m-d',strToTime($item['purchase_date'])), 
+                                'status' => 1,
+                                'created_by' => $userId,
+                                'shop_id' => $shop->id, 
+                                'batch_id' =>$item['batch_id'],
+                                'quantity'=> $item['quantity'] ?? 0 
+                            ]);
+                            $reason = '['.config('config.purchasePrefix').'-'.$purchase->purchase_no.'] , Entry done by '.auth()->user()->name.'';
+                            $plutusId = $this->createPlutusEntry($shop->id,$reason,now(),$item['selling_price']);
+                            $this->manageInventoryLedger($purchase, @$shop->id,$plutusId);
+                        } 
+                        PurchaseProduct::create([
+                            'purchase_id' => $purchase->id,
+                            'product_id' => $pro->id,
+                            'quantity' =>  $item['quantity'] ?? 0 ,
+                            'purchase_price' => $item['selling_price'],
+                            'unit_cost' => $item['selling_price'],
+                            'tax_amount' => 0,
+                        ]);
                     }
                     if(!empty($pro)){  
                         ProductTax::create([ 
@@ -591,6 +639,40 @@ class ProductController extends Controller
             'code' => $codeNo
         ];
     }
+
+    protected function createPlutusEntry($hotelId, $note, $date, $amount)
+    {
+        $createPlutus = PlutusEntries::create([
+            'shop_id' => $hotelId,
+            'note' => $note,
+            'date' => $date,
+            'amount' => $amount,
+        ]);
+
+        return $createPlutus->id;
+    }
+
+    public function manageInventoryLedger($purchase, $hotelId,$plutusId)
+    {
+        //Manage Inventory
+        $payableAccount = LedgerAccount::where('code', 'INVENTORY')->first();
+        $payableAccount = $payableAccount->getAccoutnbalance;
+        $payableAccount->balanceTransactions()->create([
+            'amount' => floatval($purchase->purchaseTotal()) - floatval($purchase->discount)
+                - floatval($purchase->calculated_tax ?? 0) + floatval($purchase->transport ?? 0),
+            'reason' => '['.config('config.purchasePrefix').'-'.$purchase->purchase_no.'] Purchased ]',
+            'type' => 1,
+            'transaction_date' => now(),
+            'cheque_no' => null,
+            'receipt_no' => null,
+            'created_by' => auth()->user()->id,
+            'status' => 1,
+            'purchase_id' => $purchase->id,
+            'shop_id' => $hotelId,
+            'plutus_entries_id' => $plutusId,
+        ]);
+    }
+
 
     // cxv import with template with sheet brand_id, sub_cat_id, unit_id, tax_id
     public function importTemplate(){

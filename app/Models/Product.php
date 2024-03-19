@@ -16,7 +16,7 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'slug', 'code', 'model', 'barcode_symbology', 'sub_cat_id', 'brand_id', 'unit_id', 'tax_id', 'tax_type', 'purchase_price', 'regular_price', 'discount', 'inventory_count', 'alert_qty', 'note', 'status', 'image_path',
+        'name', 'slug', 'code', 'model', 'barcode_symbology', 'sub_cat_id', 'brand_id', 'unit_id', 'tax_id', 'tax_type', 'purchase_price', 'selling_price', 'discount', 'inventory_count', 'alert_qty', 'note', 'status', 'image_path',
     ];
 
     /**
@@ -79,10 +79,10 @@ class Product extends Model
     {
         $price = 0;
         if ($this->tax_type == 'Exclusive') {
-            $price = $this->regular_price - $this->discountAmount() + $this->taxAmount();
+            $price = $this->selling_price - $this->discountAmount() + $this->taxAmount();
         } else { 
             if(!empty($this->productTaxRate) && count($this->productTaxRate) > 0){
-                $price = (($this->regular_price - $this->discountAmount()) / (1 + ($this->productTaxRate[0]->rate * 2) / 100)) + $this->taxAmount();
+                $price = (($this->selling_price - $this->discountAmount()) / (1 + ($this->productTaxRate[0]->rate * 2) / 100)) + $this->taxAmount();
             }
             
         }

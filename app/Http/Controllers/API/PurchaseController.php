@@ -85,6 +85,7 @@ class PurchaseController extends Controller
             'note' => 'nullable|string|max:255',
             'shop_id' => 'required',
             'batch_id' => 'required',
+            'quantity' => 'nullable|string|max:255',
         ]);
 
         try {
