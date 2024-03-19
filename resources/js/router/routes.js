@@ -411,7 +411,7 @@ export default [
     },
     // POS routes
     {
-        path: "/sales/POS/:order?",
+        path: "/sales/pos/:order?",
         name: "pos.create",
         component: page("sales/pos/create.vue"),
         meta: { permissions: ["invoice-create"] }

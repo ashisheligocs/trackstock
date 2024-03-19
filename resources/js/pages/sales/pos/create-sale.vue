@@ -6,7 +6,7 @@
 
     <div class="row sm-col-reverse">
       <!-- pos left area start -->
-      <div class="col-12 col-md-7">
+      <div class="col-12 col-md-6">
         <div class="card bg-transparent">
           <div class="pos-r-head bg-white">
             <div class="row">
@@ -48,13 +48,14 @@
                         <div v-if="product?.image">
                           <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
                             alt="product image" />
+                            <span class="stock_no">{{ product.inventoryCount ?? 0 }} </span>
                         </div>
-                        <div v-else>{{ $t("common.no_preview") }}</div>
+                        <div v-else><span class="stock_no">{{ product.inventoryCount ?? 0 }}</span></div>
                       </div>
                     </div>
                     <div class="pos-box-content">
-                      <p class="pos-box-text">{{ product.name }} ({{ product.inventoryCount ?? 0 }} In stock)</p>
-                      <span class="text-bold text-lg">{{ product.regularPrice | withCurrency }}</span>
+                      <p class="pos-box-text">{{ product.name }}</p>
+                      <span class="text-bold">{{ product.regularPrice | withCurrency }}</span>
                     </div>
                   </div>
                 </div>
@@ -67,12 +68,14 @@
                         <div v-if="product?.image">
                           <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
                             alt="product image" />
+                            <span class="stock_no">{{ product.inventoryCount ?? 0 }}</span>
                         </div>
-                        <div v-else>{{ $t("common.no_preview") }}</div>
+                        <!-- kjkjkjh{{ $t("common.no_preview") }} -->
+                        <div v-else> <span class="stock_no">{{ product.inventoryCount ?? 0 }}</span></div>
                       </div>
                     </div>
                     <div class="pos-box-content">
-                      <p class="pos-box-text">{{ product.name }} ({{ product.inventoryCount ?? 0 }} In stock)</p>
+                      <p class="pos-box-text">{{ product.name }} </p>
                       <span class="text-bold text-lg">{{ product.regularPrice | withCurrency }}</span>
                     </div>
                   </div>
@@ -96,7 +99,7 @@
       <!-- pos left area end -->
 
       <!-- POS Right area start -->
-      <div class="col-12 col-md-5">
+      <div class="col-12 col-md-6">
         <div class="card">
           <div class="card-body-l p-0">
             <div class="form-group pl-3 pt-3 pr-3 d-none">
@@ -1136,7 +1139,7 @@
 
 .pos-item-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 10px;
 }
 
@@ -1198,7 +1201,6 @@
 
 .pos-box-content p {
   font-size: 14px;
-  font-weight: bold;
   margin-bottom: 0px;
 }
 
@@ -1417,5 +1419,26 @@ span.pqty {
 
 .create-btn-2 {
   padding: 10px;
+}
+span.stock_no {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #ec3666;
+    height: auto;
+    display: inline;
+    line-height: 20px;
+    color: #fff;
+    z-index: 9;
+    padding: 1px 4px;
+}
+.table-responsive.table-wrap {
+    min-height: 400px;
+}
+.table thead th {
+    border-bottom: 0;
+    font-size: 12px;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
 }
 </style>

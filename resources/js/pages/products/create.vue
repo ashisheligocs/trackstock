@@ -85,20 +85,20 @@
                     :placeholder="$t('common.unit_placeholder')" />
                   <has-error :form="form" field="itemUnit" />
                 </div>
-               <div v-if="taxes" class="form-group col-md-6 col-xl-4">
+               <!-- <div v-if="taxes" class="form-group col-md-6 col-xl-4">
                  <label for="productTax">{{ $t('products.list.common.product_tax') }}
                    <span class="required">*</span></label>
-                 <!-- <v-select v-model="form.productTax" :options="taxes" label="code"
+                 <v-select v-model="form.productTax" :options="taxes" label="code"
                    :class="{ 'is-invalid': form.errors.has('productTax') }" name="productTax"
                    :placeholder="$t('products.list.common.tax_placeholder')" @input="calculatePrice" />
-                 <has-error :form="form" field="productTax" /> -->
-                 <multiselect v-model="form.productTax" :options="taxes"  
+                 <has-error :form="form" field="productTax" />
+                 <multiselect v-model="form.productTax" :options="taxes"
                     label="code" track-by="name" :multiple="true" :taggable="true"
-                    :class="{ 'is-invalid': form.errors.has('productTax') }" name="productTax[]" 
+                    :class="{ 'is-invalid': form.errors.has('productTax') }" name="productTax[]"
                     placeholder="Select a tax type" @input="calculatePrice"  :close-on-select="false"></multiselect>
                     <has-error :form="form" field="productTax" />
-               </div>
-               <div class="form-group col-md-6 col-xl-4">
+               </div> -->
+               <!-- <div class="form-group col-md-6 col-xl-4">
                  <label for="taxType">{{ $t('products.list.common.tax_type') }}
                    <span class="required">*</span></label>
                  <select id="taxType" v-model="form.taxType" class="form-control"
@@ -111,7 +111,7 @@
                    </option>
                  </select>
                  <has-error :form="form" field="taxType" />
-               </div>
+               </div> -->
                 <div class="form-group col-md-6 col-xl-4">
                   <label for="regularPrice">{{ $t('products.list.common.regular_price') }}
                     </label>
@@ -122,7 +122,7 @@
                     " @change="calculatePrice" @keyup="calculatePrice" />
                   <has-error :form="form" field="regularPrice" />
                 </div>
-                <div class="form-group col-md-6 col-xl-4">
+                <!-- <div class="form-group col-md-6 col-xl-4">
                   <div class="input-group">
                     <label for="discount" class="col-md-12">{{
                         $t('common.discount')
@@ -136,7 +136,7 @@
                     </div>
                     <has-error :form="form" field="discount" />
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-6 col-xl-4">
                   <label for="sellingPrice">{{
                       $t('products.list.common.selling_price')
@@ -338,7 +338,7 @@ export default {
         this.form.productTax.forEach(element => {
             if(element.rate > 0){
               taxAmount += element.rate / 100;
-            }  
+            }
         });
 
         if (this.form.taxType == 'Exclusive') {
