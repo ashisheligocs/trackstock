@@ -31,11 +31,7 @@
           <li class="nav-header text-uppercase text-bold" v-if="$can('shops-create') ||
       $can('shops-list') ||
       $can('shops-edit') ||
-      $can('shops-delete') ||
-      $can('hotel-booking-create') ||
-      $can('hotel-booking-list') ||
-      $can('hotel-booking-edit') ||
-      $can('hotel-booking-delete')
+      $can('shops-delete')
       ">{{ $t('sidebar.shops') }}</li>
           <!-- <li class="nav-item">
             <router-link :to="{ name: 'hotel' }" class="nav-link">
@@ -69,9 +65,9 @@
       $can('client-edit') ||
       $can('client-delete')
       " class="nav-item">
-            <router-link :to="{ name: 'clients.index' }" class="nav-link">
+            <router-link :to="{ name: 'shops' }" class="nav-link">
               <i class="nav-icon fas fa-users" />
-              <p>Customers</p>
+              <p>Shops</p>
             </router-link>
           </li>
           <!-- <li v-if="$can('invoice-list') ||

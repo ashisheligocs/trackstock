@@ -415,6 +415,7 @@
   "topbar": {
     "new_invoice": "New Invoice",
     "day_book": "Day Book",
+    "sales":"Sales",
     "new_expense": "New Expense",
     "new_purchase": "New Purchase",
     "new_quotation": "New Quotation",
