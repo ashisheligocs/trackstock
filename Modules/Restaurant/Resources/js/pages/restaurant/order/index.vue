@@ -50,11 +50,9 @@
                                 <tr>
                                     <th>{{ $t("common.s_no") }}</th>
                                     <th>Order Date</th>
-                                    <th>Hotel</th>
+                                    <th>Shop</th>
                                     <th>Order Id</th>
                                     <th class="text-right">Total</th>
-                                    <th class="text-right">Discount</th>
-                                    <th class="text-right">Tax</th>
                                     <th class="text-right">Order Status</th>
                                     <th class="text-right">Payment Status</th>
                                     <th>Type</th>
@@ -72,11 +70,9 @@
                                             <span>{{ i + 1 }}</span>
                                         </td>
                                         <td>{{ data?.date | moment("Do MMM, YYYY") }}</td>
-                                        <td>{{ data?.hotel?.hotel_name }}</td>
+                                        <td>{{ data?.shop?.shop_name }}</td>
                                         <td>{{ data?.orderId }}</td>
                                         <td class="text-right">{{ data?.totalAmount | forBalanceSheetCurrencyDecimalOnly}}</td>
-                                        <td class="text-right">{{ data?.discount | forBalanceSheetCurrencyDecimalOnly}}</td>
-                                        <td class="text-right">{{ data?.tax | forBalanceSheetCurrencyDecimalOnly}}</td>
                                         <td> <span v-html="data?.order_status_name"></span></td>
                                         <td><span v-html="data?.payment_status_name"></span></td>
                                         <td>{{ data?.type }}</td>
@@ -113,24 +109,24 @@
                                                 >
                                                     <i class="fas fa-print"></i>
                                                 </a>
-                                                <a @click="allData=data;showOrderStatusModal=true;"
+                                                <!-- <a @click="allData=data;showOrderStatusModal=true;"
                                                         v-tooltip="'Order Status'"
                                                         class=" btn-sm"
                                                 >
                                                     <i class="fas fa-truck"></i>
-                                                </a>
+                                                </a> -->
                                                 <router-link  v-tooltip="$t('common.show')" :to="{
                                                     name: 'restaurant-orders.show',
                                                     params: { slug: data.id },
                                                 }" class="btn btn-info btn-sm">
                                                     <i class="fas fa-eye" />
                                                 </router-link>
-                                                <router-link v-if="data?.payment_status == 0 && data?.order_status != 2" v-tooltip="$t('common.edit')" :to="{
+                                                <!-- <router-link v-if="data?.payment_status == 0 && data?.order_status != 2" v-tooltip="$t('common.edit')" :to="{
                                                     name: 'pos.edit',
                                                     params: { slug: data.id },
                                                 }" class=" btn-info btn-sm">
                                                     <i class="fas fa-edit" />
-                                                </router-link>
+                                                </router-link> -->
                                                 <a v-if="data?.order_status == 0 && data?.payment_status == 0 && data.customer != null"
                                                 @click="allData=data;showCancelModal=true"
                                                  href="#" class=" btn-danger btn-sm" v-tooltip="'Cancel'"><i class="fas fa-ban"></i></a>

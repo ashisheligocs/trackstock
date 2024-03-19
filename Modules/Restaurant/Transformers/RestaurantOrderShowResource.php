@@ -18,6 +18,7 @@ class RestaurantOrderShowResource extends JsonResource
     public function toArray($request)
     {
         $allItems = RestroItem::where('order_id',$this->id)->get(); 
+      
         if(!empty($allItems)){ 
             foreach($allItems as $item){
                 $item->items = Product::where('id',$item->restaurant_item_id)->first();

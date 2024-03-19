@@ -18,8 +18,7 @@ return new class extends Migration
             $table->bigInteger('order_id')->unsigned()->index();
             $table->foreign('order_id')->references('id')->on('item_restro_orders')->onDelete('cascade');
             $table->bigInteger('restaurant_item_id')->unsigned()->index();
-            $table->foreign('restaurant_item_id')->references('id')->on('restaurants_item')->onDelete('no action');
-            // $table->json('optional_item_ids')->nullable();
+            $table->foreign('restaurant_item_id')->references('id')->on('products')->onDelete('cascade');
             $table->string('qty');
             $table->timestamps();
         });

@@ -209,7 +209,7 @@ export default {
     selectedHotelId: null,
     loading: true,
     readonly: false,
-    showPrintModal:true,
+    showPrintModal:false,
   }),
   watch:{
       selectedHotel: function () {

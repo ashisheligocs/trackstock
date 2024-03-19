@@ -122,6 +122,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    
                                 <tr v-if="allData?.items?.items" v-for="(data, i) in allData?.items?.items" :key="i">
                                     <td>{{ ++i }}</td>
                                     <td class="text-left">{{ data.name }}</td>

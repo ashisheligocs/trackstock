@@ -29,6 +29,10 @@ class RoleSeeder extends Seeder
                     'name' => 'Agent',
                     'slug' => 'agent',
                 ],
+                [
+                    'name' => 'Incharge',
+                    'slug' => 'incharge',
+                ],
             ]);
         }
     }

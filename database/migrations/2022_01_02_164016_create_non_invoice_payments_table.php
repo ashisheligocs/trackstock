@@ -25,7 +25,9 @@ class CreateNonInvoicePaymentsTable extends Migration
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('transaction_id')->nullable()->constrained();
             $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('order_id')->nullable()->index();
 
+            // $table->foreign('order_id')->references('id')->on('item_restro_orders')->onDelete('cascade')->onUpdate('no action');
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade')->onUpdate('no action');
             $table->foreign('transaction_id')->references('id')->on('account_transactions')->onDelete('cascade')->onUpdate('no action');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('no action')->onUpdate('no action');
