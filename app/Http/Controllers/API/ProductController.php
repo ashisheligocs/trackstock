@@ -41,10 +41,28 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $d = Product::with('proSubCategory.category', 'productUnit', 'productTax','productTaxRate',
-        'productBrand')->latest()->paginate($request->perPage); 
-        return ProductListingResource::collection(Product::with('proSubCategory.category', 'productUnit', 'productTax','productTaxRate',
-            'productBrand')->latest()->paginate($request->perPage));
+        // dd($request->input());
+        // $d = Product::with('proSubCategory.category', 'productUnit', 'productTax','productTaxRate',
+        // 'productBrand')->latest()->paginate($request->perPage); 
+        $search = $request->search ?? '';
+
+        return ProductListingResource::collection(
+            Product::with('proSubCategory.category', 'productUnit', 'productTax','productTaxRate',
+        'productBrand')->when($search, function ($q) use ($search) {
+            $q->where('name', 'like', "%$search%");
+            $q->orWhere('slug', 'LIKE', '%'.$search.'%');
+            $q->orWhere('model', 'LIKE', '%'.$search.'%');
+            $q->orWhere('code', 'LIKE', '%'.$search.'%');
+            $q->orWhere('regular_price', 'LIKE', '%'.$search.'%');
+            $q->orWhere('purchase_price', 'LIKE', '%'.$search.'%');
+            $q->orWhereHas('proSubCategory', function ($newQuery) use ($search) {
+                $newQuery->where('name', 'LIKE', '%'.$search.'%')
+                    ->orWhereHas('category', function ($newQuery) use ($search) {
+                        $newQuery->where('name', 'LIKE', '%'.$search.'%');
+                    });
+            });
+        })
+        ->latest()->paginate($request->perPage));    
     }
 
     /**
