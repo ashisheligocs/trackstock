@@ -468,14 +468,14 @@ class ProductController extends Controller
                 'model' => ['nullable','string','min:2','max:255'],
                 'barcode_symbology' => ['required','string','max:20'],
                 'sub_cat_id' => ['required'],
-                // 'brand_id' => ['nullable'],
+                'brand_id' => ['nullable'],
                 'unit_id' => ['required'],
-                'tax_id' => ['required'],
-                // 'tax_type' => ['required'],
-                // 'regular_price' => ['required','numeric','min:0'],
-                'discount' => ['nullable','numeric','min:0','max:100'],
-                'note' => ['nullable','string','max:255'],
-                // 'alert_qty' => ['nullable','numeric','min:1'],
+                'tax_type' => ['nullable'],
+                'selling_price' => ['required','numeric','min:0'],
+                'quantity' => ['nullable'],
+                'alert_qty' => ['nullable','numeric','min:1'],
+                'purchase_date' => ['nullable','numeric','min:1'],
+                'batch_id' => ['nullable'],
             ];
 
             foreach ($data as $key => $item) { 
@@ -507,10 +507,46 @@ class ProductController extends Controller
                 $item['tax_id'] = 1;   
                 $validator = Validator::make($item, $rules);
                 if ($validator->passes()) {
-                    $pro = Product::create(
-                        $this->incrementCode() +
-                        $validator->validated()
-                    );
+                    $exist = Product::where('model',$item['model'])->first();
+                    if(!empty($exist)){
+                        $pro = Product::where('model',$item['model'])->update([
+                            'selling_price' => $item['selling_price'] ?? 0
+                        ]);
+                    }else{
+                        $pro = Product::create(
+                            $this->incrementCode() +
+                            $validator->validated()
+                        );
+                    }
+
+
+                    $code = 1;
+                    $prevCode = Purchase::latest()->first();
+                    if ($prevCode) {
+                        $code = $prevCode->id + 1;
+                    }
+                    $userId = auth()->user()->id;
+                    if($item['quantity'] > 0){
+                        if(!empty($item['shop'])){
+                            $shop = Shop::where('name',$item['shop'])->first();
+
+                            $exist = Purchase::where('batch_id',$item['batch_id'])->first();
+                            if(empty($exist)){ 
+                                $purchase = Purchase::create([
+                                    'purchase_no' => $code,
+                                    'slug' => uniqid(), 
+                                    'supplier_id' => 1, 
+                                    'sub_total' => $item['quantity'] * $item['selling_price'],   
+                                    'purchase_date' => $item['purchaseDate'], 
+                                    'status' => 1,
+                                    'created_by' => $userId,
+                                    'shop_id' => $shop->id, 
+                                    'batch_id' =>$item['batch_id'],
+                                    'quantity'=> $item['quantity'] ?? 0
+                                ]);
+                            }
+                        }
+                    }
                     if(!empty($pro)){  
                         ProductTax::create([ 
                             'product_id' => $pro->id,
