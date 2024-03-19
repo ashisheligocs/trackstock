@@ -164,7 +164,7 @@ class OrderController extends Controller
 
     public function payInvoice(Request $request)
     {
-      
+       
         $input = $request->all();
         $hotelId = $input['hotel_id'];
         $orderId = $input['invoice_slug'];
@@ -263,6 +263,22 @@ class OrderController extends Controller
             $updateStatus->order_status = 1;
             $updateStatus->payment_status = 1;
             $updateStatus->save();
+
+            //Update Product Inventory
+
+            $orderItems = $input['selectedProducts'];
+
+            if ($orderItems && !empty($orderItems)) {
+                foreach ($orderItems as $item) {
+                    $product = Product::where('id', $item['id'])->first();
+                    if ($product) {
+                        $updatedInventoryCount = $product->inventory_count - $item['quantity'];
+                        $product->update([
+                            'inventory_count' => $updatedInventoryCount,
+                        ]);
+                    }
+                }
+            }
         }
     }
 
