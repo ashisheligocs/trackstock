@@ -16,12 +16,6 @@
                 <has-error :form="form" field="category" />
 
               </div> -->
-              <div v-if="categoryOptions.length" class="form-group col-md-12">
-                <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
-                  :class="{ 'is-invalid': form.errors.has('category') }" name="category"
-                  placeholder="Select a Brand" />
-                <has-error :form="form" field="category" />
-              </div>
               <div v-if="products" class="col-md-12 form-group">
                 <div class="d-flex w-100">
                   <search class="flex-grow-1" :isPosSearch="true" v-model="query" @reset-pagination="resetPagination()"
@@ -29,14 +23,25 @@
                 </div>
                 <has-error :form="form" field="selectedProducts" />
               </div>
+              <div v-if="categoryOptions.length" class="form-group col-md-6">
+                <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
+                  :class="{ 'is-invalid': form.errors.has('category') }" name="category" placeholder="Select a Brand" />
+                <has-error :form="form" field="category" />
+              </div>
+
+              <div v-if="products.length" class="form-group col-md-6">
+                <v-select v-model="selectedSubCategory" :options="subCategoryOptions"
+                  placeholder="Select Subcategory"></v-select>
+              </div>
+
             </div>
           </div>
 
           <div class="card-body bg-white mt-3 pos-body">
             <table-loading v-show="loading" />
             <div class="pos-item-grid">
-              <div v-if="product.status == 1" v-for="product in products" :key="product.id">
-                <div>
+              <div v-if="filteredProducts.length > 0">
+                <div v-for="product in filteredProducts" :key="product.id">
                   <div class="pos-box" @click="openProductModal(product)">
                     <div class="relative">
                       <div class="pos-box-img">
@@ -48,15 +53,32 @@
                       </div>
                     </div>
                     <div class="pos-box-content">
-                      <p class="pos-box-text">{{ product.name }} ({{ product.inventoryCount ?? 0
-                        }}
-                        In stock)</p>
-                      <span class="text-bold text-lg">{{ product.regularPrice | withCurrency
-                        }}</span>
+                      <p class="pos-box-text">{{ product.name }} ({{ product.inventoryCount ?? 0 }} In stock)</p>
+                      <span class="text-bold text-lg">{{ product.regularPrice | withCurrency }}</span>
                     </div>
                   </div>
                 </div>
               </div>
+              <div v-else>
+                <div v-for="product in products" :key="product.id" v-if="product.status == 1">
+                  <div class="pos-box" @click="openProductModal(product)">
+                    <div class="relative">
+                      <div class="pos-box-img">
+                        <div v-if="product?.image">
+                          <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
+                            alt="product image" />
+                        </div>
+                        <div v-else>{{ $t("common.no_preview") }}</div>
+                      </div>
+                    </div>
+                    <div class="pos-box-content">
+                      <p class="pos-box-text">{{ product.name }} ({{ product.inventoryCount ?? 0 }} In stock)</p>
+                      <span class="text-bold text-lg">{{ product.regularPrice | withCurrency }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
 
@@ -270,50 +292,29 @@
                 form.selectedProducts.length > 0
                 ">
             <div class="form-group col-md-6">
-              <!-- <label for="account">{{ $t("common.account") }}
-                <span class="required">*</span></label> -->
-                <input type="hidden" v-model="form.account">
-                Cash : 
-              <!-- <v-select v-model="form.account" :options="accounts" label="ledgerName"
+              <label for="account">{{ $t("common.account") }}
+                <span class="required">*</span></label>
+              <v-select v-model="form.account" :options="accounts" label="ledgerName"
                 :class="{ 'is-invalid': form.errors.has('account') }" name="account"
                 :placeholder="$t('common.account_placeholder')" />
-              <has-error :form="form" field="account" /> -->
+              <has-error :form="form" field="account" />
             </div>
             <div class="form-group col-md-6">
-              <!-- <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label> -->
+              <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label>
               <input ref="paidAmountInput" id="paidAmount" v-model="form.paidAmount" type="number" step="any"
                 class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1"
-                :max="form.netTotal" :placeholder="$t('common.paid_amount_placeholder')" />
+                :max="form.netTotal" :placeholder="$t('common.paid_amount_placeholder')" disabled />
               <has-error :form="form" field="paidAmount" />
             </div>
           </div>
-
-          <div class="row" v-if="accounts &&
-                form.selectedProducts &&
-                form.selectedProducts.length > 0
-                ">
-            <div class="form-group col-md-6">
-              <!-- <label for="account">{{ $t("common.account") }}
-                <span class="required">*</span></label> -->
-                <input type="hidden" v-model="form.account">
-                Bank : 
-            </div>
-            <div class="form-group col-md-6">
-              <!-- <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label> -->
-              <input type="number" step="any" class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1"
-                :max="form.netTotal" :placeholder="$t('common.paid_amount_placeholder')" disabled/>
-              <has-error :form="form" field="paidAmount" />
-            </div>
-          </div>
-          
           <div class="row">
-            <!-- <div class="form-group col-md-6">
+            <div class="form-group col-md-6">
               <label for="receiptNo">Order No.</label>
               <input id="receiptNo" v-model="form.receiptNo" type="text" class="form-control"
                 :class="{ 'is-invalid': form.errors.has('receiptNo') }" name="receiptNo"
                 :placeholder="$t('common.receipt_no_placeholder')" disabled />
               <has-error :form="form" field="receiptNo" />
-            </div> -->
+            </div>
             <div class="form-group col-md-6">
               <label for="date">{{ $t("common.date") }}</label>
               <input id="date" v-model="form.date" type="date" class="form-control"
@@ -321,12 +322,12 @@
               <has-error :form="form" field="date" />
             </div>
           </div>
-          <!-- <div class="form-group">
+          <div class="form-group">
             <label for="note">{{ $t("common.note") }}</label>
             <textarea id="note" v-model="form.note" class="form-control"
               :class="{ 'is-invalid': form.errors.has('note') }" :placeholder="$t('common.note_placeholder')" />
             <has-error :form="form" field="note" />
-          </div> -->
+          </div>
         </div>
       </div>
       <div class="payment-modal-footer" slot="modal-footer">
@@ -521,6 +522,8 @@
             audio: "",
             products: "",
             currentProduct: null,
+            subCategoryOptions: [],
+      selectedSubCategory: null,
             accounts: "",
             categories: [],
             productPrefix: "",
@@ -550,6 +553,14 @@
         }),
         computed: {
             ...mapGetters("operations", ["items", "appInfo", "hotelItems", "selectedHotel"]),
+
+            filteredProducts() {
+      if (!this.selectedSubCategory) {
+        return this.products;
+      } else {
+        return this.products.filter(product => product.subCategory.name === this.selectedSubCategory);
+      }
+    },
 
             currentItemAmount() {
                 return parseFloat(this.currentVariant?.price || 0) + this.currentAddonAmount;
@@ -595,7 +606,7 @@
                 }
                 let taxRate = 0;
                 console.log("Price:", price);
-                console.log("Tax Rate:", taxRate);
+    console.log("Tax Rate:", taxRate);
                 return parseFloat(price)*parseFloat(taxRate)/100;
                 // console.log(this.taxRate);
             },
@@ -686,14 +697,12 @@
           },
 
           inclusiveTaxAmount(amount, taxRate) {
-                taxRate = 0;
                 let price = parseFloat(amount || 0);
                 let rate = parseFloat(taxRate || 0);
 
                 return  price * (100 / (100 + rate));
             },
           exclusiveTaxAmount(amount, taxRate) {
-            taxRate = 0;
             let price = parseFloat(amount || 0);
             let rate = parseFloat(taxRate || 0);
 
@@ -709,6 +718,7 @@
                 const { data } = await axios.get(
                     window.location.origin + "/api/food/category/list"
                 );
+                console.log(data?.data);
                 this.categoryOptions = data?.data;
             },
             async getHotelDataList() {
@@ -861,6 +871,10 @@
 
                 this.taxRate = data.data?.length > 0 ? data.data[0].taxRate : 0;
                 this.products = data.data;
+
+                const subCategoryNames = Array.from(new Set(data.data.map(product => product.subCategory.name)));
+
+                this.subCategoryOptions = subCategoryNames.map(name => ({ label: name, value: name }));
                 this.pagination = data.meta;
                 this.loading = false;
             },
