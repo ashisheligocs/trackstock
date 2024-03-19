@@ -29,7 +29,7 @@
                 <has-error :form="form" field="category" />
               </div>
 
-              <div v-if="products.length" class="form-group col-md-6">
+              <div  class="form-group col-md-6">
                 <v-select v-model="selectedSubCategory" :options="subCategoryOptions"
                   placeholder="Select Subcategory"></v-select>
               </div>
@@ -39,8 +39,8 @@
 
           <div class="card-body bg-white mt-3 pos-body">
             <table-loading v-show="loading" />
-            <div class="pos-item-grid">
-              <div v-if="filteredProducts.length > 0">
+            <div>
+              <div v-if="filteredProducts.length > 0" class="pos-item-grid">
                 <div v-for="product in filteredProducts" :key="product.id">
                   <div class="pos-box" @click="openProductModal(product)">
                     <div class="relative">
@@ -59,7 +59,7 @@
                   </div>
                 </div>
               </div>
-              <div v-else>
+              <div v-else  class="pos-item-grid">
                 <div v-for="product in products" :key="product.id" v-if="product.status == 1">
                   <div class="pos-box" @click="openProductModal(product)">
                     <div class="relative">
