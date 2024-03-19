@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
             $table->string('barcode_symbology')->nullable();
             $table->string('tax_type')->nullable();
             $table->double('purchase_price', 12, 2)->nullable();
-            $table->double('regular_price', 12, 2)->nullable();
+            $table->double('selling_price', 12, 2)->nullable();
             $table->double('discount', 5, 2)->nullable();
             $table->double('inventory_count', 12, 2)->nullable();
             $table->unsignedTinyInteger('alert_qty')->nullable();

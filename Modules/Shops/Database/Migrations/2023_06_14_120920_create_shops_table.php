@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
-            $table->string('shop_name');
-            $table->longText('shop_address')->unique();;
-            $table->string('shop_phone')->unique();
+            $table->string('shop_name')->unique();
+            $table->longText('shop_address')->nullable();
+            $table->string('shop_phone')->nullable();
             $table->string('shop_phone1')->nullable();
-            $table->string('shop_email')->unique();
+            $table->string('shop_email')->nullable();
             $table->string('shop_prefix')->nullable();
             $table->integer("shop_Status")->default('0')->comment('0=active,1=inactive');
             $table->string('contact_phone')->nullable();

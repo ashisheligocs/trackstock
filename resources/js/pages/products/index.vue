@@ -146,15 +146,11 @@
                     <td>{{ data.itemModel }}</td>
                     <td>{{ data.itemUnit.code }}</td>
                     <td>
-                      <span v-if="data.discount > 0"
+                      <span  
                         ><del>{{ data.regularPrice }}</del>
-                        {{ data.sellingPrice | withCurrency }} ({{
-                          data.discount
-                        }}%)</span
+                        {{ data.sellingPrice | withCurrency }}  </span
                       >
-                      <span v-else
-                        >{{ data.regularPrice | withCurrency }}
-                      </span>
+                      
                     </td>
                     <td>
                       <span v-if="data.status === 1" class="badge bg-success">{{
