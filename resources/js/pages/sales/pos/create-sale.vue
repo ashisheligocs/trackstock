@@ -326,7 +326,7 @@
             </div>
             <div class="form-group col-md-6">
               <!-- <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label> -->
-              <input type="number" step="any" class="form-control" :value="form.netTotal - form.paidAmount"
+              <input type="number" step="any" class="form-control"
                 :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1" :max="form.netTotal"
                 :placeholder="$t('common.paid_amount_placeholder')" disabled />
               <has-error :form="form" field="paidAmount" />
@@ -409,9 +409,7 @@
                   <td colspan="3">
                     <span>
                       <span>{{ data.name }}</span><br />
-                      <span class="pqty">{{ data.quantity }} x {{ data?.variant?.price |
-                withCurrency
-                        }}
+                      <span class="pqty">{{ data.quantity }}
                         {{ addonPrice(data) > 0 ? '+' + addonPrice(data) : '' }} </span>
                     </span>
                   </td>
@@ -445,15 +443,15 @@
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="3" class="total">Bank</td>
+                  <td colspan="3" class="total">{{ $t("common.paid") }}</td>
                   <td style="text-align: right" class="total">
                     -{{ allData.paidAmount | withCurrency }}
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="3" class="total">Cash</td>
+                  <td colspan="3" class="total">{{ $t("common.due") }}</td>
                   <td style="text-align: right" class="total">
-                    - {{ parseFloat(allData.netTotal) - parseFloat(allData.paidAmount) | withCurrency
+                    {{ parseFloat(allData.netTotal) - parseFloat(allData.paidAmount) | withCurrency
                     }}
                   </td>
                 </tr>
@@ -474,9 +472,9 @@
       </div>
       <div class="pos-modal-footer no-print" slot="modal-footer">
         <div>
-          <button @click="printInvoice" class="modal-default-button btn btn-info">
+          <!-- <button @click="printInvoice" class="modal-default-button btn btn-info">
             {{ $t("common.print") }}
-          </button>
+          </button> -->
         </div>
         <button class="modal-default-button btn btn-danger" @click="closeReceiptModal">
           {{ $t("common.close") }}
@@ -1021,11 +1019,6 @@ console.log(this.products);
 
             // save payment
             async addPayment() {
-             
-              if(this.form.paidAmount > this.form.netTotal){
-                return toast.fire({ type: "error", title: "Max Amount should be "+this.form.netTotal });
-              }
-
                 if (this.form.invoice_id != null) {
                     await this.form
                         .post(window.location.origin + "/api/food/order/invoice/pay")
