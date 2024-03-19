@@ -223,6 +223,9 @@ export default {
   // Map Getters
   computed: {
     ...mapGetters("operations", ["appInfo"]),
+    ...mapGetters({
+            user: "auth/user",
+        }),
   },
   methods: {
     show_new_Password() {
@@ -237,17 +240,28 @@ export default {
         remember: this.remember,
       });
       // Fetch the user.
-      await this.$store.dispatch("auth/fetchUser");
+        await this.$store.dispatch("auth/fetchUser");
       // Redirect home.
       this.redirect();
     },
     redirect() {
+
       const intendedUrl = Cookies.get("intended_url");
       if (intendedUrl) {
-        Cookies.remove("intended_url");
+        if(this.user.roles[0] == 'Super Admin'){
+          Cookies.remove("intended_url");
         this.$router.push({ path: intendedUrl });
+        } else {
+          this.$router.push({ name: "pos.create" });
+        }
+
       } else {
-        this.$router.push({ name: "home" });
+        if(this.user.roles[0] == 'Super Admin'){
+          this.$router.push({ name: "home" });
+        } else {
+          this.$router.push({ name: "pos.create" });
+        }
+
       }
     },
     loginCredential(email, pass) {

@@ -228,11 +228,11 @@ class LedgerController extends Controller
     {
         try {
             if (@$request->bank_only) {
-                $ledgerType = LedgerAccount::with('ledger', 'ledgerCategory', 'hotel', 'getAccoutnbalance')->where('is_bank', 1)->paginate($request->perPage);
+                $ledgerType = LedgerAccount::with('ledger', 'ledgerCategory', 'shop', 'getAccoutnbalance')->where('is_bank', 1)->paginate($request->perPage);
             } else if (@$request->ledger_type) {
-                $ledgerType = LedgerAccount::with('ledger', 'ledgerCategory', 'hotel', 'getAccoutnbalance')->where('ledger_type', $request->ledger_type)->paginate($request->perPage);
+                $ledgerType = LedgerAccount::with('ledger', 'ledgerCategory', 'shop', 'getAccoutnbalance')->where('ledger_type', $request->ledger_type)->paginate($request->perPage);
             } else {
-                $ledgerType = LedgerAccount::with('ledger', 'ledgerCategory', 'getAccoutnbalance', 'hotel')->paginate($request->perPage);
+                $ledgerType = LedgerAccount::with('ledger', 'ledgerCategory', 'getAccoutnbalance', 'shop')->paginate($request->perPage);
             }
             if (@$ledgerType) {
                 return new CommonResource($ledgerType);
