@@ -157,11 +157,12 @@
                                 <tr>
                                     <th>{{ $t("common.s_no") }}</th>
                                     <th>{{ $t("common.date") }}</th>
-                                    <th>{{ $t("sidebar.hotel") }}</th>
+                                    <th>{{ $t("sidebar.shop") }}</th>
                                     <th>{{ $t("common.particular") }}</th>
                                     <th>{{ inr }}  {{ $t("common.debit") }}</th>
                                     <th>{{ inr }} {{ $t("common.credit") }}</th>
                                     <th>{{ inr }} {{ $t("common.balance") }}</th>
+                                    <th>Entry By</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -181,8 +182,8 @@
                                         }}</span>
                                     </td>
                                     <td>
-                                        <span v-if="data?.hotel?.hotel_name">{{
-                                            data?.hotel?.hotel_name
+                                        <span v-if="data?.shop?.shop_name">{{
+                                            data?.shop?.shop_name
                                         }}</span>
                                     </td>
                                     <td>
@@ -219,6 +220,7 @@
                                         <span v-else>{{ Number(data.amount).toFixed(2) | indformate }}</span>
                                     </td>
                                     <td class="text-right">{{ Number(data.balance).toFixed(2) }}</td>
+                                    <td class="text-right">{{ data.user.name }}</td>
                                 </tr>
                                 <tr v-show="!loading && !transactions.length">
                                     <td colspan="8">
