@@ -169,6 +169,7 @@ class PurchaseController extends Controller
                 'shop_id' => @$request->shop_id['id'],
                 'tax_amount' =>$request->totalProductTax,
                 'batch_id' =>$request->batch_id,
+                'quantity' =>$request->quantity ?? 0,
             ]);
 
             // if (!empty($taxes)) {

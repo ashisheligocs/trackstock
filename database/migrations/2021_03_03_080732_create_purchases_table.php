@@ -17,6 +17,7 @@ class CreatePurchasesTable extends Migration
             $table->id();
             $table->string('purchase_no');
             $table->string('slug');
+            $table->integer('quantity')->default(0);
             $table->double('discount', 12, 2)->nullable();
             $table->double('transport', 12, 2)->nullable();
             $table->double('sub_total', 12, 2)->nullable();
