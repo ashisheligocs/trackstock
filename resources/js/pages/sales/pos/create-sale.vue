@@ -29,7 +29,7 @@
                 <has-error :form="form" field="category" />
               </div>
 
-              <div  class="form-group col-md-6">
+              <div class="form-group col-md-6">
                 <v-select v-model="selectedSubCategory" :options="subCategoryOptions"
                   placeholder="Select Subcategory"></v-select>
               </div>
@@ -48,19 +48,19 @@
                         <div v-if="product?.image">
                           <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
                             alt="product image" />
-                            <span class="stock_no">{{ product.inventoryCount ?? 0 }} </span>
+                          <span class="stock_no">{{ product.alertQty ?? 0 }} </span>
                         </div>
-                        <div v-else><span class="stock_no">{{ product.inventoryCount ?? 0 }}</span></div>
+                        <div v-else><span class="stock_no">{{ product.alertQty ?? 0 }}</span></div>
                       </div>
                     </div>
                     <div class="pos-box-content">
                       <p class="pos-box-text">{{ product.name }}</p>
-                      <span class="text-bold">{{ product.regularPrice | withCurrency }}</span>
+                      <span class="text-bold">{{ product.sellingPrice | withCurrency }}</span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div v-else  class="pos-item-grid">
+              <div v-else class="pos-item-grid">
                 <div v-for="product in products" :key="product.id" v-if="product.status == 1">
                   <div class="pos-box" @click="openProductModal(product)">
                     <div class="relative">
@@ -68,15 +68,16 @@
                         <div v-if="product?.image">
                           <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
                             alt="product image" />
-                            <span class="stock_no">{{ product.inventoryCount ?? 0 }}</span>
+                          <span class="stock_no">{{ product.alertQty ?? 0 }}</span>
                         </div>
                         <!-- kjkjkjh{{ $t("common.no_preview") }} -->
-                        <div v-else> <span class="stock_no">{{ product.inventoryCount ?? 0 }}</span></div>
+                        <div v-else> <span class="stock_no">{{ product.alertQty ?? 0 }}</span></div>
                       </div>
                     </div>
                     <div class="pos-box-content">
                       <p class="pos-box-text">{{ product.name }} </p>
-                      <span class="text-bold text-lg">{{ product.regularPrice | withCurrency }}</span>
+                      <!-- {{ product }} -->
+                      <span class="text-bold text-lg">{{ product.sellingPrice | withCurrency }}</span>
                     </div>
                   </div>
                 </div>
@@ -297,8 +298,8 @@
             <div class="form-group col-md-6">
               <!-- <label for="account">{{ $t("common.account") }}
                 <span class="required">*</span></label> -->
-                <input type="hidden" v-model="form.account">
-                QR : 
+              <input type="hidden" v-model="form.account">
+              QR :
               <!-- <v-select v-model="form.account" :options="accounts" label="ledgerName"
                 :class="{ 'is-invalid': form.errors.has('account') }" name="account"
                 :placeholder="$t('common.account_placeholder')" />
@@ -320,13 +321,14 @@
             <div class="form-group col-md-6">
               <!-- <label for="account">{{ $t("common.account") }}
                 <span class="required">*</span></label> -->
-                <input type="hidden" v-model="form.account">
-                Cash : 
+              <input type="hidden" v-model="form.account">
+              Cash :
             </div>
             <div class="form-group col-md-6">
               <!-- <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label> -->
-              <input type="number" step="any" class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1"
-                :max="form.netTotal" :placeholder="$t('common.paid_amount_placeholder')" disabled/>
+              <input type="number" step="any" class="form-control"
+                :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1" :max="form.netTotal"
+                :placeholder="$t('common.paid_amount_placeholder')" disabled />
               <has-error :form="form" field="paidAmount" />
             </div>
           </div>
@@ -341,12 +343,12 @@
             </div>
             <div class="form-group col-md-6">
               {{ form.receiptNo }}
-              <input id="receiptNo" v-model="form.receiptNo" type="hidden" class="form-control"/>
+              <input id="receiptNo" v-model="form.receiptNo" type="hidden" class="form-control" />
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-6">
-              Date : 
+              Date :
             </div>
             <div class="form-group col-md-6">
               {{ form.date }}
@@ -761,7 +763,7 @@
                 console.log("do this");
             },
             openProductModal(product) {
-              if(product.inventoryCount == 0 || product.inventoryCount == null){
+              if(product.alertQty == 0 || product.alertQty == null){
                     return toast.fire({
                         type: "error",
                         title: 'Insufficient Stock !',
@@ -804,8 +806,8 @@
                         addonString:addonString,
                         quantity: 1,
                         // total: parseFloat(this.currentProduct?.sellingPrice || 0) + this.currentAddonAmount
-                        price: parseFloat(this.currentProduct?.regularPrice || 0),
-                        total: parseFloat(this.currentProduct?.regularPrice || 0),
+                        price: parseFloat(this.currentProduct?.sellingPrice || 0),
+                        total: parseFloat(this.currentProduct?.sellingPrice || 0),
                         inventoryCount: this.currentProduct?.inventoryCount ?? 0,
                     }
 
@@ -819,7 +821,7 @@
                         addonString:addonString,
                         quantity: 1,
                         // total: parseFloat(this.currentProduct?.sellingPrice || 0) + this.currentAddonAmount
-                        price: parseFloat(this.currentProduct?.regularPrice || 0),
+                        price: parseFloat(this.currentProduct?.sellingPrice || 0),
                         inventoryCount: this.currentProduct?.inventoryCount ?? 0,
                     })
                 }
@@ -902,7 +904,7 @@
 
                 this.taxRate = data.data?.length > 0 ? data.data[0].taxRate : 0;
                 this.products = data.data;
-
+console.log(this.products);
                 const subCategoryNames = Array.from(new Set(data.data.map(product => product.subCategory.name)));
 
                 this.subCategoryOptions = subCategoryNames.map(name => ({ label: name, value: name }));
@@ -1420,25 +1422,28 @@ span.pqty {
 .create-btn-2 {
   padding: 10px;
 }
+
 span.stock_no {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: #ec3666;
-    height: auto;
-    display: inline;
-    line-height: 20px;
-    color: #fff;
-    z-index: 9;
-    padding: 1px 4px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #ec3666;
+  height: auto;
+  display: inline;
+  line-height: 20px;
+  color: #fff;
+  z-index: 9;
+  padding: 1px 4px;
 }
+
 .table-responsive.table-wrap {
-    min-height: 400px;
+  min-height: 400px;
 }
+
 .table thead th {
-    border-bottom: 0;
-    font-size: 12px;
-    padding-top: 5px !important;
-    padding-bottom: 5px !important;
+  border-bottom: 0;
+  font-size: 12px;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
 }
 </style>
