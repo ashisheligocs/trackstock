@@ -43,7 +43,7 @@ class ProductController extends Controller
     {
         // dd($request->input());
         // $d = Product::with('proSubCategory.category', 'productUnit', 'productTax','productTaxRate',
-        // 'productBrand')->latest()->paginate($request->perPage);
+        // 'productBrand')->latest()->paginate($request->perPage); 
         $search = $request->search ?? '';
 
         return ProductListingResource::collection(
@@ -62,7 +62,7 @@ class ProductController extends Controller
                     });
             });
         })
-        ->latest()->paginate($request->perPage));
+        ->latest()->paginate($request->perPage));    
     }
 
     /**
@@ -108,10 +108,10 @@ class ProductController extends Controller
             if ($request->image) {
                 $imageName = time().'.'.explode('/',
                         explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-
+                
                 if (!file_exists(public_path('images/products/'))) {
                     mkdir(public_path('images/products/'), 666, true);
-                }
+                }        
                 Image::make($request->image)->save(public_path('images/products/').$imageName);
             }
 
@@ -146,9 +146,9 @@ class ProductController extends Controller
             ]);
 
             if(!empty($request->productTax)){
-                foreach ($request->productTax as $key => $taxer) {
-
-                    ProductTax::create([
+                foreach ($request->productTax as $key => $taxer) {   
+                  
+                    ProductTax::create([ 
                         'product_id' => $product->id,
                         'tax_id' => $taxer['id'],
                         'name' => $taxer['name'],
@@ -192,7 +192,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $slug)
     {
-
+        
         $product = Product::where('slug', $slug)->first();
         // validate request
         $this->validate($request, [
@@ -219,11 +219,11 @@ class ProductController extends Controller
                 }
                 $imageName = time().'.'.explode('/',
                         explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-
+                
                 if (!file_exists(public_path('images/products/'))) {
                     mkdir(public_path('images/products/'), 666, true);
                 }
-
+                        
                 Image::make($request->image)->save(public_path('images/products/').$imageName);
             }
 
@@ -261,9 +261,9 @@ class ProductController extends Controller
 
             if(!empty($request->productTax)){
                 ProductTax::where('product_id',$product->id)->delete();
-                foreach ($request->productTax as $key => $taxer) {
-
-                    ProductTax::create([
+                foreach ($request->productTax as $key => $taxer) {   
+                  
+                    ProductTax::create([ 
                         'product_id' => $product->id,
                         'tax_id' => (@$taxer['tax_id']) ? $taxer['tax_id'] : $taxer['id'],
                         'name' => $taxer['name'],
@@ -366,7 +366,7 @@ class ProductController extends Controller
 
         return ProductSelectResource::collection($products);
     }
-
+    
     /**
      * @return AnonymousResourceCollection
      */
@@ -478,43 +478,35 @@ class ProductController extends Controller
                 'batch_id' => ['nullable'],
             ];
 
-            foreach ($data as $key => $item) {
+            foreach ($data as $key => $item) { 
                 if(strToLower($item['sub_cat_id']) == 'wine'){
                     $item['sub_cat_id'] = 1;
                 }else if(strToLower($item['sub_cat_id']) == 'vodka'){
-                    $item['sub_cat_id'] = 2;
+                    $item['sub_cat_id'] = 2; 
                 }else if(strToLower($item['sub_cat_id']) == 'rum'){
-                    $item['sub_cat_id'] = 3;
+                    $item['sub_cat_id'] = 3; 
                 }else if(strToLower($item['sub_cat_id']) == 'whiskey'){
-                    $item['sub_cat_id'] = 4;
+                    $item['sub_cat_id'] = 4; 
                 }else if(strToLower($item['sub_cat_id']) == 'beer'){
-                    $item['sub_cat_id'] = 5;
+                    $item['sub_cat_id'] = 5; 
                 }else if(strToLower($item['sub_cat_id']) == 'gin'){
-                    $item['sub_cat_id'] = 6;
+                    $item['sub_cat_id'] = 6; 
                 }else if(strToLower($item['sub_cat_id']) == 'breezer'){
-                    $item['sub_cat_id'] = 7;
+                    $item['sub_cat_id'] = 7; 
                 }else if(strToLower($item['sub_cat_id']) == 'tequila'){
-                    $item['sub_cat_id'] = 8;
+                    $item['sub_cat_id'] = 8; 
                 }else if(strToLower($item['sub_cat_id']) == 'brandy'){
-                    $item['sub_cat_id'] = 9;
+                    $item['sub_cat_id'] = 9; 
                 }
                 if(strToLower($item['unit_id']) == 'nos.'){
-                    $item['unit_id'] = 1;
-                }
-                $item['alert_qty'] = 10;
-                $item['status'] = 1;
-                $item['tax_type'] = 'Exclusive';
-                // $item['tax_id'] = 1;
+                    $item['unit_id'] = 1; 
+                } 
+                $item['alert_qty'] = 10;  
+                $item['status'] = 1;  
+                $item['tax_type'] = 'Exclusive';   
+                $item['tax_id'] = 1;   
                 $validator = Validator::make($item, $rules);
                 if ($validator->passes()) {
-<<<<<<< HEAD
-                    $pro = Product::create(
-                        $this->incrementCode() +
-                        $validator->validated()
-                    );
-                    if(!empty($pro)){
-                        ProductTax::create([
-=======
                     $exist = Product::where('model',$item['model'])->first();
                     if(!empty($exist)){
                         $pro = Product::where('model',$item['model'])->update([
@@ -551,14 +543,13 @@ class ProductController extends Controller
                                     'shop_id' => $shop->id, 
                                     'batch_id' =>$item['batch_id'],
                                     'quantity'=> $item['quantity'] ?? 0
-                                    // "jhdf"
+
                                 ]);
                             }
                         }
                     }
                     if(!empty($pro)){  
                         ProductTax::create([ 
->>>>>>> cdcc04eaf13ac417bbf3c9eafdd9368882630673
                             'product_id' => $pro->id,
                             'tax_id' => 1,
                             'name' => 'SGST 0%',
@@ -566,14 +557,14 @@ class ProductController extends Controller
                             'code' => 'SGST@0',
                             'amount' => 0.00,
                         ]);
-                        ProductTax::create([
+                        ProductTax::create([ 
                             'product_id' => $pro->id,
                             'tax_id' => 2,
                             'name' => 'CGST 0%',
                             'rate' => 0,
                             'code' => 'CGST@0',
                             'amount' => 0.00,
-                        ]);
+                        ]); 
                     }
                 } else {
                     return response()->json([
