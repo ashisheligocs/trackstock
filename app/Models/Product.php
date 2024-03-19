@@ -201,4 +201,10 @@ class Product extends Model
     {
         return $this->belongsTo(VatRate::class, 'tax_id');
     }
+
+    public function produtQuantity(){
+
+        return $this->belongsTo(PurchaseProduct::class, 'product_id');
+
+    }
 }
