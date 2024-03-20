@@ -10,7 +10,7 @@ tr<template>
         <div class="card bg-transparent">
           <div class="pos-r-head bg-white">
             <div class="row">
-              
+
               <div v-if="products" class="col-md-12 form-group">
                 <div class="d-flex w-100">
                   <search class="flex-grow-1" :isPosSearch="true" v-model="query" @reset-pagination="resetPagination()"
@@ -18,16 +18,16 @@ tr<template>
                 </div>
                 <has-error :form="form" field="selectedProducts" />
               </div>
-              <div v-if="categoryOptions.length" class="form-group col-md-6">
+              <!-- <div v-if="categoryOptions.length" class="form-group col-md-6">
                 <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
                   :class="{ 'is-invalid': form.errors.has('category') }" name="category" placeholder="Select a Brand" />
                 <has-error :form="form" field="category" />
-              </div>
+              </div> -->
 
-              <div class="form-group col-md-6">
+              <!-- <div class="form-group col-md-6">
                 <v-select v-model="selectedSubCategory" :options="subCategoryOptions"
                   placeholder="Select Subcategory"></v-select>
-              </div>
+              </div> -->
 
             </div>
           </div>
@@ -128,7 +128,7 @@ tr<template>
                     </th>
                   </tr>
                 </thead>
-                
+
                 <tbody v-if="selectedItemList && selectedItemList.length > 0">
                   <tr v-for="(singleItem, i) in selectedItemList" :key="i">
                     <td>
@@ -170,7 +170,7 @@ tr<template>
           <div>
 
             <div class="pos-net-total noi-print">
-             
+
               <div class="row">
                 <button class="btn btn-primary btn-block col-6" @click="saveOrder($event, true)"
                   :disabled="selectedItemList.length <= 0">
@@ -257,7 +257,7 @@ tr<template>
             <div class="form-group col-md-6">
               <input type="hidden" v-model="form.account">
               QR :
-            
+
             </div>
             <div class="form-group col-md-6">
               <input ref="paidAmountInput" id="paidAmount" v-model="form.paidAmount" type="number" step="any"
@@ -282,7 +282,7 @@ tr<template>
               <has-error :form="form" field="paidAmount" />
             </div>
           </div>
-          
+
           <div class="row">
             <div class="form-group col-md-6">
               Date :
@@ -516,7 +516,7 @@ tr<template>
         computed: {
             ...mapGetters("operations", ["items", "appInfo", "hotelItems", "selectedHotel"]),
 
-          
+
             filteredProducts() {
               if (!this.selectedSubCategory) {
                 return this.products;
@@ -699,7 +699,7 @@ tr<template>
                 return this.addItemInList();
             },
             addItemInList() {
-                
+
                 const addonNames = this.currentAddon?.map(add => add.name);
                 const addonString = addonNames ? addonNames.join(' + ') : '';
 
@@ -708,7 +708,7 @@ tr<template>
                 })
 
                 if (alreadyAddedItem >= 0) {
-                  
+
                   if(this.selectedItemList[alreadyAddedItem].quantity >= this.selectedItemList[alreadyAddedItem].available_qty){
                     return toast.fire({
                         type: "error",
@@ -725,8 +725,8 @@ tr<template>
                       price: parseFloat(this.currentProduct?.sellingPrice || 0),
                       total: parseFloat(this.currentProduct?.sellingPrice || 0),
                       available_qty: this.currentProduct?.available_qty ?? 0,
-                  });  
-                  
+                  });
+
                 } else {
                     this.selectedItemList.push({
                         name: `${this.currentProduct?.name}`,
@@ -922,7 +922,7 @@ tr<template>
                         this.form.invoice_id = data.data.id;
                         this.form.invoice_slug = data.data.order_id_uniq;
                         this.form.receiptNo = data.data.order_id_uniq;
-            
+
                         if (this.form.invoice_id != null) {
                            this.form
                             .post(window.location.origin + "/api/food/order/invoice/pay")
@@ -934,7 +934,7 @@ tr<template>
                                 this.resetForm();
                                 this.form.reset();
                                 this.againDefaultSettings();
-                                
+
                             })
                             .catch(() => {
                                 toast.fire({ type: "error", title: this.$t("common.error_msg") });
