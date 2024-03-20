@@ -222,7 +222,7 @@
 import Form from 'vform'
 import { mapGetters } from 'vuex'
 import VModal from "../../../components/VModal"; 
-
+import PaperCard from './PaperCard.vue';
 export default {
   middleware: ['auth', 'check-permissions'],
   metaInfo() {
