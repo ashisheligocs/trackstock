@@ -16,7 +16,7 @@ export const state = {
     bedTypeItems: null,
     floorItems: null,
     restaurant: null,
-    selectedHotel: Cookies.get('selectedHotel') || 'all',
+    selectedHotel: Cookies.get('selectedHotel') || '1',
 }
 
 // getters
