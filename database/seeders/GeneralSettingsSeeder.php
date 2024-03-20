@@ -48,7 +48,7 @@ class GeneralSettingsSeeder extends Seeder
                 'default_client_slug'=> 'walking-customer',
                 'default_account_slug'=> 'cash-0001',
                 'default_vat_rate_slug'=> 'vat-0',
-                'selected_hotel' => 'all',
+                'selected_hotel' => '1',
                 'booking_prefix' => 'BOOKED',
                 'gst_number' => '',
             ];
