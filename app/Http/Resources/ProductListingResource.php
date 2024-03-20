@@ -2,7 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Purchase;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\PurchaseProduct;
+use Modules\Restaurant\Entities\RestroItem;
 
 class ProductListingResource extends JsonResource
 {
@@ -13,7 +16,16 @@ class ProductListingResource extends JsonResource
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
-    { 
+    {
+        
+        $getTotalPurchaseQtyPerShop =  PurchaseProduct::where('product_id', $this->id)->whereHas('purchase', function ($newQuery) use ($request) {
+            $newQuery->where('shop_id', request()->hotel_id);
+        })->sum('quantity');
+        
+        $getTotalSellQtyPerShop = RestroItem::where('restaurant_item_id', $this->id)->whereHas('restaurantorder', function ($newQuery) use ($request) {
+            $newQuery->where('shop_id', request()->hotel_id);
+        })->sum('qty');
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -34,7 +46,9 @@ class ProductListingResource extends JsonResource
             'note' => $this->note,
             'status' => (int) $this->status,
             'image' => $this->image_path ? asset('/images/products/' . $this->image_path) : '',
-            "quantity" => $this->produtQuantity(),
+            // "quantity" => $this->produtQuantity(),
+            'available_qty' => $getTotalPurchaseQtyPerShop - $getTotalSellQtyPerShop,
+            'total_qty' => $getTotalPurchaseQtyPerShop,
             // 'taxRate' => !empty($this->productTaxRate) ? $this->productTaxRate[0]->rate : '',
         ];
     }

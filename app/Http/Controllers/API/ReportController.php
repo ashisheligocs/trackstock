@@ -26,6 +26,7 @@ use App\Models\Purchase;
 use App\Models\PurchasePayment;
 use App\Models\PurchaseProduct;
 use App\Models\PurchaseReturnProduct;
+use Modules\Restaurant\Entities\RestroItem;
 use DateTime;
 use Exception;
 use Illuminate\Http\Request;
@@ -518,7 +519,6 @@ class ReportController extends Controller
             $products = Product::where('slug', $request->itemName['slug'])->with('proSubCategory.category', 'productUnit')->get();
             $allProducts = $this->generateItemsArray($products, $request);
         }
-
         return $allProducts;
     }
 
@@ -559,20 +559,26 @@ class ReportController extends Controller
                 $newQuery->whereBetween('invoice_date', [$request->fromDate, $request->toDate]);
             })->sum('quantity');
 
+            $getTotalSellQtyPerShop = RestroItem::where('restaurant_item_id', $product->id)->whereHas('restaurantorder', function ($newQuery) use ($request) {
+                $newQuery->where('shop_id', $request->shop_id);
+                $newQuery->whereBetween('order_date', [$request->fromDate, $request->toDate]);
+            })->sum('qty');
+
             $purchaseReturnOuts = PurchaseReturnProduct::with('purchaseReturn.purchase.supplier')->where('product_id', $product->id)->whereHas('purchaseReturn', function ($newQuery) use ($request) {
                 $newQuery->whereBetween('date', [$request->fromDate, $request->toDate]);
             })->sum('quantity');
 
 
             $stockIns = $purchaseIns + $invoiceReturnIns + $adjutmentIns;
-            $stockOuts = $adjutmentOuts + $inventoryOuts + $purchaseReturnOuts;
+            $stockOuts = $adjutmentOuts + $inventoryOuts + $purchaseReturnOuts + $getTotalSellQtyPerShop;
             if ($purchaseIns > 0 || $invoiceReturnIns > 0 || $adjutmentIns > 0 || $adjutmentOuts > 0 || $inventoryOuts > 0 || $purchaseReturnOuts > 0) {
                 $allProducts[$key]['productName'] = $product->name;
                 $allProducts[$key]['slug'] = $product->slug;
                 $allProducts[$key]['productCode'] = $product->code;
                 $allProducts[$key]['stockIn'] = $stockIns;
                 $allProducts[$key]['stockOut'] = $stockOuts;
-                $allProducts[$key]['availableStock'] = $product->inventory_count;
+                // $allProducts[$key]['availableStock'] = $product->inventory_count;
+                $allProducts[$key]['availableStock'] = $stockIns - $stockOuts;
                 $allProducts[$key]['hotel_name'] = (@$getHotel[0]) ? $getHotel[0]->inventoryAdjustment->shop->shop_name : ((@$getHotel1[0]) ? $getHotel1[0]->purchase->shop->shop_name : '');
             }
         }

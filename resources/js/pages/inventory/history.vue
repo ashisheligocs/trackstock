@@ -126,6 +126,9 @@
                         <span v-else-if="data.type === 'Purchase Return'">{{
                             data.supplier
                         }}</span>
+                        <span v-else-if="data.type === 'Order From POS'">{{
+                            data.client
+                        }}</span>
                       </td>
                     </tr>
                     <tr>
@@ -209,7 +212,7 @@ export default {
       const { data } = await axios.get(
         window.location.origin +
         '/api/inventory-history/' +
-        this.$route.params.slug
+        this.$route.params.slug +'/'+this.$route.params.id
       )
       this.allData = data
       this.product = data.product

@@ -22,6 +22,10 @@ class RestroItem extends Model
         return $this->belongsTo(Product::class, 'restaurant_item_id');
     }
     
+    public function restaurantorder()
+    {
+        return $this->belongsTo(Restroorder::class, 'order_id');
+    }
 }
 
 
