@@ -528,13 +528,13 @@
 import VueApexCharts from 'vue-apexcharts';
 import Form from "vform";
 import axios from "axios";
-import { use } from "echarts/core";
-import "echarts/lib/component/grid";
-import { BarChart, LineChart, PieChart } from "echarts/charts";
-import VChart, { THEME_KEY } from "vue-echarts";
+// import { use } from "echarts/core";
+// import "echarts/lib/component/grid";
+// import { BarChart, LineChart, PieChart } from "echarts/charts";
+// import VChart, { THEME_KEY } from "vue-echarts";
 import { CanvasRenderer } from "echarts/renderers";
 import moment from "moment";
-import { LegendComponent, TitleComponent, TooltipComponent, } from "echarts/components";
+// import { LegendComponent, TitleComponent, TooltipComponent, } from "echarts/components";
 import { mapGetters } from "vuex";
 
 use([

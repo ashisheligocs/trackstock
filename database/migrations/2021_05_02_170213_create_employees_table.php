@@ -18,7 +18,7 @@ class CreateEmployeesTable extends Migration
             $table->string('name');
             $table->string('emp_id');
             $table->string('slug');
-            $table->string('designation');
+            $table->string('designation')->nullable();
             $table->double('salary', 12, 2)->nullable();
             $table->double('commission', 12, 2)->nullable();
             $table->string('mobile_number');

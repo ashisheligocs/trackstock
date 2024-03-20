@@ -51,19 +51,19 @@ class EmployeeController extends Controller
         $this->validate($request, [
             'employeeName' => 'required|string|max:255',
             'department' => 'required',
-            'designation' => 'required|string|max:255',
-            'salary' => 'required|numeric',
+            'designation' => 'nullable',
+            'salary' => 'nullable',
             'commission' => 'nullable|numeric',
             'mobileNumber' => 'required|string|max:20',
-            'birthDate' => 'required|date|date_format:Y-m-d|before:today',
-            'appointmentDate' => 'required|date|date_format:Y-m-d',
+            'birthDate' => 'nullable',
+            'appointmentDate' => 'nullable',
             'joiningDate' => 'required|date|date_format:Y-m-d',
-            'gender' => 'required|string',
+            'gender' => 'nullable',
             'bloodGroup' => 'nullable|string',
             'religion' => 'nullable|string',
             'address' => 'nullable|string|max:255',
             'email' => $request->allowLogin == true ? 'required|string|email|max:255|unique:users,email' : 'nullable',
-            'password' => $request->allowLogin == true ? 'required|string|max:255|min:8' : 'nullable',
+            'password' => $request->allowLogin == true ? 'required|string|max:255|min:4' : 'nullable',
             'role' => $request->allowLogin == true ? 'required' : 'nullable',
             'shop_id' => $request->allowLogin == true ? 'required | array' : 'nullable',
             'shop' => 'required',
@@ -99,7 +99,7 @@ class EmployeeController extends Controller
                 $user->roles()->attach($role->id);
                 $user->permissions()->attach($user->roles[0]->permissions);
                 !empty($request->shop_id) && $user->shops()->sync($request->shop_id);
-                
+
             }
 
             // create employee
@@ -140,7 +140,7 @@ class EmployeeController extends Controller
     {
         try {
             $employee = Employee::with('department', 'user')->where('slug', $slug)->first();
-        
+
             return new EmployeeResource($employee);
         } catch (Exception $e) {
             return $this->responseWithError($e->getMessage());
@@ -167,13 +167,13 @@ class EmployeeController extends Controller
             'employeeName' => 'required|string|max:255',
             'department' => 'required',
             'designation' => 'required|string|max:255',
-            'salary' => 'required|numeric',
+            'salary' => 'nullable',
             'commission' => 'nullable|numeric',
             'mobileNumber' => 'required|string|max:20',
-            'birthDate' => 'required|date|date_format:Y-m-d|before:today',
-            'appointmentDate' => 'required|date|date_format:Y-m-d',
+            'birthDate' => 'nullable',
+            'appointmentDate' => 'nullable',
             'joiningDate' => 'required|date|date_format:Y-m-d',
-            'gender' => 'required|string',
+            'gender' => 'nullable',
             'bloodGroup' => 'nullable|string',
             'religion' => 'nullable|string',
             'address' => 'nullable|string|max:255',
@@ -182,7 +182,7 @@ class EmployeeController extends Controller
             'role' => $request->allowLogin == true ? 'required' : 'nullable',
             'shop_id' => $request->allowLogin == true ? 'required | array' : 'nullable',
             'shop' => 'required',
-            // 'back_days' =>  'required',
+            // 'back_days' =>  'nullable',
         ]);
 
         try {
