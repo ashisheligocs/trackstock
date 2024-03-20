@@ -34,6 +34,7 @@
     <link rel="import" href="/bower_components/paper-input/paper-textarea.html"> 
     <link rel="import" href="/bower_components/paper-styles/color.html">
     <link rel="stylesheet" href="/bower_components/paper-styles/demo.css"> -->
+    <link rel="import" href="../polymer/polymer.html">
 
 </head>
 
