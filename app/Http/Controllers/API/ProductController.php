@@ -26,7 +26,7 @@ use Modules\Accounts\Entities\PlutusEntries;
 use Modules\Accounts\Entities\LedgerAccount;
 use Intervention\Image\Facades\Image as Image;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-
+use DateTime;
 class ProductController extends Controller
 {
     // define middleware
@@ -463,29 +463,32 @@ class ProductController extends Controller
         $request->validate([
             'file' => ['required', 'mimes:csv,txt', 'file'],
         ]);
-
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $data = SimpleExcelReader::create($file, 'csv')->getRows();
-
+            
             $rules = [
-                'name' => ['required','string','max:255'],
+                'purchase_date' => ['nullable'],
+                'item_name' => ['required','string','max:255'],
                 'model' => ['nullable','string','min:2','max:255'],
-                'barcode_symbology' => ['required','string','max:20'],
-                'sub_cat_id' => ['required'],
-                'brand_id' => ['nullable'],
-                'unit_id' => ['required'],
-                'tax_type' => ['nullable'],
+                'barcode_type' => ['required','string','max:20'],
+                'group' => ['required'],
+                'group' => ['nullable'],  
                 'selling_price' => ['required','numeric','min:0'],
                 'quantity' => ['nullable'],
                 'alert_qty' => ['nullable','numeric','min:1'],
-                'purchase_date' => ['nullable'],
-                'batch_id' => ['nullable'],
+                'batch' => ['nullable'],
+                'shop' => ['nullable'],
+                'shop_address' => ['nullable'],
             ];
-
+            
             foreach ($data as $key => $item) { 
+                $formattedDate = $item['purchase_date'] ?? '';
+                $date = !empty($item['purchase_date']) ? DateTime::createFromFormat('d/m/Y', $item['purchase_date']) : '';
+                if ($date !== false) {
+                    $formattedDate = $date->format('Y-m-d');
+                } 
 
-                
                 $shop = Shop::where('shop_name',$item['shop'])->first();
                 if(empty($shop)){
                     $shop = Shop::create([
@@ -494,38 +497,37 @@ class ProductController extends Controller
                     ]);
                 }
 
-                if(strToLower($item['sub_cat_id']) == 'wine'){
+                if(strToLower($item['group']) == 'wine'){
                     $item['sub_cat_id'] = 1;
                     $item['brand_id'] = 1;
-                }else if(strToLower($item['sub_cat_id']) == 'vodka'){
+                }else if(strToLower($item['group']) == 'vodka'){
                     $item['sub_cat_id'] = 2; 
                     $item['brand_id'] = 2; 
-                }else if(strToLower($item['sub_cat_id']) == 'rum'){
+                }else if(strToLower($item['group']) == 'rum'){
                     $item['sub_cat_id'] = 3; 
                     $item['brand_id'] = 3; 
-                }else if(strToLower($item['sub_cat_id']) == 'whiskey'){
+                }else if(strToLower($item['group']) == 'whiskey'){
                     $item['sub_cat_id'] = 4; 
                     $item['brand_id'] = 4; 
-                }else if(strToLower($item['sub_cat_id']) == 'beer'){
+                }else if(strToLower($item['group']) == 'beer'){
                     $item['sub_cat_id'] = 5; 
                     $item['brand_id'] = 5; 
-                }else if(strToLower($item['sub_cat_id']) == 'gin'){
+                }else if(strToLower($item['group']) == 'gin'){
                     $item['sub_cat_id'] = 6; 
                     $item['brand_id'] = 6; 
-                }else if(strToLower($item['sub_cat_id']) == 'breezer'){
+                }else if(strToLower($item['group']) == 'breezer'){
                     $item['sub_cat_id'] = 7; 
                     $item['brand_id'] = 7; 
-                }else if(strToLower($item['sub_cat_id']) == 'tequila'){
+                }else if(strToLower($item['group']) == 'tequila'){
                     $item['sub_cat_id'] = 8; 
                     $item['brand_id'] = 8; 
-                }else if(strToLower($item['sub_cat_id']) == 'brandy'){
+                }else if(strToLower($item['group']) == 'brandy'){
                     $item['sub_cat_id'] = 9; 
                     $item['brand_id'] = 9; 
                 }
-                if(strToLower($item['unit_id']) == 'nos.'){
-                    $item['unit_id'] = 1; 
-                } 
-                $item['alert_qty'] = 10;  
+                
+                $item['unit_id'] = 1;  
+                $item['alert_qty'] = $item['alert_qty'];  
                 $item['status'] = 1;  
                 $item['tax_type'] = 'Exclusive';   
                 $item['tax_id'] = 1;   
@@ -544,10 +546,10 @@ class ProductController extends Controller
                             $codeNo = (int) $lastProduct->code + 1;
                         }
                         $pro = Product::create([
-                            'name' => @$item['name'],
+                            'name' => @$item['item_name'],
                             'code' => @$codeNo,
                             'model' => @$item['model'],
-                            'barcode_symbology' => @$item['barcode_symbology'],
+                            'barcode_symbology' => @$item['barcode_type'],
                             'sub_cat_id' => @$item['sub_cat_id'],
                             'brand_id' => @$item['brand_id'],
                             'unit_id' => @$item['unit_id'], 
@@ -556,7 +558,7 @@ class ProductController extends Controller
                             'alert_qty' => $item['alert_qty'],
                             'quantity' => $item['quantity'],
                             'status' => $item['status'],
-                            'purchase_date' => $item['purchase_date'], 
+                            'purchase_date' => $formattedDate, 
                         ]);
                     }
 
@@ -568,25 +570,25 @@ class ProductController extends Controller
                     }
                     $userId = auth()->user()->id;
                     if($item['quantity'] > 0){ 
-                        $purchase = Purchase::where('batch_id',$item['batch_id'])->first();
-                        if(empty($purchase)){ 
+                        $purchase = Purchase::where('batch_id',$item['batch'])->first();
+                        // if(empty($purchase)){ 
                             $purchase = Purchase::create([
                                 'purchase_no' => $code,
                                 'slug' => uniqid(), 
                                 'supplier_id' => 1, 
                                 'sub_total' => $item['selling_price'],   
-                                'purchase_date' => date('Y-m-d',strToTime($item['purchase_date'])), 
-                                'po_date' => date('Y-m-d',strToTime($item['purchase_date'])), 
+                                'purchase_date' => $formattedDate, 
+                                'po_date' => $formattedDate, 
                                 'status' => 1,
                                 'created_by' => $userId,
                                 'shop_id' => $shop->id, 
-                                'batch_id' =>$item['batch_id'],
+                                'batch_id' =>$item['batch'],
                                 'quantity'=> $item['quantity'] ?? 0 
                             ]);
                             $reason = '['.config('config.purchasePrefix').'-'.$purchase->purchase_no.'] , Entry done by '.auth()->user()->name.'';
                             $plutusId = $this->createPlutusEntry($shop->id,$reason,now(),$item['selling_price']);
                             $this->manageInventoryLedger($purchase, @$shop->id,$plutusId);
-                        } 
+                        // } 
                         PurchaseProduct::create([
                             'purchase_id' => $purchase->id,
                             'product_id' => $pro->id,
