@@ -27,6 +27,8 @@ use Modules\Accounts\Entities\LedgerAccount;
 use Intervention\Image\Facades\Image as Image;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use DateTime;
+use DB;
+
 class ProductController extends Controller
 {
     // define middleware
@@ -480,9 +482,9 @@ class ProductController extends Controller
                 'shop' => ['nullable'],
                 'shop_address' => ['nullable'],
             ];
-
+            
             foreach ($data as $key => $item) {
-                // dd($item);
+                
                 $formattedDate = $item['purchase_date'] ?? '';
                 $item['barcode_type'] = 'CODE39';
                 $date = !empty($item['purchase_date']) ? DateTime::createFromFormat('d/m/Y', $item['purchase_date']) : '';
@@ -490,8 +492,12 @@ class ProductController extends Controller
                     $formattedDate = $date->format('Y-m-d');
                 }
 
-                $shop = Shop::where('shop_name',$item['shop'])->first();
-                if(empty($shop)){
+                $itemShop = $item['shop'];
+                $shop = DB::table('shops')
+                ->where('shop_name', $itemShop)
+                ->first();
+
+                if(!$shop){
                     $shop = Shop::create([
                         "shop_name" => $item['shop'] ?? '',
                         "shop_address" => $item['shop_address'] ?? '',

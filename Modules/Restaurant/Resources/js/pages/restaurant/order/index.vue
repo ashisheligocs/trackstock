@@ -401,130 +401,7 @@
           </div>
       </VModal>
 
-      <VModal v-if="showOrderStatusModal" v-model="showOrderStatusModal" @close="showOrderStatusModal = false">
-          <h3 slot="title" class="text-center">Order Status</h3>
-          <div class="mt-1">
-              <div class="form-group">
-                  <label for="note">Order Status</label>
-                  <v-select
-                      v-model="order_status"
-                      :options="orderStatus"
-                      label="status_name"
-                      :class="{ 'is-invalid': payment_form.errors.has('account') }"
-                      name="account"
-                      :placeholder="$t('common.account_placeholder')"
-                  />
-              </div>
-          </div>
-          <div slot="modal-footer">
-              <button @click="updateOrderStatus(allData.id)" class="btn btn-primary">Update Status</button>
-          </div>
-      </VModal>
 
-      <Modal class="pay-modal" v-if="showModal" :form="payment_form">
-          <h5 slot="header" style="margin: 1rem">{{ $t("pos.add_payment") }}</h5>
-          <div class="w-100" slot="body">
-              <div>
-                  <div class="font-weight-bold">
-                      <span>Net payable amount :</span>
-                      <span>{{ payment_form.netTotal | forBalanceSheetCurrencyDecimalOnly }}</span>
-                  </div>
-                  <div class="row" v-if="accounts">
-                      <div class="form-group col-md-6">
-                          <label for="account"
-                          >{{ $t("common.account") }}
-                              <span class="required">*</span></label
-                          >
-                          <v-select
-                                  v-model="payment_form.account"
-                                  :options="accounts"
-                                  label="ledgerName"
-                                  :class="{ 'is-invalid': payment_form.errors.has('account') }"
-                                  name="account"
-                                  :placeholder="$t('common.account_placeholder')"
-                          />
-                          <has-error :form="payment_form" field="account"/>
-                      </div>
-                      <div class="form-group col-md-6">
-                          <label for="paidAmount"
-                          >{{ $t("common.amount") }}<span class="required">*</span></label
-                          >
-                          <input
-                                  ref="paidAmountInput"
-                                  id="paidAmount"
-                                  v-model="payment_form.paidAmount"
-                                  type="number"
-                                  step="any"
-                                  class="form-control"
-                                  :class="{ 'is-invalid': payment_form.errors.has('paidAmount') }"
-                                  name="paidAmount"
-                                  min="1"
-                                  :max="payment_form.netTotal"
-                                  :placeholder="$t('common.paid_amount_placeholder')"
-                                  disabled
-                          />
-                          <has-error :form="payment_form" field="paidAmount"/>
-                      </div>
-                  </div>
-                  <div class="row">
-                      <div class="form-group col-md-6">
-                          <label for="receiptNo">Order No.</label>
-                          <input
-                                  id="receiptNo"
-                                  v-model="payment_form.receiptNo"
-                                  type="text"
-                                  class="form-control"
-                                  :class="{ 'is-invalid': payment_form.errors.has('receiptNo') }"
-                                  name="receiptNo"
-                                  :placeholder="$t('common.receipt_no_placeholder')"
-                                  disabled
-                          />
-                          <has-error :form="payment_form" field="receiptNo"/>
-                      </div>
-                      <div class="form-group col-md-6">
-                          <label for="date">{{ $t("common.date") }}</label>
-                          <input
-                                  id="date"
-                                  v-model="payment_form.date"
-                                  type="date"
-                                  class="form-control"
-                                  :class="{ 'is-invalid': payment_form.errors.has('date') }"
-                                  name="date"
-                          />
-                          <has-error :form="payment_form" field="date"/>
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label for="note">{{ $t("common.note") }}</label>
-                      <textarea
-                              id="note"
-                              v-model="payment_form.note"
-                              class="form-control"
-                              :class="{ 'is-invalid': payment_form.errors.has('note') }"
-                              :placeholder="$t('common.note_placeholder')"
-                      />
-                      <has-error :form="payment_form" field="note"/>
-                  </div>
-              </div>
-          </div>
-          <div class="payment-modal-footer" slot="modal-footer">
-              <div class="pos-modal-footer no-print">
-                  <button
-                          class="btn btn-primary"
-                          @click="addPayment"
-                          @keydown="form.onKeydown($event)"
-                  >
-                      <i class="fas fa-save"/> {{ $t("common.save") }}
-                  </button>
-                  <button
-                          class="modal-default-button btn btn-danger"
-                          @click="closeModalAndClearFormData"
-                  >
-                      {{ $t("common.close") }}
-                  </button>
-              </div>
-          </div>
-      </Modal>
   </div>
 </template>
 
@@ -656,92 +533,11 @@
       },
       created() {
           this.getData(1);
-          this.getAccounts();
+         
       },
       methods: {
-          async updateOrderStatus(id){
-              if(this.order_status?.id == ''){
-                  return toast.fire({ type: "error", title: 'Please Select Order Status' });
-              }else{
-                  this.order_status_form.order_status = this.order_status;
-              }
-              await this.order_status_form
-              .post(window.location.origin + '/api/food/order/update-status/'+id)
-              .then((response) => {
-
-                  if (response.data.success === true) {
-                      Swal.fire(
-                          'Updated',
-                          'Status Updated Successfully',
-                          "success"
-                      );
-                      this.showOrderStatusModal = false
-                      this.getData(1);
-                  } else {
-                      Swal.fire(
-                          this.$t("common.failed"),
-                          this.$t(response.message),
-                          "warning"
-                      );
-                      this.showOrderStatusModal = false
-                  }
-              });
-          },
-          async getAccounts() {
-              const { data } = await this.payment_form.get(
-                  window.location.origin + "/api/all-accounts?bank_only=1"
-              );
-              this.accounts = data.data;
-
-              // assign default account
-              if (this.accounts && this.accounts.length > 0) {
-                  let defaultAccountSlug = this.appInfo.defaultAccountSlug;
-                  this.payment_form.account = this.accounts.find(
-                      (account) => account.slug == defaultAccountSlug
-                  );
-              }
-              let extraAccount = {
-                      'id': 0,
-                      'ledgerName':'Pay Later'
-                  }
-
-                  this.accounts.push(extraAccount)
-
-          },
-          openPaymentModal(data){
-
-              this.payment_form.selectedProducts = data.items;
-              this.payment_form.netTotal = data.totalAmount;
-              this.payment_form.paidAmount = data.totalAmount;
-              this.payment_form.receiptNo = data.orderId;
-              this.payment_form.invoice_id = data.id;
-              this.payment_form.hotel_id = data.hotel.id;
-              this.payment_form.client = data.customer;
-
-              this.showModal = true;
-          },
-          async addPayment() {
-              if (this.payment_form.invoice_id != null) {
-                  await this.payment_form
-                      .post(window.location.origin + "/api/food/order/invoice/pay")
-                      .then(async () => {
-                          this.showModal = false;
-                          this.payment_form.reset();
-                          this.getData(1);
-                          toast.fire({ type: "Success", title: 'Payment added Successfully' });
-                      })
-                      .catch(() => {
-                          toast.fire({ type: "error", title: this.$t("common.error_msg") });
-                      });
-              } else {
-                  await toast.fire({ type: "error", title: this.$t("common.error_msg") });
-              }
-          },
-          closeModalAndClearFormData() {
-              this.showModal = false;
-              this.generateOrder = false;
-              this.payment_form.reset();
-          },
+          
+         
           async cancelOrder(id){
               if(this.cancel_note == ''){
                   return toast.fire({ type: "error", title: 'Please enter Cancel note' });
@@ -799,7 +595,7 @@
               try {
                   const { data } = await axios.get(
                       window.location.origin + "/api/food/order?page=" + (this.pagination?.currentPage || 1)
-                      +"&startDate="+this.dateRange.startDate+"&endDate="+this.dateRange.endDate
+                      +"&startDate="+this.dateRange.startDate+"&endDate="+this.dateRange.endDate+"&shop_id="+this.selectedHotel
                   );
 
                   this.restaurantOrders = data.data;

@@ -32,7 +32,7 @@ class OrderController extends Controller
         $startDate = $request->startDate ? Carbon::parse($request->startDate) : null;
         $endDate = $request->endDate ? Carbon::parse($request->endDate)->addDay() : null;
         return RestaurantOrderResource::collection(Restroorder::with('items',
-            'items.restaurantItem')->when($startDate, function ($query) use ($startDate, $endDate) {
+            'items.restaurantItem')->where('shop_id',$request->shop_id)->when($startDate, function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('order_date', [$startDate, $endDate]);
         })->latest()->paginate(15));
 

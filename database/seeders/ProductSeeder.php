@@ -50,7 +50,7 @@ class ProductSeeder extends Seeder
                     'cat_id' => 1
                 ],
                 [
-                    'name' => 'Wiskey',
+                    'name' => 'Whiskey',
                     'slug' => 'wisky',
                     'code' => '1',
                     'note' => null,

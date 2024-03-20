@@ -141,9 +141,9 @@
     <!-- </div>
             </li>
             </ul>  -->
-    <ul class="navbar-nav ml-auto align-items-center" v-if="$can('restaurant-order')">
+    <ul class="navbar-nav ml-auto align-items-center">
       <!-- Notifications Dropdown Menu -->
-      <li>
+      <li v-if="$can('restaurant-order')">
         <router-link :to="{ name: 'pos.create' }" class="btn pos-btn d-sm-block d-none">
           <i class="fas fa-cash-register"></i>
           POS
@@ -243,7 +243,7 @@
           <!--                    </router-link>-->
         </div>
       </li>
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown" v-if="$can('restaurant-order')">
         <a class="nav-link" data-toggle="dropdown" href="javascript:void(0)">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
             stroke-width="2">
