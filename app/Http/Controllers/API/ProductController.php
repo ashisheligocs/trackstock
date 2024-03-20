@@ -48,7 +48,7 @@ class ProductController extends Controller
     {
         // dd($request->input());
         // $d = Product::with('proSubCategory.category', 'productUnit', 'productTax','productTaxRate',
-        // 'productBrand')->latest()->paginate($request->perPage); 
+        // 'productBrand')->latest()->paginate($request->perPage);
         $search = $request->search ?? '';
 
         return ProductListingResource::collection(
@@ -67,7 +67,7 @@ class ProductController extends Controller
                     });
             });
         })
-        ->latest()->paginate($request->perPage));    
+        ->latest()->paginate($request->perPage));
     }
 
     /**
@@ -113,10 +113,10 @@ class ProductController extends Controller
             if ($request->image) {
                 $imageName = time().'.'.explode('/',
                         explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                
+
                 if (!file_exists(public_path('images/products/'))) {
                     mkdir(public_path('images/products/'), 666, true);
-                }        
+                }
                 Image::make($request->image)->save(public_path('images/products/').$imageName);
             }
 
@@ -151,9 +151,9 @@ class ProductController extends Controller
             ]);
 
             if(!empty($request->productTax)){
-                foreach ($request->productTax as $key => $taxer) {   
-                  
-                    ProductTax::create([ 
+                foreach ($request->productTax as $key => $taxer) {
+
+                    ProductTax::create([
                         'product_id' => $product->id,
                         'tax_id' => $taxer['id'],
                         'name' => $taxer['name'],
@@ -197,12 +197,12 @@ class ProductController extends Controller
      */
     public function update(Request $request, $slug)
     {
-        
+
         $product = Product::where('slug', $slug)->first();
         // validate request
         $this->validate($request, [
             'itemName' => 'required|string|max:255|unique:products,name,'.$product->id,
-            'itemCode' => 'required|numeric|max:99999|unique:products,code,'.$product->id,
+            'itemCode' => 'required|string|max:99999|unique:products,code,'.$product->id,
             'itemModel' => 'nullable|string|min:2|max:255',
             'barcodeSymbology' => 'required|string|max:20',
             'subCategory' => 'required',
@@ -224,11 +224,11 @@ class ProductController extends Controller
                 }
                 $imageName = time().'.'.explode('/',
                         explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                
+
                 if (!file_exists(public_path('images/products/'))) {
                     mkdir(public_path('images/products/'), 666, true);
                 }
-                        
+
                 Image::make($request->image)->save(public_path('images/products/').$imageName);
             }
 
@@ -266,9 +266,9 @@ class ProductController extends Controller
 
             if(!empty($request->productTax)){
                 ProductTax::where('product_id',$product->id)->delete();
-                foreach ($request->productTax as $key => $taxer) {   
-                  
-                    ProductTax::create([ 
+                foreach ($request->productTax as $key => $taxer) {
+
+                    ProductTax::create([
                         'product_id' => $product->id,
                         'tax_id' => (@$taxer['tax_id']) ? $taxer['tax_id'] : $taxer['id'],
                         'name' => $taxer['name'],
@@ -320,7 +320,7 @@ class ProductController extends Controller
             ->orWhere('slug', 'LIKE', '%'.$term.'%')
             ->orWhere('model', 'LIKE', '%'.$term.'%')
             ->orWhere('code', 'LIKE', '%'.$term.'%')
-            ->orWhere('regular_price', 'LIKE', '%'.$term.'%')
+            ->orWhere('selling_price', 'LIKE', '%'.$term.'%')
             ->orWhere('purchase_price', 'LIKE', '%'.$term.'%')
             ->orWhereHas('proSubCategory', function ($newQuery) use ($term) {
                 $newQuery->where('name', 'LIKE', '%'.$term.'%')
@@ -371,7 +371,7 @@ class ProductController extends Controller
 
         return ProductSelectResource::collection($products);
     }
-    
+
     /**
      * @return AnonymousResourceCollection
      */
@@ -466,35 +466,35 @@ class ProductController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $data = SimpleExcelReader::create($file, 'csv')->getRows();
-            
+
             $rules = [
                 'purchase_date' => ['nullable'],
                 'item_name' => ['required','string','max:255'],
-                'model' => ['nullable','string','min:2','max:255'],
+                'model' => ['string','min:2','max:255'],
                 // 'barcode_type' => ['required','string','max:20'],
                 'group' => ['required'],
-                'group' => ['nullable'],  
                 'selling_price' => ['required','numeric','min:0'],
                 'quantity' => ['nullable'],
-                'alert_qty' => ['nullable','numeric','min:1'],
+                // 'alert_qty' => ['nullable','numeric','min:1'],
                 'batch' => ['nullable'],
                 'shop' => ['nullable'],
                 'shop_address' => ['nullable'],
             ];
-            
-            foreach ($data as $key => $item) { 
+
+            foreach ($data as $key => $item) {
+                // dd($item);
                 $formattedDate = $item['purchase_date'] ?? '';
                 $item['barcode_type'] = 'CODE39';
                 $date = !empty($item['purchase_date']) ? DateTime::createFromFormat('d/m/Y', $item['purchase_date']) : '';
                 if ($date !== false) {
                     $formattedDate = $date->format('Y-m-d');
-                } 
+                }
 
                 $shop = Shop::where('shop_name',$item['shop'])->first();
                 if(empty($shop)){
                     $shop = Shop::create([
                         "shop_name" => $item['shop'] ?? '',
-                        "shop_address" => $item['shop_address'] ?? '', 
+                        "shop_address" => $item['shop_address'] ?? '',
                     ]);
                 }
 
@@ -502,36 +502,35 @@ class ProductController extends Controller
                     $item['sub_cat_id'] = 1;
                     $item['brand_id'] = 1;
                 }else if(strToLower($item['group']) == 'vodka'){
-                    $item['sub_cat_id'] = 2; 
-                    $item['brand_id'] = 2; 
+                    $item['sub_cat_id'] = 2;
+                    $item['brand_id'] = 2;
                 }else if(strToLower($item['group']) == 'rum'){
-                    $item['sub_cat_id'] = 3; 
-                    $item['brand_id'] = 3; 
+                    $item['sub_cat_id'] = 3;
+                    $item['brand_id'] = 3;
                 }else if(strToLower($item['group']) == 'whiskey'){
-                    $item['sub_cat_id'] = 4; 
-                    $item['brand_id'] = 4; 
+                    $item['sub_cat_id'] = 4;
+                    $item['brand_id'] = 4;
                 }else if(strToLower($item['group']) == 'beer'){
-                    $item['sub_cat_id'] = 5; 
-                    $item['brand_id'] = 5; 
+                    $item['sub_cat_id'] = 5;
+                    $item['brand_id'] = 5;
                 }else if(strToLower($item['group']) == 'gin'){
-                    $item['sub_cat_id'] = 6; 
-                    $item['brand_id'] = 6; 
+                    $item['sub_cat_id'] = 6;
+                    $item['brand_id'] = 6;
                 }else if(strToLower($item['group']) == 'breezer'){
-                    $item['sub_cat_id'] = 7; 
-                    $item['brand_id'] = 7; 
+                    $item['sub_cat_id'] = 7;
+                    $item['brand_id'] = 7;
                 }else if(strToLower($item['group']) == 'tequila'){
-                    $item['sub_cat_id'] = 8; 
-                    $item['brand_id'] = 8; 
+                    $item['sub_cat_id'] = 8;
+                    $item['brand_id'] = 8;
                 }else if(strToLower($item['group']) == 'brandy'){
-                    $item['sub_cat_id'] = 9; 
-                    $item['brand_id'] = 9; 
+                    $item['sub_cat_id'] = 9;
+                    $item['brand_id'] = 9;
                 }
-                
-                $item['unit_id'] = 1;  
-                $item['alert_qty'] = $item['alert_qty'];  
-                $item['status'] = 1;  
-                $item['tax_type'] = 'Exclusive';   
-                $item['tax_id'] = 1;   
+
+                $item['unit_id'] = 1;
+                $item['status'] = 1;
+                $item['tax_type'] = 'Exclusive';
+                $item['tax_id'] = 1;
                 $validator = Validator::make($item, $rules);
                 if ($validator->passes()) {
                     $exist = Product::where('model',$item['model'])->first();
@@ -548,18 +547,18 @@ class ProductController extends Controller
                         }
                         $pro = Product::create([
                             'name' => @$item['item_name'],
-                            'code' => @$codeNo,
-                            'model' => @$item['model'],
+                            'code' => @$item['model'],
+                            'model' => @$codeNo,
                             'barcode_symbology' => @$item['barcode_type'],
                             'sub_cat_id' => @$item['sub_cat_id'],
                             'brand_id' => @$item['brand_id'],
-                            'unit_id' => @$item['unit_id'], 
+                            'unit_id' => @$item['unit_id'],
                             'tax_type' => @$item['taxType'],
-                            'selling_price' => isset($item['selling_price']) ? $item['selling_price'] : 0,  
+                            'selling_price' => isset($item['selling_price']) ? $item['selling_price'] : 0,
                             'alert_qty' => $item['alert_qty'] ?? 10,
                             'quantity' => $item['quantity'],
                             'status' => $item['status'],
-                            'purchase_date' => $formattedDate, 
+                            'purchase_date' => $formattedDate,
                         ]);
                     }
 
@@ -570,26 +569,26 @@ class ProductController extends Controller
                         $code = $prevCode->id + 1;
                     }
                     $userId = auth()->user()->id;
-                    if($item['quantity'] > 0){ 
+                    if($item['quantity'] > 0){
                         $purchase = Purchase::where('batch_id',$item['batch'])->first();
-                        // if(empty($purchase)){ 
+                        // if(empty($purchase)){
                             $purchase = Purchase::create([
                                 'purchase_no' => $code,
-                                'slug' => uniqid(), 
-                                'supplier_id' => 1, 
-                                'sub_total' => $item['selling_price'],   
-                                'purchase_date' => $formattedDate, 
-                                'po_date' => $formattedDate, 
+                                'slug' => uniqid(),
+                                'supplier_id' => 1,
+                                'sub_total' => $item['selling_price'],
+                                'purchase_date' => $formattedDate,
+                                'po_date' => $formattedDate,
                                 'status' => 1,
                                 'created_by' => $userId,
-                                'shop_id' => $shop->id, 
+                                'shop_id' => $shop->id,
                                 'batch_id' =>$item['batch'],
-                                'quantity'=> $item['quantity'] ?? 0 
+                                'quantity'=> $item['quantity'] ?? 0
                             ]);
                             $reason = '['.config('config.purchasePrefix').'-'.$purchase->purchase_no.'] , Entry done by '.auth()->user()->name.'';
                             $plutusId = $this->createPlutusEntry($shop->id,$reason,now(),$item['selling_price']);
                             $this->manageInventoryLedger($purchase, @$shop->id,$plutusId);
-                        // } 
+                        // }
                         PurchaseProduct::create([
                             'purchase_id' => $purchase->id,
                             'product_id' => $pro->id,
@@ -599,8 +598,8 @@ class ProductController extends Controller
                             'tax_amount' => 0,
                         ]);
                     }
-                    if(!empty($pro)){  
-                        ProductTax::create([ 
+                    if(!empty($pro)){
+                        ProductTax::create([
                             'product_id' => $pro->id,
                             'tax_id' => 1,
                             'name' => 'SGST 0%',
@@ -608,14 +607,14 @@ class ProductController extends Controller
                             'code' => 'SGST@0',
                             'amount' => 0.00,
                         ]);
-                        ProductTax::create([ 
+                        ProductTax::create([
                             'product_id' => $pro->id,
                             'tax_id' => 2,
                             'name' => 'CGST 0%',
                             'rate' => 0,
                             'code' => 'CGST@0',
                             'amount' => 0.00,
-                        ]); 
+                        ]);
                     }
                 } else {
                     return response()->json([

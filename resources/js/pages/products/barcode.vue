@@ -141,7 +141,7 @@ import { mapGetters } from 'vuex'
 import Form from 'vform'
 
 export default {
-  middleware: ['auth', 'check-permissions'],
+  // middleware: ['auth', 'check-permissions'],
   metaInfo() {
     return { title: this.$t('products.list.barcode.page_title') }
   },

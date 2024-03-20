@@ -52,10 +52,7 @@
             <ul class="nav nav-treeview" :style="menuOpen('productCats') ||
               menuOpen('productSubCats') ||
               menuOpen('products') ||
-              menuOpen('barcode')
-              ? 'display: block'
-              : 'display: none'
-              ">
+              menuOpen('barcode')">
               <li v-if="$can('product-category-create') ||
                 $can('product-category-edit') ||
                 $can('product-category-delete')
@@ -86,6 +83,13 @@
               </li>
             </ul>
           </li>
+
+<li class="nav-item">
+                <router-link :to="{ name: 'barcode.print' }" class="nav-link">
+                  <i class="fas fa-barcode nav-icon" />
+                  <p>Barcode</p>
+                </router-link>
+              </li>
 
           <!-----------------------------Expenses------------------------>
           <li v-if="$can('expense-category-list') ||
