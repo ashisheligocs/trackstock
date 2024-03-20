@@ -528,7 +528,7 @@ class ProductController extends Controller
                 }
                 
                 $item['unit_id'] = 1;  
-                $item['alert_qty'] = $item['alert_qty'];  
+                $item['alert_qty'] = $item['alert_qty'] ?? 10;  
                 $item['status'] = 1;  
                 $item['tax_type'] = 'Exclusive';   
                 $item['tax_id'] = 1;   
