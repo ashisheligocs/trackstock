@@ -202,6 +202,9 @@
                       <span v-else-if="data.type === 'Purchase Return'">{{
                         data.supplier
                       }}</span>
+                      <span v-else-if="data.type === 'Order From POS'">{{
+                            data.client
+                        }}</span>
                     </td>
                   </tr>
                   <tr>
@@ -280,6 +283,7 @@ export default {
       fromDate: moment().subtract(7,'d').format('YYYY-MM-DD'),
       toDate: moment().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSS'),
       productName: "",
+      shop_id: "",
     }),
     loading: false,
     allData: "",
@@ -315,7 +319,7 @@ export default {
 
     async getHotelDataList () {
         await this.$store.dispatch('operations/getHotelData', {
-            path: '/api/hotel',
+            path: '/api/shop',
         });
     },
 
@@ -332,7 +336,7 @@ export default {
 
     async getItemData(){
       this.loading = true;
-
+      this.form.shop_id = (this.selectedHotel != 'all') ? this.selectedHotel : '',
       await this.form
         .post(window.location.origin + "/api/reports/items")
         .then((response) => {
