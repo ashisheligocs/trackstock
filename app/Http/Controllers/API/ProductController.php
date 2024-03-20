@@ -471,7 +471,7 @@ class ProductController extends Controller
                 'purchase_date' => ['nullable'],
                 'item_name' => ['required','string','max:255'],
                 'model' => ['nullable','string','min:2','max:255'],
-                'barcode_type' => ['required','string','max:20'],
+                // 'barcode_type' => ['required','string','max:20'],
                 'group' => ['required'],
                 'group' => ['nullable'],  
                 'selling_price' => ['required','numeric','min:0'],
@@ -484,6 +484,7 @@ class ProductController extends Controller
             
             foreach ($data as $key => $item) { 
                 $formattedDate = $item['purchase_date'] ?? '';
+                $item['barcode_type'] = 'CODE39';
                 $date = !empty($item['purchase_date']) ? DateTime::createFromFormat('d/m/Y', $item['purchase_date']) : '';
                 if ($date !== false) {
                     $formattedDate = $date->format('Y-m-d');
@@ -555,7 +556,7 @@ class ProductController extends Controller
                             'unit_id' => @$item['unit_id'], 
                             'tax_type' => @$item['taxType'],
                             'selling_price' => isset($item['selling_price']) ? $item['selling_price'] : 0,  
-                            'alert_qty' => $item['alert_qty'],
+                            'alert_qty' => $item['alert_qty'] ?? 10,
                             'quantity' => $item['quantity'],
                             'status' => $item['status'],
                             'purchase_date' => $formattedDate, 
