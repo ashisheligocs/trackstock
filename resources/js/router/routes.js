@@ -1042,7 +1042,7 @@ export default [
         meta: { permissions: ["inventory-view"] }
     },
     {
-        path: "/inventory-history/:slug",
+        path: "/inventory-history/:slug/:id",
         name: "inventory.history",
         component: page("inventory/history.vue"),
         meta: { permissions: ["inventory-history"] }

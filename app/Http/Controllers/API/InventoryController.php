@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Models\InvoiceReturnProduct;
 use App\Models\PurchaseReturnProduct;
 use App\Http\Resources\ProductResource;
+use Modules\Restaurant\Entities\RestroItem;
 
 class InventoryController extends Controller
 {
@@ -78,7 +79,7 @@ class InventoryController extends Controller
     }
 
     // return inventory history
-    public function inventoryHistoryByItem($slug)
+    public function inventoryHistoryByItem($slug,$id='')
     {
         try {
             $product = Product::where('slug', $slug)->with('proSubCategory.category', 'productUnit')->first();
@@ -126,6 +127,11 @@ class InventoryController extends Controller
             $adjutmentOuts = AdjustmentProduct::where('product_id', $product->id)->where('type', 0)->with('inventoryAdjustment')->get();
             $inventoryOuts = InvoiceProduct::where('product_id', $product->id)->with('invoice.client')->get();
             $purchaseReturnOuts = PurchaseReturnProduct::where('product_id', $product->id)->with('purchaseReturn.purchase.supplier')->get();
+            $getTotalSellQtyPerShop = RestroItem::with('restaurantorder.client')->where('restaurant_item_id', $product->id)->whereHas('restaurantorder', function ($newQuery) use ($id) {
+                $newQuery->where('shop_id', $id);
+            })->get();
+
+           
 
             $stockOuts = [];
             // Invoice sales
@@ -137,7 +143,7 @@ class InventoryController extends Controller
                 $stockOuts[$key]['client'] = $inventoryOut->invoice->client->name;
                 $stockOuts[$key]['type'] = 'Invoice';
             }
-
+            
             $length = count($stockOuts);
             // Inventory adjustments
             foreach ($adjutmentOuts as $key => $adjutmentOut) {
@@ -160,6 +166,20 @@ class InventoryController extends Controller
                 $stockOuts[$length]['price'] = $purchaseReturnOut->purchase_price;
                 $stockOuts[$length++]['type'] = 'Purchase Return';
             }
+
+
+            $length = count($stockOuts);
+            // Purchase returns
+            foreach ($getTotalSellQtyPerShop as $key => $totalSellQtyPerShop) {
+                $stockOuts[$length]['quantity'] = $totalSellQtyPerShop->qty;
+                $stockOuts[$length]['date'] = $totalSellQtyPerShop->restaurantorder->order_date;
+                $stockOuts[$length]['code'] = $totalSellQtyPerShop->restaurantorder->order_id_uniq;
+                $stockOuts[$length]['client'] = $totalSellQtyPerShop->restaurantorder->client->name;
+                $stockOuts[$length]['reason'] = 'Order From POS';
+                $stockOuts[$length]['price'] = $totalSellQtyPerShop->restaurantorder->total_amount;
+                $stockOuts[$length++]['type'] = 'Order From POS';
+            }
+
 
             return [
                 'product' => new ProductResource($product),
