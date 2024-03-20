@@ -169,7 +169,7 @@ class InventoryController extends Controller
 
 
             $length = count($stockOuts);
-            // Purchase returns
+            // Pos Order
             foreach ($getTotalSellQtyPerShop as $key => $totalSellQtyPerShop) {
                 $stockOuts[$length]['quantity'] = $totalSellQtyPerShop->qty;
                 $stockOuts[$length]['date'] = $totalSellQtyPerShop->restaurantorder->order_date;

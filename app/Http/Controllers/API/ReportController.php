@@ -445,6 +445,12 @@ class ReportController extends Controller
                 $newQuery->whereBetween('date', [$request->fromDate, $request->toDate]);
             })->get();
 
+            $getTotalSellQtyPerShop = RestroItem::with('restaurantorder.client')->where('restaurant_item_id', $product->id)->whereHas('restaurantorder', function ($newQuery) use ($request) {
+                $newQuery->where('shop_id', $request->shop_id);
+                $newQuery->whereBetween('order_date', [$request->fromDate, $request->toDate]);
+            })->get();
+            
+
             $stockOuts = [];
             // Invoice sales
             foreach ($inventoryOuts as $key => $inventoryOut) {
@@ -478,6 +484,18 @@ class ReportController extends Controller
                 $stockOuts[$length]['supplier'] = $purchaseReturnOut->purchaseReturn->purchase->supplier->name;
                 $stockOuts[$length]['price'] = $purchaseReturnOut->purchase_price;
                 $stockOuts[$length++]['type'] = 'Purchase Return';
+            }
+
+            $length = count($stockOuts);
+            // Pos Order
+            foreach ($getTotalSellQtyPerShop as $key => $totalSellQtyPerShop) {
+                $stockOuts[$length]['quantity'] = $totalSellQtyPerShop->qty;
+                $stockOuts[$length]['date'] = $totalSellQtyPerShop->restaurantorder->order_date;
+                $stockOuts[$length]['code'] = $totalSellQtyPerShop->restaurantorder->order_id_uniq;
+                $stockOuts[$length]['client'] = $totalSellQtyPerShop->restaurantorder->client->name;
+                $stockOuts[$length]['reason'] = 'Order From POS';
+                $stockOuts[$length]['price'] = $totalSellQtyPerShop->restaurantorder->total_amount;
+                $stockOuts[$length++]['type'] = 'Order From POS';
             }
 
             return [
