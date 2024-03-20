@@ -285,7 +285,7 @@ class GeneralController extends Controller
         $setting = GeneralSetting::where('key', 'selected_hotel', 'display_name')->first();
 
         
-        return $setting ? $setting->value : 'all';
+        return $setting ? $setting->value : '1';
     }
 
     public function setSelectedShop(Request $request)
