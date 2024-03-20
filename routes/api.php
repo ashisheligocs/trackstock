@@ -393,7 +393,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/inventory/search', [InventoryController::class, 'searchInventory']);
     Route::get('/non-zero-inventory', [InventoryController::class, 'nonZeroInventory']);
     Route::get('/non-zero-inventory/search', [InventoryController::class, 'searchNonZeroInventory']);
-    Route::get('/inventory-history/{slug}', [InventoryController::class, 'inventoryHistoryByItem']);
+    Route::get('/inventory-history/{slug}/{id?}', [InventoryController::class, 'inventoryHistoryByItem']);
 
     // Inventory adjustment routes
     Route::get('/inventory-adjustments/search', [InventoryAdjustmentController::class, 'search']);

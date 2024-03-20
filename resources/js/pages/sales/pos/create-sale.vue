@@ -1,4 +1,4 @@
-<template>
+tr<template>
   <div id="pos">
     <!-- breadcrumbs Start -->
     <!-- <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" /> -->
@@ -10,12 +10,7 @@
         <div class="card bg-transparent">
           <div class="pos-r-head bg-white">
             <div class="row">
-              <!-- <div v-if="hotelItems.length" class="form-group col-md-6">
-                <v-select class="flex-grow-1" v-model="hotel" :options="hotelItems" label="shop_name" name="hotel"
-                  placeholder="Select a Shops" :clearable="false" />
-                <has-error :form="form" field="category" />
-
-              </div> -->
+              
               <div v-if="products" class="col-md-12 form-group">
                 <div class="d-flex w-100">
                   <search class="flex-grow-1" :isPosSearch="true" v-model="query" @reset-pagination="resetPagination()"
@@ -48,9 +43,9 @@
                         <div v-if="product?.image">
                           <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
                             alt="product image" />
-                          <span class="stock_no">{{ product.alertQty ?? 0 }} </span>
+                          <span class="stock_no">{{ product.available_qty ?? 0 }} </span>
                         </div>
-                        <div v-else><span class="stock_no">{{ product.alertQty ?? 0 }}</span></div>
+                        <div v-else><span class="stock_no">{{ product.available_qty ?? 0 }}</span></div>
                       </div>
                     </div>
                     <div class="pos-box-content">
@@ -68,15 +63,13 @@
                         <div v-if="product?.image">
                           <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
                             alt="product image" />
-                          <span class="stock_no">{{ product.alertQty ?? 0 }}</span>
+                          <span class="stock_no">{{ product.available_qty ?? 0 }}</span>
                         </div>
-                        <!-- kjkjkjh{{ $t("common.no_preview") }} -->
-                        <div v-else> <span class="stock_no">{{ product.alertQty ?? 0 }}</span></div>
+                        <div v-else> <span class="stock_no">{{ product.available_qty ?? 0 }}</span></div>
                       </div>
                     </div>
                     <div class="pos-box-content">
                       <p class="pos-box-text">{{ product.name }} </p>
-                      <!-- {{ product }} -->
                       <span class="text-bold text-lg">{{ product.sellingPrice | withCurrency }}</span>
                     </div>
                   </div>
@@ -105,10 +98,6 @@
           <div class="card-body-l p-0">
             <div class="form-group pl-3 pt-3 pr-3 d-none">
               <div class="d-flex w-100">
-                <!-- <Multiselect v-model="form.client" :options="clients" :taggable="false" :show-labels="false"
-                                    tag-placeholder="" :placeholder="$t('common.client_placeholder')" class="form-control"
-                                    @select="form.room = null" :custom-label="({ name, phone }) => `${name} (${phone})`"
-                                    label="name" track-by="id" style="min-width: 85%"></Multiselect> -->
                 <v-select v-model="form.client" :options="clients" label="name"
                   :class="{ 'is-invalid': form.errors.has('client') }" name="client"
                   :placeholder="$t('common.client_placeholder')" />
@@ -120,12 +109,6 @@
                 </ClientCreateModal>
               </div>
               <has-error :form="form" field="client" />
-              <!-- <div class="w-100 mt-2">
-                                <Multiselect v-model="form.room" :options="occupiedRooms" :taggable="false"
-                                    :show-labels="false" tag-placeholder="" placeholder="Select a room" class="form-control"
-                                    @select="form.client = null" label="room_name" track-by="id" style="min-width: 80%">
-                                </Multiselect>
-                            </div> -->
             </div>
 
             <div class="table-responsive table-wrap">
@@ -145,6 +128,7 @@
                     </th>
                   </tr>
                 </thead>
+                
                 <tbody v-if="selectedItemList && selectedItemList.length > 0">
                   <tr v-for="(singleItem, i) in selectedItemList" :key="i">
                     <td>
@@ -152,7 +136,6 @@
                       <span v-if="singleItem.addonString != ''" style="font-size: 11px;"><br />{{
                 singleItem.addonString }}</span>
                     </td>
-                    <!-- <td>{{ parseFloat(product.variant?.price) + parseFloat(product.addonAmount) | withCurrency }}</td> -->
                     <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td>
                     <td>
                       <div class="d-flex custom-qty-input">
@@ -187,15 +170,7 @@
           <div>
 
             <div class="pos-net-total noi-print">
-              <!-- <div>
-                Subtotal: {{ foodItemFinalSubtotal | withCurrency }}
-              </div>
-              <div>
-                Discount: {{ foodItemDiscount | withCurrency }}
-              </div>
-              <div>
-                GST: {{ foodItemTax | withCurrency }}
-              </div> -->
+             
               <div class="row">
                 <button class="btn btn-primary btn-block col-6" @click="saveOrder($event, true)"
                   :disabled="selectedItemList.length <= 0">
@@ -210,22 +185,6 @@
             </div>
           </div>
         </div>
-
-        <!-- <div class="row no-print">
-          <div class="col-12 col-lg-6 mb-1">
-            <button class="btn btn-primary btn-block" @click="saveOrder($event, false)"
-              @keydown="form.onKeydown($event)" :disabled="selectedItemList.length <= 0">
-              <i class="fas fa-save" /> Save
-            </button>
-          </div>
-          <div class="col-12 col-lg-6 mb-1">
-            <button class="btn btn-primary btn-block" @click="saveOrder($event, true)"
-              :disabled="selectedItemList.length <= 0">
-              <i class="fas fa-credit-card" />
-              Save & Payment
-            </button>
-          </div>
-        </div> -->
       </div>
       <!-- POS Right area end -->
     </div>
@@ -296,17 +255,11 @@
                 form.selectedProducts.length > 0
                 ">
             <div class="form-group col-md-6">
-              <!-- <label for="account">{{ $t("common.account") }}
-                <span class="required">*</span></label> -->
               <input type="hidden" v-model="form.account">
               QR :
-              <!-- <v-select v-model="form.account" :options="accounts" label="ledgerName"
-                :class="{ 'is-invalid': form.errors.has('account') }" name="account"
-                :placeholder="$t('common.account_placeholder')" />
-              <has-error :form="form" field="account" /> -->
+            
             </div>
             <div class="form-group col-md-6">
-              <!-- <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label> -->
               <input ref="paidAmountInput" id="paidAmount" v-model="form.paidAmount" type="number" step="any"
                 class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1"
                 :max="form.netTotal" :placeholder="$t('common.paid_amount_placeholder')" />
@@ -319,13 +272,10 @@
                 form.selectedProducts.length > 0
                 ">
             <div class="form-group col-md-6">
-              <!-- <label for="account">{{ $t("common.account") }}
-                <span class="required">*</span></label> -->
               <input type="hidden" v-model="form.account">
               Cash :
             </div>
             <div class="form-group col-md-6">
-              <!-- <label for="paidAmount">{{ $t("common.amount") }}<span class="required">*</span></label> -->
               <input type="number" step="any" class="form-control" :value="form.netTotal - form.paidAmount"
                 :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1" :max="form.netTotal"
                 :placeholder="$t('common.paid_amount_placeholder')" disabled />
@@ -566,13 +516,14 @@
         computed: {
             ...mapGetters("operations", ["items", "appInfo", "hotelItems", "selectedHotel"]),
 
+          
             filteredProducts() {
-      if (!this.selectedSubCategory) {
-        return this.products;
-      } else {
-        return this.products.filter(product => product.subCategory.name === this.selectedSubCategory);
-      }
-    },
+              if (!this.selectedSubCategory) {
+                return this.products;
+              } else {
+                return this.products.filter(product => product.subCategory.name === this.selectedSubCategory);
+              }
+            },
 
             currentItemAmount() {
                 return parseFloat(this.currentVariant?.price || 0) + this.currentAddonAmount;
@@ -617,8 +568,6 @@
                     console.log(price);
                 }
                 let taxRate = 0;
-                console.log("Price:", price);
-    console.log("Tax Rate:", taxRate);
                 return parseFloat(price)*parseFloat(taxRate)/100;
                 // console.log(this.taxRate);
             },
@@ -693,10 +642,6 @@
             // },
         },
         methods: {
-        //   setNewPrices() {
-        //     if (this.tax_included) this.setTaxInclusivePrice();
-        //     else this.setTaxExclusivePrice();
-        //   },
           setTaxInclusivePrice() {
 
             let finalPrice = this.inclusiveTaxAmount(this.foodItemSubTotal,this.taxRate)
@@ -742,83 +687,63 @@
                 console.log("do this");
             },
             openProductModal(product) {
-              if(product.alertQty == 0 || product.alertQty == null){
+              if(product.available_qty == 0){
                     return toast.fire({
                         type: "error",
                         title: 'Insufficient Stock !',
                     });
               }
 
-
                 this.currentProduct = product;
-                console.log(product)
                 toast.fire({ type: "success", title: "Order Added Successfully" });
-                // this.currentVariant = product.variants[0]
-                // if (product.optionalItems.length <= 0 && product.variants.length <= 1) {
-                    return this.addItemInList();
-                // }
-                // this.showProductModal = true;
+                return this.addItemInList();
             },
             addItemInList() {
-                // if (!this.currentVariant || this.currentVariant.length <= 0) {
-                //     return toast.fire({
-                //         type: "error",
-                //         title: 'Select at-least one variant',
-                //     });
-                // }
-                console.log(this.selectedItemList)
+                
+                const addonNames = this.currentAddon?.map(add => add.name);
+                const addonString = addonNames ? addonNames.join(' + ') : '';
+
                 let alreadyAddedItem = _.findIndex(this.selectedItemList, (item) => {
                     return item.id == this.currentProduct.id && item.variant == this.currentVariant
                 })
 
-                const addonNames = this.currentAddon?.map(add => add.name);
-
-                const addonString = addonNames ? addonNames.join(' + ') : '';
-
                 if (alreadyAddedItem >= 0) {
-                    this.selectedItemList[alreadyAddedItem] = {
-                        name: `${this.currentProduct?.name}`,
-                        id: this.currentProduct.id,
-                        // variant: this.currentVariant,
-                        addon: this.currentAddon,
-                        // addonAmount: this.currentAddonAmount,
-                        addonString:addonString,
-                        quantity: 1,
-                        // total: parseFloat(this.currentProduct?.sellingPrice || 0) + this.currentAddonAmount
-                        price: parseFloat(this.currentProduct?.sellingPrice || 0),
-                        total: parseFloat(this.currentProduct?.sellingPrice || 0),
-                        inventoryCount: this.currentProduct?.inventoryCount ?? 0,
-                    }
+                  
+                  if(this.selectedItemList[alreadyAddedItem].quantity >= this.selectedItemList[alreadyAddedItem].available_qty){
+                    return toast.fire({
+                        type: "error",
+                        title: 'Insufficient Stock ! you can not added more than '+this.selectedItemList[alreadyAddedItem].available_qty+' Quantity',
+                    });
+                  }
 
+                  this.$set(this.selectedItemList, alreadyAddedItem, {
+                      name: `${this.currentProduct?.name}`,
+                      id: this.currentProduct.id,
+                      addon: this.currentAddon,
+                      addonString:addonString,
+                      quantity: parseFloat(this.selectedItemList[alreadyAddedItem].quantity) + 1,
+                      price: parseFloat(this.currentProduct?.sellingPrice || 0),
+                      total: parseFloat(this.currentProduct?.sellingPrice || 0),
+                      available_qty: this.currentProduct?.available_qty ?? 0,
+                  });  
+                  
                 } else {
                     this.selectedItemList.push({
                         name: `${this.currentProduct?.name}`,
                         id: this.currentProduct.id,
-                        // variant: this.currentVariant,
                         addon: this.currentAddon,
-                        // addonAmount: this.currentAddonAmount,
                         addonString:addonString,
                         quantity: 1,
-                        // total: parseFloat(this.currentProduct?.sellingPrice || 0) + this.currentAddonAmount
                         price: parseFloat(this.currentProduct?.sellingPrice || 0),
-                        inventoryCount: this.currentProduct?.inventoryCount ?? 0,
+                        available_qty: this.currentProduct?.available_qty ?? 0,
                     })
                 }
                 this.currentVariant = null;
                 this.currentAddon = [];
 
                 this.showProductModal = false;
-                console.log(this.selectedItemList, 'list')
             },
             itemSubtotal(item) {
-                // let addonTotal = 0;
-                // if (item.addon?.length > 0) {
-                //     item.addon?.forEach(add => {
-                //         addonTotal += parseFloat(add.price);
-                //     })
-                // }
-                // return parseFloat(item.quantity * (parseFloat(item.variant?.price) + parseFloat(addonTotal)) || 0);
-
                 return parseFloat(item.quantity * parseFloat(item?.price));
             },
             addonPrice(item) {
@@ -828,7 +753,6 @@
                         addonTotal += parseFloat(add.price);
                     })
                 }
-
                 return addonTotal;
             },
 
@@ -871,7 +795,7 @@
             // get products
             async getProducts() {
                 this.loading = true;
-                this.form.hotel_id = this.hotel?.id || 1;
+                this.form.hotel_id = (this.selectedHotel !== 'all') ? this.selectedHotel : this.hotel?.id || 1;
                 this.form.category = this.selectedCategory?.id || ''
                 this.form.search = this.query || '';
                 let currentPage = this.pagination ? this.pagination.current_page : 1;
@@ -883,7 +807,6 @@
 
                 this.taxRate = data.data?.length > 0 ? data.data[0].taxRate : 0;
                 this.products = data.data;
-console.log(this.products);
                 const subCategoryNames = Array.from(new Set(data.data.map(product => product.subCategory.name)));
 
                 this.subCategoryOptions = subCategoryNames.map(name => ({ label: name, value: name }));
@@ -918,6 +841,13 @@ console.log(this.products);
             // update array
             adjustQuantity(event, i, type) {
                 if (type === 'increment') {
+
+                  if(this.selectedItemList[i].quantity >= this.selectedItemList[i].available_qty){
+                    return toast.fire({
+                        type: "error",
+                        title: 'Insufficient Stock ! you can not added more than '+this.selectedItemList[i].available_qty+' Quantity',
+                    });
+                  }
                     this.selectedItemList[i].quantity += 1;
                 } else if (type === 'decrement') {
                     this.selectedItemList[i].quantity -= 1;
@@ -980,38 +910,19 @@ console.log(this.products);
                 this.form.room = null;
             },
 
-            // save invoice
-            // async saveInvoice(isDirect = true) {
-            //     await this.form
-            //         .post(window.location.origin + "/api/food/order/invoice")
-            //         .then(({ data }) => {
-            //             this.form.invoice_id = data.data.id;
-            //             this.form.invoice_slug = data.data.order_id_uniq;
-            //             this.form.receiptNo = data.data.order_id_uniq;
-            //             if (isDirect) {
-            //                 this.showInvoiceAndPrint();
-            //                 this.resetForm();
-            //             }
-            //         })
-            //         .catch(() => {
-            //             toast.fire({ type: "error", title: this.$t("common.error_msg") });
-            //         });
-            // },
-
-            // save payment
             async addPayment() {
 
               if(this.form.paidAmount > this.form.netTotal){
                 return toast.fire({ type: "error", title: "Max Amount should be "+this.form.netTotal });
               }
-
+              this.form.hotel_id = (this.selectedHotel !== 'all') ? this.selectedHotel : this.hotel?.id || 1;
               await this.form
                     .post(window.location.origin + "/api/food/order/invoice")
                     .then(({ data }) => {
                         this.form.invoice_id = data.data.id;
                         this.form.invoice_slug = data.data.order_id_uniq;
                         this.form.receiptNo = data.data.order_id_uniq;
-
+            
                         if (this.form.invoice_id != null) {
                            this.form
                             .post(window.location.origin + "/api/food/order/invoice/pay")
@@ -1019,7 +930,7 @@ console.log(this.products);
                                toast.fire({ type: "success", title: 'Order Place Successfully' });
                                 this.showModal = false;
                                 this.allData = _.cloneDeep(this.form);
-                                // await this.showInvoiceAndPrint();
+                                this.getProducts();
                                 this.resetForm();
                                 this.form.reset();
                                 this.againDefaultSettings();
@@ -1057,7 +968,6 @@ console.log(this.products);
 
             // complete order and add payment
             async completeOrderAndAddPayment() {
-                // await this.saveInvoice(false);
                 if (this.form.invoice_id != null) {
                     this.showModal = true;
                     this.form.paidAmount = _.clone(this.form.netTotal);

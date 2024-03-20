@@ -181,7 +181,7 @@
                       v-tooltip="$t('inventory.common.inventory_history')"
                       :to="{
                             name: 'inventory.history',
-                            params: { slug: data.slug },
+                            params: { slug: data.slug , id: selectedHotel },
                           }"
                     >
                       {{ data.productCode | withPrefix(prefix) }}
@@ -273,6 +273,7 @@ export default {
       category: {id: 0, name: "All Categories", slug: "all"},
       subCategory: {id: 0, name: "All Sub Categories", slug: "all"},
       itemName: {id: 0, name: "All Items", slug: "all"},
+      shop_id:''
     }),
     loading: false,
     subCategories: [],
@@ -390,7 +391,7 @@ export default {
 
     async getInventoryData(){
       this.loading = true;
-      
+      this.form.shop_id = (this.selectedHotel != 'all') ? this.selectedHotel : '' 
       await this.form
         .post(window.location.origin + "/api/reports/inventory")
         .then((response) => {
