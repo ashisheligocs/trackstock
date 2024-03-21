@@ -74,9 +74,9 @@ export default [
   },
 
   {
-    path: "/view_shop",
+    path: "/shop",
     name: "ShopView",
-    component: page("view_shop.vue")
+    component: page("shop.vue")
   },
   // tasks route
   // Dashboard stock alert
@@ -1157,6 +1157,21 @@ export default [
     path: "/shops",
     name: "shops",
     component: shopPath("shops/index.vue"),
+  },
+  {
+    path: "/shopbalance",
+    name: "shop_balance",
+    component: page("shop_balance.vue"),
+  },
+  {
+    path: "/salesman",
+    name: "shop_salesman",
+    component: page("shop_salesman.vue"),
+  },
+  {
+    path: "/collectcash",
+    name: "collect_cash",
+    component: page("collect_cash.vue"),
   },
   {
     path: "/shops/add",

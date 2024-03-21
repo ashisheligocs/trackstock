@@ -434,6 +434,7 @@ export default {
     // this.getData();
     // this.getD();
     console.log('this', this.hotelItems);
+    console.log('this', this.getHotelDataList);
 
     this.inr = this.appInfo.currency.symbol;
     this.list_all = (this.selectedHotel);
