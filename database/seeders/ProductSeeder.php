@@ -34,9 +34,17 @@ class ProductSeeder extends Seeder
                     'cat_id' => 1
                 ],
                 [
+                    'name' => 'Scotch',
+                    'slug' => 'scotch',
+                    'code' => '2',
+                    'note' => null,
+                    'status' => 1,
+                    'cat_id' => 1
+                ],
+                [
                     'name' => 'Vodka',
                     'slug' => 'vodka',
-                    'code' => '1',
+                    'code' => '3',
                     'note' => null,
                     'status' => 1,
                     'cat_id' => 1
@@ -44,15 +52,15 @@ class ProductSeeder extends Seeder
                 [
                     'name' => 'Rum',
                     'slug' => 'rum',
-                    'code' => '1',
+                    'code' => '4',
                     'note' => null,
                     'status' => 1,
                     'cat_id' => 1
                 ],
                 [
-                    'name' => 'Whiskey',
-                    'slug' => 'wisky',
-                    'code' => '1',
+                    'name' => 'Whisky',
+                    'slug' => 'whisky',
+                    'code' => '5',
                     'note' => null,
                     'status' => 1,
                     'cat_id' => 1
@@ -60,7 +68,7 @@ class ProductSeeder extends Seeder
                 [
                     'name' => 'Beer',
                     'slug' => 'beer',
-                    'code' => '1',
+                    'code' => '6',
                     'note' => null,
                     'status' => 1,
                     'cat_id' => 1
@@ -68,7 +76,7 @@ class ProductSeeder extends Seeder
                 [
                     'name' => 'Gin',
                     'slug' => 'gin',
-                    'code' => '1',
+                    'code' => '7',
                     'note' => null,
                     'status' => 1,
                     'cat_id' => 1
@@ -76,7 +84,7 @@ class ProductSeeder extends Seeder
                 [
                     'name' => 'Breezer',
                     'slug' => 'breezer',
-                    'code' => '1',
+                    'code' => '8',
                     'note' => null,
                     'status' => 1,
                     'cat_id' => 1
@@ -84,7 +92,7 @@ class ProductSeeder extends Seeder
                 [
                     'name' => 'Tequila',
                     'slug' => 'tequila',
-                    'code' => '1',
+                    'code' => '9',
                     'note' => null,
                     'status' => 1,
                     'cat_id' => 1
@@ -92,7 +100,7 @@ class ProductSeeder extends Seeder
                 [
                     'name' => 'Brandy',
                     'slug' => 'brandy',
-                    'code' => '1',
+                    'code' => '10',
                     'note' => null,
                     'status' => 1,
                     'cat_id' => 1
@@ -110,58 +118,65 @@ class ProductSeeder extends Seeder
                 'status' => 1, 
             ],
             [
+                'name' => 'Scotch',
+                'slug' => 'scotch',
+                'code' => '2',
+                'note' => null,
+                'status' => 1,
+            ],
+            [
                 'name' => 'Vodka',
                 'slug' => 'vodka',
-                'code' => '1',
+                'code' => '3',
                 'note' => null,
                 'status' => 1, 
             ],
             [
                 'name' => 'Rum',
                 'slug' => 'rum',
-                'code' => '1',
+                'code' => '4',
                 'note' => null,
                 'status' => 1, 
             ],
             [
                 'name' => 'Wiskey',
                 'slug' => 'wisky',
-                'code' => '1',
+                'code' => '5',
                 'note' => null,
                 'status' => 1, 
             ],
             [
                 'name' => 'Beer',
                 'slug' => 'beer',
-                'code' => '1',
+                'code' => '6',
                 'note' => null,
                 'status' => 1, 
             ],
             [
                 'name' => 'Gin',
                 'slug' => 'gin',
-                'code' => '1',
+                'code' => '7',
                 'note' => null,
                 'status' => 1, 
             ],
             [
                 'name' => 'Breezer',
                 'slug' => 'breezer',
-                'code' => '1',
+                'code' => '8',
                 'note' => null,
                 'status' => 1, 
             ],
             [
                 'name' => 'Tequila',
                 'slug' => 'tequila',
-                'code' => '1',
+                'code' => '9',
                 'note' => null,
                 'status' => 1, 
             ],
             [
                 'name' => 'Brandy',
                 'slug' => 'brandy',
-                'code' => '1',
+                'code' => '10',
                 'note' => null,
                 'status' => 1, 
             ],
