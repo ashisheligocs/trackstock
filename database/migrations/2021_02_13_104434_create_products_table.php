@@ -30,7 +30,7 @@ class CreateProductsTable extends Migration
             $table->boolean('status')->nullable()->default(1);
             $table->string('image_path')->nullable();
             $table->timestamps();
-            $table->unsignedBigInteger('sub_cat_id');
+            $table->unsignedBigInteger('sub_cat_id')->nullable();;
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->unsignedBigInteger('unit_id')->nullable();
             $table->unsignedBigInteger('tax_id')->nullable();
