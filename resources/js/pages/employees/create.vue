@@ -210,12 +210,12 @@
               </div>
               <div class="row mt-3">
                 <div class="form-group col-md-6">
-                  <label for="email">User Name
+                  <label for="email">{{ $t("common.email") }}
                     <span class="required">*</span></label>
-                  <input id="email" v-model="form.email" type="email" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('email') }" name="email"
+                  <input id="email" v-model="form.username" type="text" class="form-control"
+                    :class="{ 'is-invalid': form.errors.has('username') }" name="username"
                     :placeholder="$t('common.email_placeholder')" />
-                  <has-error :form="form" field="email" />
+                  <has-error :form="form" field="username" />
                 </div>
                 <div class="form-group col-md-6">
                   <label for="password">{{ $t("common.password") }}
@@ -236,6 +236,7 @@
                 <div class="form-group col-md-6">
                   <label for="hotel" class="d-block">Hotel Access
                     <span class="required">*</span></label>
+
                   <multiselect id="hotel" v-model="selectedHotels" :options="hotelItems" :show-labels="false"
                     tag-placeholder="" :taggable="false" placeholder="Search a Shop" class="form-control"
                     label="shop_name" track-by="shop_name" :allowEmpty="false" :multiple="true" />
@@ -321,7 +322,7 @@ export default {
       status: 1,
       image: "",
       allowLogin: false,
-      email: "",
+      username: "",
       password: "",
       role: "Employee",
       back_days: '',
@@ -337,6 +338,7 @@ export default {
     await this.getRoles();
     await this.getHotelDataList();
     if (this.selectedHotel && this.selectedHotel !== 'all') {
+
       this.hotelItems.forEach((hotel) => {
         if (hotel.id == this.selectedHotel) {
           this.selectedHotels.push(hotel)

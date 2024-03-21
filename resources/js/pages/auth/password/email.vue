@@ -2,20 +2,20 @@
   <div class="container-fluid">
     <div class="row no-gutter">
       <!-- The image half -->
-      <div class="col-md-6 d-none d-md-flex bg-image"></div>
+      <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
       <!-- The content half -->
-      <div class="col-md-6 bg-light">
+      <div class="col-12 bg-light">
         <div class="auth-wrapper d-flex align-items-center py-5">
           <!-- Demo content-->
           <div class="container">
             <div class="row">
-              <div class="col-lg-10 col-xl-7 mx-auto">
-                <img
+              <div class="col-lg-10 col-xl-7 mx-auto" style="max-width: 500px;">
+                <!-- <img
                   v-if="appInfo"
                   :src="appInfo.blackLogo"
                   :alt="appInfo.companyName"
                   class="lg-logo img-fluid"
-                />
+                /> -->
                 <p class="text-muted mb-4">
                   {{ $t("reset_email_text") }}
                 </p>
@@ -49,18 +49,6 @@
                     </router-link>
                   </div>
                 </form>
-              </div>
-              <div class="w-100 text-center mt-4">
-                <p>
-                  {{ $t("TrackHotel v.1.0.0. Developed by") }}
-                  <a
-                    href="https://www.eligocs.com/"
-                    class="font-italic text-muted"
-                    target="__blank"
-                  >
-                    <u>EligoCS</u>
-                  </a>
-                </p>
               </div>
             </div>
           </div>
