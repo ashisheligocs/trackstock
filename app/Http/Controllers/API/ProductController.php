@@ -404,6 +404,7 @@ class ProductController extends Controller
         // generate code
         $code = 1;
         $product = Product::latest()->first();
+        
         if ($product) {
             $code = $product->code + 1;
         }
@@ -465,73 +466,104 @@ class ProductController extends Controller
         $request->validate([
             'file' => ['required', 'mimes:csv,txt', 'file'],
         ]);
+
+        $productArray = [];
+
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $data = SimpleExcelReader::create($file, 'csv')->getRows();
-
+            
             $rules = [
-                'purchase_date' => ['nullable'],
-                'item_name' => ['required','string','max:255'],
-                'model' => ['string','min:2','max:255'],
+                'Date' => ['nullable'],
+                'Item Name' => ['required','string','max:255'],
+                'Batch' => ['required','string','min:2','max:255'],
                 // 'barcode_type' => ['required','string','max:20'],
-                'group' => ['required'],
-                'selling_price' => ['required','numeric','min:0'],
-                'quantity' => ['nullable'],
+                // 'group' => ['required'],
+                'Rate' => ['required','numeric','min:0'],
+                'Quantity' => ['nullable'],
                 // 'alert_qty' => ['nullable','numeric','min:1'],
                 'batch' => ['nullable'],
-                'shop' => ['nullable'],
-                'shop_address' => ['nullable'],
+                'Sundry Debtor (Store)' => ['required'],
+                // 'shop_address' => ['nullable'],
             ];
             
             foreach ($data as $key => $item) {
-                
-                $formattedDate = $item['purchase_date'] ?? '';
-                $item['barcode_type'] = 'CODE39';
-                $date = !empty($item['purchase_date']) ? DateTime::createFromFormat('d/m/Y', $item['purchase_date']) : '';
-                if ($date !== false) {
-                    $formattedDate = $date->format('Y-m-d');
-                }
+                // echo "<pre/>"; print_r($item); exit();
+                // $formattedDate = $item['purchase_date'] ?? '';
+                // $item['barcode_type'] = 'CODE39';
+                // $date = !empty($item['purchase_date']) ? DateTime::createFromFormat('d/m/Y', $item['purchase_date']) : '';
+                // if ($date !== false) {
+                //     $formattedDate = $date->format('Y-m-d');
+                // }
 
-                $itemShop = $item['shop'];
+                $itemShop = $item['Sundry Debtor (Store)'];
                 $shop = DB::table('shops')
                 ->where('shop_name', $itemShop)
                 ->first();
 
                 if(!$shop){
                     $shop = Shop::create([
-                        "shop_name" => $item['shop'] ?? '',
+                        "shop_name" => $item['Sundry Debtor (Store)'] ?? '',
                         "shop_address" => $item['shop_address'] ?? '',
                     ]);
                 }
 
-                if(strToLower($item['group']) == 'wine'){
-                    $item['sub_cat_id'] = 1;
-                    $item['brand_id'] = 1;
-                }else if(strToLower($item['group']) == 'vodka'){
-                    $item['sub_cat_id'] = 2;
-                    $item['brand_id'] = 2;
-                }else if(strToLower($item['group']) == 'rum'){
-                    $item['sub_cat_id'] = 3;
-                    $item['brand_id'] = 3;
-                }else if(strToLower($item['group']) == 'whiskey'){
-                    $item['sub_cat_id'] = 4;
-                    $item['brand_id'] = 4;
-                }else if(strToLower($item['group']) == 'beer'){
-                    $item['sub_cat_id'] = 5;
-                    $item['brand_id'] = 5;
-                }else if(strToLower($item['group']) == 'gin'){
-                    $item['sub_cat_id'] = 6;
-                    $item['brand_id'] = 6;
-                }else if(strToLower($item['group']) == 'breezer'){
-                    $item['sub_cat_id'] = 7;
-                    $item['brand_id'] = 7;
-                }else if(strToLower($item['group']) == 'tequila'){
-                    $item['sub_cat_id'] = 8;
-                    $item['brand_id'] = 8;
-                }else if(strToLower($item['group']) == 'brandy'){
-                    $item['sub_cat_id'] = 9;
-                    $item['brand_id'] = 9;
+                $itemSubCategory = strToLower($item['Sub Category']);
+                
+                if($itemSubCategory == ''){
+                    $subCategoryId = NULL;
+                } else {
+                    $subCategory = DB::table('product_sub_categories')
+                        ->where('slug', 'LIKE', '%' . $itemSubCategory . '%')
+                        ->first();
+
+                        if(!$subCategory){
+                            $subCategory = ProductSubCategory::create([
+                                "name" => $item['Sub Category'] ?? '',
+                                "slug" => $itemSubCategory,
+                            ]);
+                            $subCategory->code = $subCategory->id;
+                            $subCategory->save();
+
+                            $brand = Brand::create([
+                                "name" => $item['Sub Category'] ?? '',
+                                "slug" => $itemSubCategory,
+                            ]);
+                            $brand->code = $brand->id;
+                            $brand->save();
+                        }
+
+                    $subCategoryId = $subCategory->id;    
                 }
+
+                // if(strToLower($item['Sub Category']) == 'wine'){
+                //     $item['sub_cat_id'] = 1;
+                //     $item['brand_id'] = 1;
+                // }else if(strToLower($item['Sub Category']) == 'scotch'){
+                //     $item['sub_cat_id'] = 2;
+                //     $item['brand_id'] = 2;
+                // }else if(strToLower($item['Sub Category']) == 'rum'){
+                //     $item['sub_cat_id'] = 3;
+                //     $item['brand_id'] = 3;
+                // }else if(strToLower($item['Sub Category']) == 'whisky'){
+                //     $item['sub_cat_id'] = 4;
+                //     $item['brand_id'] = 4;
+                // }else if(strToLower($item['Sub Category']) == 'beer'){
+                //     $item['sub_cat_id'] = 5;
+                //     $item['brand_id'] = 5;
+                // }else if(strToLower($item['Sub Category']) == 'gin'){
+                //     $item['sub_cat_id'] = 6;
+                //     $item['brand_id'] = 6;
+                // }else if(strToLower($item['Sub Category']) == 'breezer'){
+                //     $item['sub_cat_id'] = 7;
+                //     $item['brand_id'] = 7;
+                // }else if(strToLower($item['Sub Category']) == 'tequila'){
+                //     $item['sub_cat_id'] = 8;
+                //     $item['brand_id'] = 8;
+                // }else if(strToLower($item['Sub Category']) == 'brandy'){
+                //     $item['sub_cat_id'] = 9;
+                //     $item['brand_id'] = 9;
+                // }
 
                 $item['unit_id'] = 1;
                 $item['status'] = 1;
@@ -539,89 +571,147 @@ class ProductController extends Controller
                 $item['tax_id'] = 1;
                 $validator = Validator::make($item, $rules);
                 if ($validator->passes()) {
-                    $exist = Product::where('model',$item['model'])->first();
-                    if(!empty($exist)){
-                        Product::where('model',$item['model'])->update([
-                            'selling_price' => $item['selling_price'] ?? 0
-                        ]);
-                        $pro = Product::where('model',$item['model'])->first();
-                    }else{
-                        $codeNo = 1;
-                        $lastProduct = Product::latest('id')->first();
-                        if ($lastProduct) {
-                            $codeNo = (int) $lastProduct->code + 1;
-                        }
-                        $pro = Product::create([
-                            'name' => @$item['item_name'],
-                            'code' => @$item['model'],
-                            'model' => @$codeNo,
-                            'barcode_symbology' => @$item['barcode_type'],
-                            'sub_cat_id' => @$item['sub_cat_id'],
-                            'brand_id' => @$item['brand_id'],
+                    $quantity = explode(' ',$item['Quantity']);
+                    /*Check Already Added Product*/
+
+                    $products = DB::table('products')
+                                    ->where('name', $item['Item Name'])
+                                    ->where('model', $item['Batch'])
+                                    ->first();
+
+                    if(!$products) {
+
+                        $products = Product::create([
+                            'name' => @$item['Item Name'],
+                            'code' => @$item['Batch'],
+                            'model' => @$item['Batch'],
+                            'barcode_symbology' => @$item['barcode_type'] ? $item['barcode_type'] : NULL,
+                            'sub_cat_id' => $subCategoryId,
+                            'brand_id' => $subCategoryId,
                             'unit_id' => @$item['unit_id'],
                             'tax_type' => @$item['taxType'],
-                            'selling_price' => isset($item['selling_price']) ? $item['selling_price'] : 0,
+                            'selling_price' => isset($item['Rate']) ? $item['Rate'] : 0,
                             'alert_qty' => $item['alert_qty'] ?? 10,
-                            'quantity' => $item['quantity'],
+                            'inventory_count' => $quantity[0],
                             'status' => $item['status'],
-                            'purchase_date' => $formattedDate,
+                            'purchase_date' => $item['Date'],
                         ]);
+                    } else {
+                        $products->inventory_count = $products->inventory_count + $quantity[0];
+                        $products->save();
                     }
 
+                    ProductTax::create([
+                        'product_id' => $products->id,
+                        'tax_id' => 1,
+                        'name' => 'SGST 0%',
+                        'rate' => 0,
+                        'code' => 'SGST@0',
+                        'amount' => 0.00,
+                    ]);
+                    ProductTax::create([
+                        'product_id' => $products->id,
+                        'tax_id' => 2,
+                        'name' => 'CGST 0%',
+                        'rate' => 0,
+                        'code' => 'CGST@0',
+                        'amount' => 0.00,
+                    ]);
 
-                    $code = 1;
-                    $prevCode = Purchase::latest()->first();
-                    if ($prevCode) {
-                        $code = $prevCode->id + 1;
-                    }
-                    $userId = auth()->user()->id;
-                    if($item['quantity'] > 0){
-                        $purchase = Purchase::where('batch_id',$item['batch'])->first();
-                        // if(empty($purchase)){
-                            $purchase = Purchase::create([
-                                'purchase_no' => $code,
-                                'slug' => uniqid(),
-                                'supplier_id' => 1,
-                                'sub_total' => $item['selling_price'],
-                                'purchase_date' => $formattedDate,
-                                'po_date' => $formattedDate,
-                                'status' => 1,
-                                'created_by' => $userId,
-                                'shop_id' => $shop->id,
-                                'batch_id' =>$item['batch'],
-                                'quantity'=> $item['quantity'] ?? 0
-                            ]);
-                            $reason = '['.config('config.purchasePrefix').'-'.$purchase->purchase_no.'] , Entry done by '.auth()->user()->name.'';
-                            $plutusId = $this->createPlutusEntry($shop->id,$reason,now(),$item['selling_price']);
-                            $this->manageInventoryLedger($purchase, @$shop->id,$plutusId);
-                        // }
-                        PurchaseProduct::create([
-                            'purchase_id' => $purchase->id,
-                            'product_id' => $pro->id,
-                            'quantity' =>  $item['quantity'] ?? 0 ,
-                            'purchase_price' => $item['selling_price'],
-                            'unit_cost' => $item['selling_price'],
-                            'tax_amount' => 0,
-                        ]);
-                    }
-                    if(!empty($pro)){
-                        ProductTax::create([
-                            'product_id' => $pro->id,
-                            'tax_id' => 1,
-                            'name' => 'SGST 0%',
-                            'rate' => 0,
-                            'code' => 'SGST@0',
-                            'amount' => 0.00,
-                        ]);
-                        ProductTax::create([
-                            'product_id' => $pro->id,
-                            'tax_id' => 2,
-                            'name' => 'CGST 0%',
-                            'rate' => 0,
-                            'code' => 'CGST@0',
-                            'amount' => 0.00,
-                        ]);
-                    }
+                    $productArray[$shop->id][] = [
+                        'product_id' => $products->id,
+                        'quantity' => $products->inventory_count,
+                        'purchase_price' => $item['Rate'],
+                        'total_price'=> $item['Amount'],
+                        'date' => $item['Date']
+                    ];
+
+
+                    // $exist = Product::where('model',$item['Batch'])->where('name',$item['name'])->first();
+                    // if(!empty($exist)){
+                    //     Product::where('model',$item['model'])->update([
+                    //         'selling_price' => $item['selling_price'] ?? 0
+                    //     ]);
+                    //     $pro = Product::where('model',$item['model'])->first();
+                    // }else{
+                    //     $codeNo = 1;
+                    //     $lastProduct = Product::latest('id')->first();
+                    //     if ($lastProduct) {
+                    //         $codeNo = (int) $lastProduct->code + 1;
+                    //     }
+                    //     $pro = Product::create([
+                    //         'name' => @$item['item_name'],
+                    //         'code' => @$item['model'],
+                    //         'model' => @$codeNo,
+                    //         'barcode_symbology' => @$item['barcode_type'],
+                    //         'sub_cat_id' => @$item['sub_cat_id'],
+                    //         'brand_id' => @$item['brand_id'],
+                    //         'unit_id' => @$item['unit_id'],
+                    //         'tax_type' => @$item['taxType'],
+                    //         'selling_price' => isset($item['selling_price']) ? $item['selling_price'] : 0,
+                    //         'alert_qty' => $item['alert_qty'] ?? 10,
+                    //         'quantity' => $item['quantity'],
+                    //         'status' => $item['status'],
+                    //         'purchase_date' => $formattedDate,
+                    //     ]);
+                    // }
+
+
+
+
+                    // $code = 1;
+                    // $prevCode = Purchase::latest()->first();
+                    // if ($prevCode) {
+                    //     $code = $prevCode->id + 1;
+                    // }
+                    // $userId = auth()->user()->id;
+                    // if($item['quantity'] > 0){
+                    //     $purchase = Purchase::where('batch_id',$item['batch'])->first();
+                    //     // if(empty($purchase)){
+                    //         $purchase = Purchase::create([
+                    //             'purchase_no' => $code,
+                    //             'slug' => uniqid(),
+                    //             'supplier_id' => 1,
+                    //             'sub_total' => $item['selling_price'],
+                    //             'purchase_date' => $formattedDate,
+                    //             'po_date' => $formattedDate,
+                    //             'status' => 1,
+                    //             'created_by' => $userId,
+                    //             'shop_id' => $shop->id,
+                    //             'batch_id' =>$item['batch'],
+                    //             'quantity'=> $item['quantity'] ?? 0
+                    //         ]);
+                    //         $reason = '['.config('config.purchasePrefix').'-'.$purchase->purchase_no.'] , Entry done by '.auth()->user()->name.'';
+                    //         $plutusId = $this->createPlutusEntry($shop->id,$reason,now(),$item['selling_price']);
+                    //         $this->manageInventoryLedger($purchase, @$shop->id,$plutusId);
+                    //     // }
+                    //     PurchaseProduct::create([
+                    //         'purchase_id' => $purchase->id,
+                    //         'product_id' => $pro->id,
+                    //         'quantity' =>  $item['quantity'] ?? 0 ,
+                    //         'purchase_price' => $item['selling_price'],
+                    //         'unit_cost' => $item['selling_price'],
+                    //         'tax_amount' => 0,
+                    //     ]);
+                    // }
+                    // if(!empty($pro)){
+                    //     ProductTax::create([
+                    //         'product_id' => $pro->id,
+                    //         'tax_id' => 1,
+                    //         'name' => 'SGST 0%',
+                    //         'rate' => 0,
+                    //         'code' => 'SGST@0',
+                    //         'amount' => 0.00,
+                    //     ]);
+                    //     ProductTax::create([
+                    //         'product_id' => $pro->id,
+                    //         'tax_id' => 2,
+                    //         'name' => 'CGST 0%',
+                    //         'rate' => 0,
+                    //         'code' => 'CGST@0',
+                    //         'amount' => 0.00,
+                    //     ]);
+                    // }
                 } else {
                     return response()->json([
                         'message' => $validator->errors()->first(),
@@ -630,8 +720,66 @@ class ProductController extends Controller
                 }
                 // if($key == 100) break;
             }
+
+            /*Create Purchase Order*/
+
+            $code = 1;
+            $userId = auth()->user()->id;
+            
+
+            // $subTotal = 0;
+            foreach($productArray as $key => $value){
+                $subTotal = 0;
+                $prevCode = DB::table('purchases')->latest()->first();
+                if ($prevCode) {
+                    $code = $prevCode->id + 1;
+                }
+
+               $purchase =  Purchase::create([
+                                'purchase_no' => $code,
+                                'slug' => uniqid(),
+                                'supplier_id' => 1,
+                                //'sub_total' => $item['selling_price'],
+                                'purchase_date' => date('Y-m-d',strtotime($value[0]['date'])),
+                                'po_date' => date('Y-m-d',strtotime($value[0]['date'])),
+                                'status' => 1,
+                                'created_by' => $userId,
+                                'shop_id' => $key,
+                                'batch_id' => 'BATCH'.$code,
+                                'quantity'=> 0
+                            ]);
+
+                
+                      
+                
+                
+                foreach($value as $product){
+
+                    $subTotal += $product['total_price'];
+
+                    PurchaseProduct::create([
+                        'purchase_id' => $purchase->id,
+                        'product_id' => $product['product_id'],
+                        'quantity' =>  $product['quantity'],
+                        'purchase_price' => $product['purchase_price'],
+                        'unit_cost' => $product['purchase_price'],
+                        'tax_amount' => 0,
+                    ]);
+                }
+
+                $purchase->sub_total = $subTotal;
+                $purchase->save();
+
+               
+                $reason = '['.config('config.purchasePrefix').'-'.$purchase->purchase_no.'] , Entry done by '.auth()->user()->name.'';
+                $plutusId = $this->createPlutusEntry($shop->id,$reason,now(),$subTotal);
+                $this->manageInventoryLedger($purchase,$key,$plutusId);
+
+            }
+
+
             return response()->json([
-                'message' => 'Supplier imported successfully'
+                'message' => 'CSV imported successfully'
             ]);
         }
     }
