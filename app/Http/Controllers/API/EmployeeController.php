@@ -57,12 +57,12 @@ class EmployeeController extends Controller
             'mobileNumber' => 'required|string|max:20',
             'birthDate' => 'nullable',
             'appointmentDate' => 'nullable',
-            'joiningDate' => 'required|date|date_format:Y-m-d',
+            'joiningDate' => 'nullable',
             'gender' => 'nullable',
             'bloodGroup' => 'nullable|string',
             'religion' => 'nullable|string',
             'address' => 'nullable|string|max:255',
-            'email' => $request->allowLogin == true ? 'required|string|email|max:255|unique:users,email' : 'nullable',
+            'text' => $request->allowLogin == true ? 'required|string|text|max:255|unique:users,text' : 'nullable',
             'password' => $request->allowLogin == true ? 'required|string|max:255|min:4' : 'nullable',
             'role' => $request->allowLogin == true ? 'required' : 'nullable',
             'shop_id' => $request->allowLogin == true ? 'required | array' : 'nullable',
@@ -91,7 +91,7 @@ class EmployeeController extends Controller
                 // store user
                 $user = User::create([
                     'name' => $request->employeeName,
-                    'email' => $request->email,
+                    'text' => $request->text,
                     'password' => Hash::make($request->password),
                     'account_role' => 0,
                     'back_days' => 'All',
@@ -172,12 +172,12 @@ class EmployeeController extends Controller
             'mobileNumber' => 'required|string|max:20',
             'birthDate' => 'nullable',
             'appointmentDate' => 'nullable',
-            'joiningDate' => 'required|date|date_format:Y-m-d',
+            'joiningDate' => 'nullable',
             'gender' => 'nullable',
             'bloodGroup' => 'nullable|string',
             'religion' => 'nullable|string',
             'address' => 'nullable|string|max:255',
-            'email' => $request->allowLogin == true ? 'required|string|email|max:255|unique:users,email,'.$userId : 'nullable',
+            'text' => $request->allowLogin == true ? 'required|string|max:255|unique:users,text,'.$userId : 'nullable',
             'password' => ($request->allowLogin == true) && (isset($request->password) || empty($employee->user_id)) ? 'required|string|max:255|min:8' : 'nullable',
             'role' => $request->allowLogin == true ? 'required' : 'nullable',
             'shop_id' => $request->allowLogin == true ? 'required | array' : 'nullable',
@@ -212,10 +212,10 @@ class EmployeeController extends Controller
                     }
                     $user->update([
                         'name' => $request->employeeName,
-                        'email' => $request->email,
+                        'text' => $request->text,
                         'password' => $password,
                         'is_active' => 1,
-                        'back_days' => $request->back_days,
+                        // 'back_days' => $request->back_days,
                     ]);
                     $user->roles()->sync($role->id);
                     $user->permissions()->sync($user->roles[0]->permissions);
@@ -223,10 +223,10 @@ class EmployeeController extends Controller
                     // store user login
                     $user = User::create([
                         'name' => $request->employeeName,
-                        'email' => $request->email,
+                        'text' => $request->text,
                         'password' => Hash::make($request->password),
                         'account_role' => 0,
-                        'back_days' => 'All',
+                        // 'back_days' => 'All',
                     ]);
                     $user->roles()->attach($role->id);
                     $user->permissions()->attach($user->roles[0]->permissions);

@@ -40,24 +40,17 @@
                     " />
                   <has-error :form="form" field="employeeName" />
                 </div>
-                <div class="form-group col-md-4">
+                <!-- <div class="form-group col-md-4">
                   <label for="department">{{ $t('common.department') }}
                     <span class="required">*</span></label>
                   <v-select v-if="items" v-model="form.department" :options="items" label="name"
                     :class="{ 'is-invalid': form.errors.has('department') }" name="department"
                     :placeholder="$t('common.department_placeholder')" />
                   <has-error :form="form" field="department" />
-                </div>
+                </div> -->
               </div>
               <div class="row">
-                <div class="form-group col-md-3">
-                  <label for="designation">{{ $t('common.designation') }}
-                    <span class="required">*</span></label>
-                  <input id="designation" v-model="form.designation" type="text" class="form-control"
-                         :class="{ 'is-invalid': form.errors.has('designation') }" name="designation"
-                         :placeholder="$t('common.designation_placeholder')" />
-                  <has-error :form="form" field="designation" />
-                </div>
+
                 <div class="form-group col-md-3">
                   <label for="mobileNumber">{{ $t('common.contact_number') }}
                     <span class="required">*</span></label>
@@ -66,131 +59,10 @@
                     :placeholder="$t('common.contact_number_placeholder')" />
                   <has-error :form="form" field="mobileNumber" />
                 </div>
-                <div class="form-group col-md-3">
-                  <label for="salary">{{ $t('common.salary') }}
-                    <span class="required">*</span></label>
-                  <input id="salary" v-model="form.salary" type="number" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('salary') }" name="salary"
-                    :placeholder="$t('common.salary_placeholder')" min="0" />
-                  <has-error :form="form" field="salary" />
-                </div>
-                <div class="form-group col-md-3">
-                  <label for="commission">{{ $t('payroll.common.commission') }}(%)
-                  </label>
-                  <input id="commission" v-model="form.commission" type="number" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('commission') }" name="commission"
-                    :placeholder="$t('payroll.common.commission_placeholder')" max="100" />
-                  <has-error :form="form" field="commission" />
-                </div>
+
+
               </div>
-              <div class="row">
-                <div class="form-group col-md-3">
-                  <label for="birthDate">{{
-                      $t('employees.common.birth_date')
-                  }}</label>
-                  <input id="reabirthDateson" v-model="form.birthDate" type="date" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('birthDate') }" name="birthDate" />
-                  <has-error :form="form" field="birthDate" />
-                </div>
-                <div class="form-group col-md-3">
-                  <label for="gender">{{ $t('employees.common.gender') }}
-                    <span class="required">*</span></label>
-                  <select v-model="form.gender" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('gender') }" name="gender">
-                    <option value="" selected disabled>
-                      {{ $t('employees.common.gender_placeholder') }}
-                    </option>
-                    <option value="Male">
-                      {{ $t('employees.common.male') }}
-                    </option>
-                    <option value="Female">
-                      {{ $t('employees.common.female') }}
-                    </option>
-                    <option value="Transgender">
-                      {{ $t('employees.common.transgender') }}
-                    </option>
-                    <option value="Other">
-                      {{ $t('employees.common.other') }}
-                    </option>
-                  </select>
-                  <has-error :form="form" field="gender" />
-                </div>
-                <div class="form-group col-md-3">
-                  <label for="bloodGroup">{{
-                      $t('employees.common.blood_group')
-                  }}</label>
-                  <select v-model="form.bloodGroup" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('bloodGroup') }" name="bloodGroup">
-                    <option value="" selected disabled>
-                      {{ $t('employees.common.blood_group_placeholder') }}
-                    </option>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                  </select>
-                  <has-error :form="form" field="bloodGroup" />
-                </div>
-                <div class="form-group col-md-3">
-                  <label for="religion">{{
-                      $t('employees.common.religion')
-                  }}</label>
-                  <select v-model="form.religion" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('religion') }" name="religion">
-                    <option value="" selected disabled>
-                      {{ $t('employees.common.religion_placeholder') }}
-                    </option>
-                    <option value="Islam">
-                      {{ $t('employees.common.islam') }}
-                    </option>
-                    <option value="Hinduism">
-                      {{ $t('employees.common.hinduism') }}
-                    </option>
-                    <option value="Buddhists">
-                      {{ $t('employees.common.buddhists') }}
-                    </option>
-                    <option value="Christians">
-                      {{ $t('employees.common.christians') }}
-                    </option>
-                    <option value="Animists">
-                      {{ $t('employees.common.animists') }}
-                    </option>
-                    <option value="Other">
-                      {{ $t('employees.common.other') }}
-                    </option>
-                  </select>
-                  <has-error :form="form" field="religion" />
-                </div>
-              </div>
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label for="appointmentDate">{{
-                      $t('employees.common.appointment_date')
-                  }}</label>
-                  <input id="appointmentDate" v-model="form.appointmentDate" type="date" class="form-control" :class="{
-                    'is-invalid': form.errors.has('appointmentDate'),
-                  }" name="appointmentDate" />
-                  <has-error :form="form" field="appointmentDate" />
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="joiningDate">{{
-                      $t('employees.common.join_date')
-                  }}</label>
-                  <input id="joiningDate" v-model="form.joiningDate" type="date" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('joiningDate') }" name="joiningDate" />
-                  <has-error :form="form" field="joiningDate" />
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="address">{{ $t('common.address') }}</label>
-                <textarea id="address" v-model="form.address" class="form-control"
-                  :class="{ 'is-invalid': form.errors.has('note') }" :placeholder="$t('common.address_placeholder')" />
-                <has-error :form="form" field="address" />
-              </div>
+
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="status">{{ $t('common.status') }}</label>
@@ -201,20 +73,6 @@
                   </select>
                   <has-error :form="form" field="status" />
                 </div>
-                <div class="form-group col-md-6">
-                  <label for="image">{{ $t('common.profile_picture') }}</label>
-                  <div class="custom-file">
-                    <input id="image" type="file" class="custom-file-input" name="image"
-                      :class="{ 'is-invalid': form.errors.has('image') }" @change="onFileChange" />
-                    <label class="custom-file-label" for="image">{{
-                        $t('common.choose_file')
-                    }}</label>
-                  </div>
-                  <has-error :form="form" field="image" />
-                  <div class="bg-light mt-4 w-25">
-                    <img v-if="url" :src="url" class="img-fluid" :alt="$t('common.image_alt')" />
-                  </div>
-                </div>
               </div>
               <div class="form-check">
                 <input v-model="form.allowLogin" type="checkbox" class="form-check-input" id="allowLogin" />
@@ -224,12 +82,12 @@
               </div>
               <div v-if="form.allowLogin" class="row mt-3">
                 <div class="form-group col-md-6">
-                  <label for="email">{{ $t('common.email') }}
+                  <label for="text">User Name
                     <span class="required">*</span></label>
-                  <input id="email" v-model="form.email" type="email" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('email') }" name="email"
+                  <input id="text" v-model="form.text" type="text" class="form-control"
+                    :class="{ 'is-invalid': form.errors.has('text') }" name="text"
                     :placeholder="$t('common.email_placeholder')" />
-                  <has-error :form="form" field="email" />
+                  <has-error :form="form" field="text" />
                 </div>
                 <div class="form-group col-md-6">
                   <label for="password">{{ $t('common.password') }} </label>
@@ -247,17 +105,10 @@
                   <has-error :form="form" field="role" />
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="hotel" class="d-block">{{ $t('sidebar.hotel') }}
+                  <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                     <span class="required">*</span></label>
                   <multiselect id="hotel" v-model="selectedHotels" :options="hotelItems" :show-labels="false" tag-placeholder="" :taggable="false" placeholder="Search an hotel"
                                class="form-control" label="hotel_name" track-by="hotel_name" :allowEmpty="false" :multiple="true"/>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="back_days">Back Days <span class="required">*</span></label>
-                  <input id="back_days" v-model="form.back_days" type="text" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('back_days') }" name="back_days"
-                    placeholder="Enter a back days" />
-                  <has-error :form="form" field="back_days" />
                 </div>
               </div>
             </div>
@@ -326,10 +177,9 @@ export default {
       status: 1,
       image: '',
       allowLogin: false,
-      email: '',
+      text: '',
       password: '',
       role: '',
-      back_days:'',
     }),
     options: [],
     roles: '',

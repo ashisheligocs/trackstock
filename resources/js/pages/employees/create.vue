@@ -116,7 +116,7 @@
                   />
                   <has-error :form="form" field="birthDate" />
                 </div> -->
-                <div class="form-group col-md-3">
+                <!-- <div class="form-group col-md-3">
                   <label for="gender">{{ $t("employees.common.gender") }}
                     <span class="required">*</span></label>
                   <select v-model="form.gender" class="form-control"
@@ -138,7 +138,7 @@
                     </option>
                   </select>
                   <has-error :form="form" field="gender" />
-                </div>
+                </div> -->
 
                 <!-- <div class="form-group col-md-6">
                   <label for="appointmentDate">{{
@@ -156,16 +156,16 @@
                   />
                   <has-error :form="form" field="appointmentDate" />
                 </div> -->
-                <div class="form-group col-md-6">
+                <!-- <div class="form-group col-md-6">
                   <label for="joiningDate">{{
       $t("employees.common.join_date")
     }}<span class="required">*</span></label>
                   <input id="joiningDate" v-model="form.joiningDate" type="date" class="form-control"
                     :class="{ 'is-invalid': form.errors.has('joiningDate') }" name="joiningDate" />
                   <has-error :form="form" field="joiningDate" />
-                </div>
+                </div> -->
 
-              <div class="form-group col-md-6">
+                <!-- <div class="form-group col-md-6">
                 <label for="address">{{ $t("common.address") }}</label>
                 <textarea id="address" v-model="form.address" class="form-control"
                   :class="{ 'is-invalid': form.errors.has('note') }" :placeholder="$t('common.address_placeholder')" />
@@ -181,8 +181,8 @@
                   </select>
                   <has-error :form="form" field="status" />
                 </div>
-                <div class="form-group col-md-6">
-                  <!-- <label for="image">{{ $t("common.profile_picture") }}</label>
+                <div class="form-group col-md-6"> -->
+                <!-- <label for="image">{{ $t("common.profile_picture") }}</label>
                   <div class="custom-file">
                     <input
                       id="image"
@@ -196,11 +196,11 @@
                       $t("common.choose_file")
                     }}</label>
                   </div> -->
-                  <has-error :form="form" field="image" />
-                  <div class="bg-light mt-4 w-25">
+                <!-- <has-error :form="form" field="image" /> -->
+                <!-- <div class="bg-light mt-4 w-25">
                     <img v-if="url" :src="url" class="img-fluid" :alt="$t('common.image_alt')" />
-                  </div>
-                </div>
+                  </div> -->
+                <!-- </div> -->
               </div>
               <div class="form-check">
                 <input v-model="form.allowLogin" type="checkbox" class="form-check-input" id="allowLogin" />
@@ -210,7 +210,7 @@
               </div>
               <div class="row mt-3">
                 <div class="form-group col-md-6">
-                  <label for="email">{{ $t("common.email") }}
+                  <label for="email">User Name
                     <span class="required">*</span></label>
                   <input id="email" v-model="form.email" type="email" class="form-control"
                     :class="{ 'is-invalid': form.errors.has('email') }" name="email"
@@ -249,7 +249,7 @@
                 </div> -->
               </div>
             </div>
-                        <!-- /.card-body -->
+            <!-- /.card-body -->
             <div class="card-footer">
               <v-button :loading="form.busy" class="btn btn-primary">
                 <i class="fas fa-save" /> {{ $t("common.save") }}

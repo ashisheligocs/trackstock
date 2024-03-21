@@ -1,9 +1,6 @@
 <template>
   <div>
-    <!-- breadcrumbs Start -->
-    <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" />
-    <!-- breadcrumbs end -->
-    <div class="row">
+    <div class="row mt-4">
       <div class="col-lg-12">
         <div class="card custom-card w-100">
           <div class="card-header setings-header">
@@ -13,29 +10,7 @@
               </h3>
             </div>
             <div class="col-xl-8 col-8 float-right text-right">
-              <div class="btn-group c-w-100">
-                <a
-                  @click="refreshTable()"
-                  href="#"
-                  v-tooltip="'Refresh'"
-                  class="btn btn-success"
-                >
-                  <i class="fas fa-sync"></i>
-                </a>
-                <a
-                  href="/employees/pdf"
-                  v-tooltip="$t('common.export_table')"
-                  class="btn btn-dark"
-                >
-                  <i class="fas fa-file-export"></i>
-                </a>
-                <a
-                  @click="print"
-                  v-tooltip="$t('common.print_table')"
-                  class="btn btn-info"
-                >
-                  <i class="fas fa-print"></i>
-                </a>
+              <div class="btn-group">
                 <router-link
                   v-if="$can('employee-create')"
                   :to="{ name: 'employees.create' }"
@@ -57,28 +32,6 @@
                   @reload="reload"
                 />
               </div>
-              <div class="col-6 col-xl-8 mb-2 text-right">
-                <date-range-picker
-                  ref="picker"
-                  opens="left"
-                  :locale-data="locale"
-                  :minDate="minDate"
-                  :maxDate="maxDate"
-                  :singleDatePicker="false"
-                  :showWeekNumbers="false"
-                  :showDropdowns="true"
-                  :autoApply="true"
-                  v-model="dateRange"
-                  @update="updateValues"
-                  :linkedCalendars="true"
-                  class="c-w-100"
-                >
-                  <template v-slot:input="picker" style="min-width: 350px">
-                    {{ picker.startDate | startDate }} -
-                    {{ picker.endDate | endDate }}
-                  </template>
-                </date-range-picker>
-              </div>
             </div>
             <table-loading v-show="loading" />
             <div class="table-responsive table-custom mt-3" id="printMe">
@@ -86,16 +39,10 @@
                 <thead>
                   <tr>
                     <th>{{ $t("common.s_no") }}</th>
-                    <th>{{ $t("common.image") }}</th>
                     <th>{{ $t("common.name") }}</th>
                     <th>Shop</th>
-                    <th>{{ $t("common.emp_id") }}</th>
-                    <th>{{ $t("common.department") }}</th>
-                    <th>{{ $t("common.designation") }}</th>
-                    <th>{{ $t("payroll.common.total_salary") }}</th>
+                    <th>Role</th>
                     <th>{{ $t("common.contact_number") }}</th>
-                    <th>{{ $t("employees.common.birth_date") }}</th>
-                    <th>{{ $t("employees.common.join_date") }}</th>
 <!--                    <th>{{ $t("common.status") }}</th>-->
                     <th
                       v-if="
@@ -121,55 +68,17 @@
                       <span v-else>{{ i + 1 }}</span>
                     </td>
                     <td>
-                      <a
-                        v-if="data.image"
-                        href="#"
-                        id="show-modal"
-                        @click="previewModal(data.image)"
-                      >
-                        <img
-                          :src="data.image"
-                          class="rounded preview-sm"
-                          loading="lazy"
-                        />
-                      </a>
-                      <div v-else class="bg-secondary rounded no-preview-sm">
-                        <small>{{ $t("common.no_preview") }}</small>
-                      </div>
-                    </td>
-                    <td>
-                      <router-link
-                        v-if="data.slug"
-                        :to="{
-                          name: 'employees.show',
-                          params: { slug: data.slug },
-                        }"
-                      >
                         {{ data.name }}
-                      </router-link>
                     </td>
                     <td>
                       {{data?.shop?.shop_name}}
                     </td>
-                    <td>{{ data.empID | withPrefix(employeePrefix) }}</td>
                     <td>
                       <span v-if="data.department"
-                        >{{ data.department.name }}
+                        >{{ data.role.name }}
                       </span>
                     </td>
-                    <td>{{ data.designation }}</td>
-                    <td>{{ data.totalSalary | withCurrency }}</td>
                     <td>{{ data.mobileNumber }}</td>
-                    <td>
-                      <span v-if="data.birthDate">{{
-                        data.birthDate | moment("Do MMM, YYYY")
-                      }}</span>
-                    </td>
-                    <td>
-                      <span v-if="data.joiningDate">{{
-                        data.joiningDate | moment("Do MMM, YYYY")
-                      }}</span>
-                    </td>
 <!--                    <td>-->
 <!--                      <span v-if="data.status === 1" class="badge bg-success">{{-->
 <!--                        $t("common.active")-->
@@ -188,17 +97,6 @@
                     >
                       <div v-if="data.slug" class="btn-group">
                         <router-link
-                          v-if="$can('employee-view')"
-                          v-tooltip="$t('common.view')"
-                          :to="{
-                            name: 'employees.show',
-                            params: { slug: data.slug },
-                          }"
-                          class="btn btn-primary btn-sm"
-                        >
-                          <i class="fas fa-eye" />
-                        </router-link>
-                        <router-link
                           v-if="$can('employee-edit')"
                           v-tooltip="$t('common.edit')"
                           :to="{
@@ -209,7 +107,7 @@
                         >
                           <i class="fas fa-edit" />
                         </router-link>
-                        <a
+                        <!-- <a
                           v-if="$can('employee-delete')"
                           v-tooltip="$t('common.delete')"
                           href="#"
@@ -217,7 +115,7 @@
                           @click="deleteData(data.slug)"
                         >
                           <i class="fas fa-trash" />
-                        </a>
+                        </a> -->
                       </div>
                     </td>
                   </tr>

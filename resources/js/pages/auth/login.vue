@@ -2,9 +2,9 @@
   <div class="container-fluid">
     <div class="row no-gutter">
       <!-- The image half -->
-      <div class="col-md-6 d-none d-md-flex bg-image"></div>
+
       <!-- The content half -->
-      <div class="col-md-6 bg-light">
+      <div class="col-12 bg-light">
         <div class="auth-wrapper d-flex align-items-center py-5">
           <!-- Demo content-->
           <div class="container">
@@ -182,14 +182,14 @@
                     </div>
                   </div>
                 </div> -->
-                <div class="w-100 text-center mt-4">
+                <!-- <div class="w-100 text-center mt-4">
                   <p>
                     {{ $t("TrackHotel v.1.0.0. Developed by") }}
                     <a href="https://www.eligocs.com/" class="font-italic text-muted" target="__blank">
                       <u>EligoCS</u>
                     </a>
                   </p>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
