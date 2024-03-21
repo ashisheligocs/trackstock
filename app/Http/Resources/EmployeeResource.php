@@ -40,7 +40,7 @@ class EmployeeResource extends JsonResource
             'image' => $this->image_path ? asset('/images/employees/'.$this->image_path) : '',
             'shops' => $this->shops(),
             'shop' => $this->shop,
-            'back_days' => $this->user->back_days,
+            // 'back_days' => $this->user->back_days,
         ];
     }
 }

@@ -2,14 +2,14 @@
   <div class="container-fluid">
     <div class="row no-gutter">
       <!-- The image half -->
-      <div class="col-md-6 d-none d-md-flex bg-image"></div>
+
       <!-- The content half -->
-      <div class="col-md-6 bg-light">
+      <div class="col-12 bg-light">
         <div class="auth-wrapper d-flex align-items-center py-5">
           <!-- Demo content-->
           <div class="container">
             <div class="row">
-              <div class="col-lg-10 col-xl-7 mx-auto text-center">
+              <div class="col-lg-10 col-xl-7 mx-auto text-center" style="max-width: 500px;">
 
                 <!-- <img
                   v-if="appInfo"
@@ -18,12 +18,12 @@
                   class="lg-logo img-fluid"
                   style="width: 10rem"
                 /> -->
-                <p class="text-muted mb-4 mt-2">{{ $t("login_txt") }}</p>
+                <h2 class="text-muted mb-4 mt-2">Login</h2>
                 <form @submit.prevent="login" @keydown="form.onKeydown($event)">
                   <div class="form-group mb-3">
                     <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }"
-                      class="form-control rounded-pill border-0 shadow-sm px-4 text-primary" type="email" name="email"
-                      :placeholder="$t('email_placeholder')" />
+                      class="form-control rounded-pill border-0 shadow-sm px-4 text-primary" type="text" name="email"
+                      placeholder="Enter Username" />
                     <has-error :form="form" field="email" />
                   </div>
 
@@ -31,7 +31,7 @@
                     <input :type="shownewPassword ? 'text' : 'password'" v-model="form.password"
                       :class="{ 'is-invalid': form.errors.has('password') }"
                       class="form-control rounded-pill border-0 shadow-sm px-4 text-primary" type="password"
-                      name="password" :placeholder="$t('password_placeholder')" />
+                      name="password" placeholder="Enter Password" />
                     <has-error :form="form" field="password" />
                     <div id="icon" @click="show_new_Password">
                       <i class="fa-solid fa-eye-slash"></i>
@@ -182,14 +182,14 @@
                     </div>
                   </div>
                 </div> -->
-                <div class="w-100 text-center mt-4">
+                <!-- <div class="w-100 text-center mt-4">
                   <p>
                     {{ $t("TrackHotel v.1.0.0. Developed by") }}
                     <a href="https://www.eligocs.com/" class="font-italic text-muted" target="__blank">
                       <u>EligoCS</u>
                     </a>
                   </p>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

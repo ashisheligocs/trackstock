@@ -2,12 +2,15 @@
   <div class="p-0 position-relative mt-2 ledger-account">
     <div id="tabs" class="justify-content-end">
       <div class="tabs w-100 pa-2 d-flex justify-content-between">
-        <div v-if="activetab === 2">
+        <!-- <div v-if="activetab === 2">
           <a @click="activetab = 1" :class="[activetab === 1 ? 'active' : '']" class="outline_btn">Create Sale</a>
         </div>
         <div v-if="activetab === 1">
           <a @click="activetab = 2" :class="[activetab === 2 ? 'active' : '']" class="outline_btn text-left">Sales</a>
-        </div>
+        </div> -->
+        <router-link :to="{ name: 'home' }" class="small-box-footer">
+          <button class="outline_btn">Back</button>
+        </router-link>
       </div>
       <div v-if="activetab" class="tabcontent">
         <div class="mt-3">
@@ -49,22 +52,10 @@ export default {
   margin-right: 10px;
 }
 
-.ledger-account .tabs a.active {
-  background: #007bff;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-  hyphenate-character: revert;
 
-}
 
 .ledger-account .tabs a {
   padding: 5px 25px;
-}
-
-.ledger-account .tabs a:hover {
-  background: #007bff;
-  color: #fff;
 }
 
 .ledger-account .tabs {

@@ -11,14 +11,14 @@
     </section>
 
     <!-- Main content -->
-    <footer class="main-footer no-print">
+    <!-- <footer class="main-footer no-print">
       <strong v-if="appInfo">{{ appInfo.copyright }}.</strong>
       Developed by
       <a href="https://www.eligocs.com/" target="__blank">EligoCS</a>
       <div class="float-right d-none d-sm-inline-block">
         <b>Version</b> 1.0.0
       </div>
-    </footer>
+    </footer> -->
 
     <!-- Control Sidebar -->
     <sidebar-controll />

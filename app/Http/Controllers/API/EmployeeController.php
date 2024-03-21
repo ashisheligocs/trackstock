@@ -57,12 +57,12 @@ class EmployeeController extends Controller
             'mobileNumber' => 'required|string|max:20',
             'birthDate' => 'nullable',
             'appointmentDate' => 'nullable',
-            'joiningDate' => 'required|date|date_format:Y-m-d',
+            'joiningDate' => 'nullable',
             'gender' => 'nullable',
             'bloodGroup' => 'nullable|string',
             'religion' => 'nullable|string',
             'address' => 'nullable|string|max:255',
-            'email' => $request->allowLogin == true ? 'required|string|email|max:255|unique:users,email' : 'nullable',
+            'username' => $request->allowLogin == true ? 'required|string|max:255' : 'nullable',
             'password' => $request->allowLogin == true ? 'required|string|max:255|min:4' : 'nullable',
             'role' => $request->allowLogin == true ? 'required' : 'nullable',
             'shop_id' => $request->allowLogin == true ? 'required | array' : 'nullable',
@@ -91,10 +91,9 @@ class EmployeeController extends Controller
                 // store user
                 $user = User::create([
                     'name' => $request->employeeName,
-                    'email' => $request->email,
+                    'email' => $request->username,
                     'password' => Hash::make($request->password),
                     'account_role' => 0,
-                    'back_days' => 'All',
                 ]);
                 $user->roles()->attach($role->id);
                 $user->permissions()->attach($user->roles[0]->permissions);
@@ -126,7 +125,7 @@ class EmployeeController extends Controller
 
             return $this->responseWithSuccess('Employee added successfully');
         } catch (Exception $e) {
-            return $this->responseWithError($e->getMessage());
+            return $this->responseWithError($e->getMessage().'--'.$e->getLine());
         }
     }
 
