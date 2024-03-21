@@ -299,13 +299,17 @@ tr<template>
           <button class="btn btn-primary" @click="addPayment" @keydown="form.onKeydown($event)">
             <i class="fas fa-save" /> {{ $t("common.save") }}
           </button>
+
+          <button class="btn btn-primary" @click="order_recipt" @keydown="form.onKeydown($event)">
+            <i class="fas fa-save" /> {{ $t("common.save") }}
+          </button>
           <button class="modal-default-button btn btn-danger" @click="closeModalAndClearFormData">
             {{ $t("common.close") }}
           </button>
         </div>
       </div>
     </Modal>
-
+    <!-- kjkjkjbkj -->
     <Modal v-if="showSmallInvoiceModal && allData">
       <h5 slot="header" class="no-print">Order Receipt</h5>
       <div class="w-100" slot="body">
@@ -437,6 +441,12 @@ tr<template>
             Multiselect
         },
         data: () => ({
+          billContent: '',
+      printerServiceUUID: '000018f0-0000-1000-8000-00805f9b34fb', 
+      device: null,
+      server: null,
+      characteristic: null,
+       
             breadcrumbsCurrent: "pos.breadcrumbs_current",
             breadcrumbs: [
                 {
@@ -642,6 +652,28 @@ tr<template>
             // },
         },
         methods: {
+
+          async   order_recipt(){
+      try {
+        this.device = await navigator.bluetooth.requestDevice({
+          filters: [{ services: [this.printerServiceUUID] }]
+        });
+        this.server = await this.device.gatt.connect();
+        this.characteristic = await this.server.getPrimaryService(this.printerServiceUUID)
+          .then(service => service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb'));
+          let encoder = new TextEncoder("utf-8");
+          // Add line feed + carriage return chars to text
+          let encodedBillContent = encoder.encode(this.billContent + '\u000A\u000D');
+        //const encodedBillContent = new TextEncoder().encode();
+        await this.characteristic.writeValue(encodedBillContent);
+        console.log('Bill sent to printer successfully.');
+      } catch (error) {
+        console.error('Error printing bill:', error);
+      }
+          },
+
+
+
           setTaxInclusivePrice() {
 
             let finalPrice = this.inclusiveTaxAmount(this.foodItemSubTotal,this.taxRate)
