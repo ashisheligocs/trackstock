@@ -11,13 +11,13 @@
             {{ selectedHotel && selectedHotel === 'all' ? 'All' : (selectedHotel && Object.keys(selectedHotel).length > 0 ? selectedHotel.shop_name : $t('common.select_hotel')) }}
         </a>
         <div class="dropdown-menu dropdown-menu-sm">
-            <a
+            <!-- <a
                     class="dropdown-item"
                     href="#"
                     @click.prevent="setHotel('all')"
             >
                 All
-            </a>
+            </a> -->
             
             <a
                     v-for="(value, key) in shops"
@@ -72,7 +72,7 @@
             },
             async setDefaultShop() {
                 if (!Cookies.get('selectedHotel')) {
-                    this.setHotel('all');
+                    this.setHotel('1');
                 } else {
                   await axios.get('/api/get-shop').then((response) => {
                     this.setHotel(response.data)

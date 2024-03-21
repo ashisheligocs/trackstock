@@ -2693,13 +2693,13 @@
     "disable_hover": "Disable Hover/Focus Auto-Expand"
   },
   "pos": {
-    "page_title": "Restaurant",
+    "page_title": "Liquor Inventory",
     "breadcrumbs_current": "Create Sale",
     "breadcrumbs_first": "Dashboard",
     "breadcrumbs_second": "Invoices",
-    "breadcrumbs_active": "Restaurant",
+    "breadcrumbs_active": "Liquor Inventory",
     "available": "Available",
-    "pos": "Restaurant",
+    "pos": "Liquor Inventory",
     "complete_order": "Save",
     "complete_order_and_add_payment": "Save & Payment",
     "add_payment": "Add Payment",
