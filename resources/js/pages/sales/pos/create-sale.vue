@@ -10,7 +10,7 @@ tr<template>
         <div class="card bg-transparent">
           <div class="pos-r-head bg-white">
             <div class="row">
-              
+
               <div v-if="products" class="col-md-12 form-group">
                 <div class="d-flex w-100">
                   <search class="flex-grow-1" :isPosSearch="true" v-model="query" @reset-pagination="resetPagination()"
@@ -128,7 +128,7 @@ tr<template>
                     </th>
                   </tr>
                 </thead>
-                
+
                 <tbody v-if="selectedItemList && selectedItemList.length > 0">
                   <tr v-for="(singleItem, i) in selectedItemList" :key="i">
                     <td>
@@ -170,7 +170,7 @@ tr<template>
           <div>
 
             <div class="pos-net-total noi-print">
-             
+
               <div class="row">
                 <button class="btn btn-primary btn-block col-6" @click="saveOrder($event, true)"
                   :disabled="selectedItemList.length <= 0">
@@ -257,7 +257,7 @@ tr<template>
             <div class="form-group col-md-6">
               <input type="hidden" v-model="form.account">
               QR :
-            
+
             </div>
             <div class="form-group col-md-6">
               <input ref="paidAmountInput" id="paidAmount" v-model="form.paidAmount" type="number" step="any"
@@ -282,7 +282,7 @@ tr<template>
               <has-error :form="form" field="paidAmount" />
             </div>
           </div>
-          
+
           <div class="row">
             <div class="form-group col-md-6">
               Date :
@@ -299,13 +299,17 @@ tr<template>
           <button class="btn btn-primary" @click="addPayment" @keydown="form.onKeydown($event)">
             <i class="fas fa-save" /> {{ $t("common.save") }}
           </button>
+
+          <button class="btn btn-primary" @click="order_recipt" @keydown="form.onKeydown($event)">
+            <i class="fas fa-save" /> {{ $t("common.save") }}
+          </button>
           <button class="modal-default-button btn btn-danger" @click="closeModalAndClearFormData">
             {{ $t("common.close") }}
           </button>
         </div>
       </div>
     </Modal>
-
+    <!-- kjkjkjbkj -->
     <Modal v-if="showSmallInvoiceModal && allData">
       <h5 slot="header" class="no-print">Order Receipt</h5>
       <div class="w-100" slot="body">
@@ -437,6 +441,12 @@ tr<template>
             Multiselect
         },
         data: () => ({
+          billContent: '',
+      printerServiceUUID: '000018f0-0000-1000-8000-00805f9b34fb', 
+      device: null,
+      server: null,
+      characteristic: null,
+       
             breadcrumbsCurrent: "pos.breadcrumbs_current",
             breadcrumbs: [
                 {
@@ -642,6 +652,28 @@ tr<template>
             // },
         },
         methods: {
+
+          async   order_recipt(){
+      try {
+        this.device = await navigator.bluetooth.requestDevice({
+          filters: [{ services: [this.printerServiceUUID] }]
+        });
+        this.server = await this.device.gatt.connect();
+        this.characteristic = await this.server.getPrimaryService(this.printerServiceUUID)
+          .then(service => service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb'));
+          let encoder = new TextEncoder("utf-8");
+          // Add line feed + carriage return chars to text
+          let encodedBillContent = encoder.encode(this.billContent + '\u000A\u000D');
+        //const encodedBillContent = new TextEncoder().encode();
+        await this.characteristic.writeValue(encodedBillContent);
+        console.log('Bill sent to printer successfully.');
+      } catch (error) {
+        console.error('Error printing bill:', error);
+      }
+          },
+
+
+
           setTaxInclusivePrice() {
 
             let finalPrice = this.inclusiveTaxAmount(this.foodItemSubTotal,this.taxRate)
