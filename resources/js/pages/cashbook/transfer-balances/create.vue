@@ -119,30 +119,21 @@
         </div>
       </div>
     </div>
-
+   
     <Modal v-if="showPrintModal">
             <h5 slot="header" class="no-print">Receipt</h5>
             <div class="w-100" slot="body">
                 <div id="invoice-POS">
                     <div style="max-width: 400px; margin: 0px auto">
                         <div class="info">
-                           
-                            <div class="text-bold text-md">
-                              Shop Name : {{ selectedHotelId.shop_name }}
-                                <br />
-                            </div>
-                            <div class="text-bold text-md">
-                              Date : {{ form.date }}
-                                <br />
-                            </div>
-                            <div class="text-bold text-md">
-                              Cash Received : {{ form.amount }}
-                                <br />
-                            </div>
-                            <div class="text-bold text-md">
-                              By : {{ user.name }}
-                                <br />
-                            </div>
+                            
+                              <p class="text-bold text-md" style="text-align:center;">Eligo creative services</p> 
+                              <p class="text-bold text-md" style="text-align:center;">Shop Name : {{ selectedHotelId.shop_name }}</p> 
+                              <p class="text-bold text-md" style="text-align:center;"> Date : {{ form.date }}</p>
+                              <p class="text-bold text-md" style="text-align:center;">Cash Received : {{ form.amount }}</p>
+                              <p class="text-bold text-md" style="text-align:center;">Cash Balance : {{ form.availableBalance }}</p>
+                              <p class="text-bold text-md" style="text-align:center;">By : {{ user.name }}</p>
+                              
                         </div>
                     </div>
                 </div>
@@ -150,34 +141,9 @@
             <div class="pos-modal-footer no-print" slot="modal-footer">
                 <div>
                   <div id="cards">
-                    <paper-card heading="Bluetooth Printer">
-                      <div class="card-content">
-                        <paper-progress id="progress" indeterminate></paper-progress>
-                      </div>
-                    </paper-card>
-
-                    <paper-card id="logo">
-                      <div class="card-content">
-                        <image id="image" src="logo-black.png" width="200px"></image>
-                      </div>
-                    </paper-card>
-
-                    <paper-card>
-                      <div class="card-content">
-                        <paper-textarea id="message" label="Enter Message"></paper-textarea>
-                      </div>
-                    </paper-card>
-
-                    <paper-card>
-                      <div class="card-content">
-                        <paper-button id="print" raised class="colorful">Print</paper-button>
-                      </div>
-                    </paper-card>
-
-                    <paper-dialog id="dialog">
-                      <h2>Error</h2>
-                      <p>Could not connect to bluetooth device!</p>
-                    </paper-dialog>
+                   
+                    <!-- <textarea v-model="billContent" placeholder="Enter bill content"></textarea> -->
+                    <button @click="connectAndPrint">Print Bill</button>
                   </div>
                     <!-- <button @click="printInvoice" class="modal-default-button btn btn-info">
                         {{ $t("common.print") }}
@@ -222,7 +188,7 @@
 import Form from 'vform'
 import { mapGetters } from 'vuex'
 import VModal from "../../../components/VModal"; 
-import PaperCard from './PaperCard.vue';
+// import PaperCard from './PaperCard.vue';
 export default {
   middleware: ['auth', 'check-permissions'],
   metaInfo() {
@@ -232,7 +198,12 @@ export default {
     VModal,
   },
   data: () => ({
-    breadcrumbsCurrent: 'cashbook.transfers.create.breadcrumbs_current',
+      billContent: '',
+      printerServiceUUID: '000018f0-0000-1000-8000-00805f9b34fb', 
+      device: null,
+      server: null,
+      characteristic: null,
+      breadcrumbsCurrent: 'cashbook.transfers.create.breadcrumbs_current',
     breadcrumbs: [
       {
         name: 'cashbook.transfers.create.breadcrumbs_first',
@@ -447,6 +418,43 @@ export default {
     await this.getAccoutns();   
   },
   methods: {
+
+    async connectAndPrint() {
+        try {
+            // Get the content from the invoice HTML structure
+            const companyName = document.querySelector('#invoice-POS .text-bold:nth-of-type(1)').innerText.trim();
+            const shopName = document.querySelector('#invoice-POS .text-bold:nth-of-type(2)').innerText.trim();
+            const date = document.querySelector('#invoice-POS .text-bold:nth-of-type(3)').innerText.trim();
+            const cashReceived = document.querySelector('#invoice-POS .text-bold:nth-of-type(4)').innerText.trim();
+            const cashBalance = document.querySelector('#invoice-POS .text-bold:nth-of-type(5)').innerText.trim();
+            const by = document.querySelector('#invoice-POS .text-bold:nth-of-type(6)').innerText.trim();
+            
+            // Construct the printable content
+            let printableContent = '';
+            if (companyName) printableContent += `${companyName.trim()}\n`;
+            if (shopName) printableContent += `${shopName.trim()}\n`;
+            if (date) printableContent += `${date.trim()}\n`;
+            if (cashReceived) printableContent += `${cashReceived.trim()}\n`;
+            if (cashBalance) printableContent += `${cashBalance.trim()}\n`;
+            if (by) printableContent += `${by.trim()}\n`;
+            
+            // Send the content to the printer
+            this.device = await navigator.bluetooth.requestDevice({
+                filters: [{ services: [this.printerServiceUUID] }]
+            });
+            this.server = await this.device.gatt.connect();
+            this.characteristic = await this.server.getPrimaryService(this.printerServiceUUID)
+                .then(service => service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb'));
+            let encoder = new TextEncoder("utf-8");
+            let encodedPrintableContent = encoder.encode(printableContent + '\u000A\u000D');
+            await this.characteristic.writeValue(encodedPrintableContent);
+            console.log('Bill sent to printer successfully.');
+        } catch (error) {
+            console.error('Error printing bill:', error);
+        }
+    },
+
+
     async getHotelDataList () {
       await this.$store.dispatch('operations/getHotelData', {
         path: '/api/shop',

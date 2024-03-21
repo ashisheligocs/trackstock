@@ -6,7 +6,7 @@ tr<template>
 
     <div class="row sm-col-reverse">
       <!-- pos left area start -->
-      <!-- <div class="col-12 col-md-6">
+      <div class="col-12 col-md-6">
         <div class="card bg-transparent">
           <div class="pos-r-head bg-white">
             <div class="row">
@@ -17,24 +17,24 @@ tr<template>
                     @reload="reload" />
                 </div>
                 <has-error :form="form" field="selectedProducts" />
-              </div> -->
-      <!-- <div v-if="categoryOptions.length" class="form-group col-md-6">
+              </div>
+              <div v-if="categoryOptions.length" class="form-group col-md-6">
                 <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
                   :class="{ 'is-invalid': form.errors.has('category') }" name="category" placeholder="Select a Brand" />
                 <has-error :form="form" field="category" />
-              </div> -->
+              </div>
 
-      <!-- <div class="form-group col-md-6">
+              <div class="form-group col-md-6">
                 <v-select v-model="selectedSubCategory" :options="subCategoryOptions"
                   placeholder="Select Subcategory"></v-select>
-              </div> -->
+              </div>
 
-      <!-- </div>
-          </div> -->
-      <!--
+            </div>
+          </div>
+
           <div class="card-body bg-white mt-3 pos-body">
-            <table-loading v-show="loading" /> -->
-      <!-- <div>
+            <table-loading v-show="loading" />
+            <div>
               <div v-if="filteredProducts.length > 0" class="pos-item-grid">
                 <div v-for="product in filteredProducts" :key="product.id">
                   <div class="pos-box" @click="openProductModal(product)">
@@ -76,22 +76,24 @@ tr<template>
                 </div>
               </div>
 
-            </div> -->
+            </div>
 
 
-      <!-- <div class="row">
+            <div class="row">
               <div class="col-12 d-flex justify-content-center">
+                <!-- pagination-start -->
                 <pagination v-if="pagination && pagination.last_page > 1" :pagination="pagination" :offset="5"
                   class="justify-flex-end mt-3" @paginate="paginate" />
+                <!-- pagination-end -->
               </div>
-            </div> -->
-      <!-- </div> -->
-      <!-- </div>
-      </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- pos left area end -->
 
       <!-- POS Right area start -->
-      <div class="col-12">
+      <div class="col-12 col-md-6">
         <div class="card">
           <div class="card-body-l p-0">
             <div class="form-group pl-3 pt-3 pr-3 d-none">
@@ -113,8 +115,6 @@ tr<template>
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th scope="col">Sr. No.</th>
-                    <th>Batch No</th>
                     <th scope="col">{{ $t("common.product") }}</th>
                     <th scope="col">{{ $t("common.price") }}</th>
                     <th scope="col" class="text-center">
@@ -131,16 +131,10 @@ tr<template>
 
                 <tbody v-if="selectedItemList && selectedItemList.length > 0">
                   <tr v-for="(singleItem, i) in selectedItemList" :key="i">
-                    <td>1</td>
-                    <td>
-                      <div class="form-group">
-                        <input type="text" placeholder="Batch No" class="form-control">
-                      </div>
-                    </td>
                     <td>
                       {{ singleItem.name }}
                       <span v-if="singleItem.addonString != ''" style="font-size: 11px;"><br />{{
-                  singleItem.addonString }}</span>
+                singleItem.addonString }}</span>
                     </td>
                     <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td>
                     <td>
@@ -257,9 +251,9 @@ tr<template>
             <span>{{ form.netTotal | forBalanceSheetCurrencyDecimalOnly }}</span>
           </div>
           <div class="row" v-if="accounts &&
-                  form.selectedProducts &&
-                  form.selectedProducts.length > 0
-                  ">
+                form.selectedProducts &&
+                form.selectedProducts.length > 0
+                ">
             <div class="form-group col-md-6">
               <input type="hidden" v-model="form.account">
               QR :
@@ -274,9 +268,9 @@ tr<template>
           </div>
 
           <div class="row" v-if="accounts &&
-                  form.selectedProducts &&
-                  form.selectedProducts.length > 0
-                  ">
+                form.selectedProducts &&
+                form.selectedProducts.length > 0
+                ">
             <div class="form-group col-md-6">
               <input type="hidden" v-model="form.account">
               Cash :
@@ -448,11 +442,11 @@ tr<template>
         },
         data: () => ({
           billContent: '',
-      printerServiceUUID: '000018f0-0000-1000-8000-00805f9b34fb',
+      printerServiceUUID: '000018f0-0000-1000-8000-00805f9b34fb', 
       device: null,
       server: null,
       characteristic: null,
-
+       
             breadcrumbsCurrent: "pos.breadcrumbs_current",
             breadcrumbs: [
                 {
@@ -532,7 +526,7 @@ tr<template>
         computed: {
             ...mapGetters("operations", ["items", "appInfo", "hotelItems", "selectedHotel"]),
 
-
+          
             filteredProducts() {
               if (!this.selectedSubCategory) {
                 return this.products;
@@ -737,7 +731,7 @@ tr<template>
                 return this.addItemInList();
             },
             addItemInList() {
-
+                
                 const addonNames = this.currentAddon?.map(add => add.name);
                 const addonString = addonNames ? addonNames.join(' + ') : '';
 
@@ -746,7 +740,7 @@ tr<template>
                 })
 
                 if (alreadyAddedItem >= 0) {
-
+                  
                   if(this.selectedItemList[alreadyAddedItem].quantity >= this.selectedItemList[alreadyAddedItem].available_qty){
                     return toast.fire({
                         type: "error",
@@ -763,8 +757,8 @@ tr<template>
                       price: parseFloat(this.currentProduct?.sellingPrice || 0),
                       total: parseFloat(this.currentProduct?.sellingPrice || 0),
                       available_qty: this.currentProduct?.available_qty ?? 0,
-                  });
-
+                  });  
+                  
                 } else {
                     this.selectedItemList.push({
                         name: `${this.currentProduct?.name}`,
@@ -960,7 +954,7 @@ tr<template>
                         this.form.invoice_id = data.data.id;
                         this.form.invoice_slug = data.data.order_id_uniq;
                         this.form.receiptNo = data.data.order_id_uniq;
-
+            
                         if (this.form.invoice_id != null) {
                            this.form
                             .post(window.location.origin + "/api/food/order/invoice/pay")
@@ -972,7 +966,7 @@ tr<template>
                                 this.resetForm();
                                 this.form.reset();
                                 this.againDefaultSettings();
-
+                                
                             })
                             .catch(() => {
                                 toast.fire({ type: "error", title: this.$t("common.error_msg") });
