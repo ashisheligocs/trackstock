@@ -5,92 +5,6 @@ tr<template>
     <!-- breadcrumbs end -->
 
     <div class="row sm-col-reverse">
-      <!-- pos left area start -->
-      <div class="col-12 col-md-6">
-        <div class="card bg-transparent">
-          <div class="pos-r-head bg-white">
-            <div class="row">
-
-              <div v-if="products" class="col-md-12 form-group">
-                <div class="d-flex w-100">
-                  <search class="flex-grow-1" :isPosSearch="true" v-model="query" @reset-pagination="resetPagination()"
-                    @reload="reload" />
-                </div>
-                <has-error :form="form" field="selectedProducts" />
-              </div>
-              <div v-if="categoryOptions.length" class="form-group col-md-6">
-                <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
-                  :class="{ 'is-invalid': form.errors.has('category') }" name="category" placeholder="Select a Brand" />
-                <has-error :form="form" field="category" />
-              </div>
-
-              <div class="form-group col-md-6">
-                <v-select v-model="selectedSubCategory" :options="subCategoryOptions"
-                  placeholder="Select Subcategory"></v-select>
-              </div>
-
-            </div>
-          </div>
-
-          <div class="card-body bg-white mt-3 pos-body">
-            <table-loading v-show="loading" />
-            <div>
-              <div v-if="filteredProducts.length > 0" class="pos-item-grid">
-                <div v-for="product in filteredProducts" :key="product.id">
-                  <div class="pos-box" @click="openProductModal(product)">
-                    <div class="relative">
-                      <div class="pos-box-img">
-                        <div v-if="product?.image">
-                          <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
-                            alt="product image" />
-                          <span class="stock_no">{{ product.available_qty ?? 0 }} </span>
-                        </div>
-                        <div v-else><span class="stock_no">{{ product.available_qty ?? 0 }}</span></div>
-                      </div>
-                    </div>
-                    <div class="pos-box-content">
-                      <p class="pos-box-text">{{ product.name }}</p>
-                      <span class="text-bold">{{ product.sellingPrice | withCurrency }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-else class="pos-item-grid">
-                <div v-for="product in products" :key="product.id" v-if="product.status == 1">
-                  <div class="pos-box" @click="openProductModal(product)">
-                    <div class="relative">
-                      <div class="pos-box-img">
-                        <div v-if="product?.image">
-                          <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
-                            alt="product image" />
-                          <span class="stock_no">{{ product.available_qty ?? 0 }}</span>
-                        </div>
-                        <div v-else> <span class="stock_no">{{ product.available_qty ?? 0 }}</span></div>
-                      </div>
-                    </div>
-                    <div class="pos-box-content">
-                      <p class="pos-box-text">{{ product.name }} </p>
-                      <span class="text-bold text-lg">{{ product.sellingPrice | withCurrency }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-
-            <div class="row">
-              <div class="col-12 d-flex justify-content-center">
-                <!-- pagination-start -->
-                <pagination v-if="pagination && pagination.last_page > 1" :pagination="pagination" :offset="5"
-                  class="justify-flex-end mt-3" @paginate="paginate" />
-                <!-- pagination-end -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- pos left area end -->
 
       <!-- POS Right area start -->
       <div class="col-12 col-md-6">
@@ -187,6 +101,93 @@ tr<template>
         </div>
       </div>
       <!-- POS Right area end -->
+
+      <!-- pos left area start -->
+      <div class="col-12">
+        <div class="card bg-transparent">
+          <div class="pos-r-head bg-white">
+            <div class="row">
+
+              <div v-if="products" class="col-md-12 form-group">
+                <div class="d-flex w-100">
+                  <search class="flex-grow-1" :isPosSearch="true" v-model="query" @reset-pagination="resetPagination()"
+                    @reload="reload" />
+                </div>
+                <has-error :form="form" field="selectedProducts" />
+              </div>
+              <!-- <div v-if="categoryOptions.length" class="form-group col-md-6">
+                <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
+                  :class="{ 'is-invalid': form.errors.has('category') }" name="category" placeholder="Select a Brand" />
+                <has-error :form="form" field="category" />
+              </div> -->
+
+              <!-- <div class="form-group col-md-6">
+                <v-select v-model="selectedSubCategory" :options="subCategoryOptions"
+                  placeholder="Select Subcategory"></v-select>
+              </div> -->
+
+            </div>
+          </div>
+
+          <div class="card-body bg-white mt-3 pos-body">
+            <table-loading v-show="loading" />
+            <div>
+              <div v-if="filteredProducts.length > 0" class="pos-item-grid">
+                <div v-for="product in filteredProducts" :key="product.id">
+                  <div class="pos-box" @click="openProductModal(product)">
+                    <div class="relative">
+                      <div class="pos-box-img">
+                        <div v-if="product?.image">
+                          <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
+                            alt="product image" />
+                          <span class="stock_no">{{ product.available_qty ?? 0 }} </span>
+                        </div>
+                        <div v-else><span class="stock_no">{{ product.available_qty ?? 0 }}</span></div>
+                      </div>
+                    </div>
+                    <div class="pos-box-content">
+                      <p class="pos-box-text">{{ product.name }}</p>
+                      <span class="text-bold">{{ product.sellingPrice | withCurrency }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="pos-item-grid">
+                <div v-for="product in products" :key="product.id" v-if="product.status == 1">
+                  <div class="pos-box" @click="openProductModal(product)">
+                    <div class="relative">
+                      <div class="pos-box-img">
+                        <div v-if="product?.image">
+                          <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
+                            alt="product image" />
+                          <span class="stock_no">{{ product.available_qty ?? 0 }}</span>
+                        </div>
+                        <div v-else> <span class="stock_no">{{ product.available_qty ?? 0 }}</span></div>
+                      </div>
+                    </div>
+                    <div class="pos-box-content">
+                      <p class="pos-box-text">{{ product.name }} </p>
+                      <span class="text-bold text-lg">{{ product.sellingPrice | withCurrency }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+              <div class="col-12 d-flex justify-content-center">
+                <pagination v-if="pagination && pagination.last_page > 1" :pagination="pagination" :offset="5"
+                  class="justify-flex-end mt-3" @paginate="paginate" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- pos left area end -->
+
+
     </div>
 
     <!-- use the modal component, pass in the prop -->

@@ -29,10 +29,18 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
+        // dd($request->input());
         $search = $request->search ?? '';
-        $shop = Shop::when($search, function ($q) use ($search) {
+        if($request->has('search')){
+            $shop = Shop::when($search, function ($q) use ($search) {
                 $q->where('shop_name', 'like', "%$search%")->orWhere('shop_name', 'like', "%$search%");
             })->latest()->paginate($request->perPage);
+
+        } else {
+            $shop = Shop::withoutGlobalScope(SelectedHotel::class)->when($search, function ($q) use ($search) {
+                $q->where('shop_name', 'like', "%$search%")->orWhere('shop_name', 'like', "%$search%");
+            })->latest()->paginate($request->perPage);
+        }
         return CommonResource::collection($shop);
     }
 
@@ -72,7 +80,7 @@ class ShopController extends Controller
 
                 if (!file_exists(public_path('images/shop/'))) {
                     mkdir(public_path('images/shop/'), 666, true);
-                } 
+                }
 
                 $imageName = null;
                 if ($request->images && !empty($request->images)) {
@@ -151,7 +159,7 @@ class ShopController extends Controller
                     "state" => @$request->state ? $request->state['value'] : '',
                     "city" => @$request->city,
                 ]);
-              
+
                 return $this->responseWithSuccess('Shop added successfully!');
             } catch (Exception $e) {
                 return $this->responseWithError($e->getMessage() . '--' . $e->getLine());

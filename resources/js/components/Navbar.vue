@@ -12,135 +12,11 @@
         </a>
       </li>
 
-      <!--            <locale-dropdown/>-->
+      <!--<locale-dropdown/>-->
       <hotel-dropdown />
     </ul>
 
     <!-- Right nav links -->
-    <!-- <ul class="navbar-nav ml-auto" v-if="$can('restaurant-order')">
-            <li>
-                <router-link :to="{ name: 'pos.create' }" class="btn pos-btn">
-                    <i class="fas fa-cash-register"></i>
-                    KOT
-                </router-link
-                >
-            </li>
-            <li
-                    v-if="$can('lc-create') || $can('order-create') ||  $can('invoice-create') ||  $can('expense-create') || $can('international-purchase-create')"
-                    class="nav-item dropdown"
-            >
-                <a
-                        class="nav-link"
-                        data-toggle="dropdown"
-                        href="#"
-                        aria-expanded="true"
-                >
-                    <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            stroke-width="2"
-                    >
-                        <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                    </svg>
-                </a>
-                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                    <router-link
-                            v-if="$can('invoice-create')"
-                            :to="{ name: 'invoices.create' }"
-                            class="dropdown-item dropdown-icon-center"
-                    >
-                        <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                        >
-                            <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                            />
-                        </svg>
-                        {{ $t("topbar.new_invoice") }}
-                    </router-link>
-                    <div class="dropdown-divider"></div>
-                    <router-link
-                            v-if="$can('expense-create')"
-                            :to="{ name: 'expenses.create' }"
-                            class="dropdown-item dropdown-icon-center"
-                    >
-                        <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                        >
-                            <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                            />
-                        </svg>
-                        {{ $t("topbar.new_expense") }}
-                    </router-link>
-                    <div class="dropdown-divider"></div>
-                    <router-link
-                            v-if="$can('purchase-create')"
-                            :to="{ name: 'purchases.create' }"
-                            class="dropdown-item dropdown-icon-center"
-                    >
-                        <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                        >
-                            <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                            />
-                        </svg>
-                        {{ $t("topbar.new_purchase") }}
-                    </router-link>
-                  <div class="dropdown-divider"></div>-->
-    <!--                    <router-link-->
-    <!--                            v-if="$can('quotation-create')"-->
-    <!--                            :to="{ name: 'quotations.create' }"-->
-    <!--                            class="dropdown-item dropdown-icon-center"-->
-    <!--                    >-->
-    <!--                        <svg-->
-    <!--                                xmlns="http://www.w3.org/2000/svg"-->
-    <!--                                class="h-6 w-6"-->
-    <!--                                fill="none"-->
-    <!--                                viewBox="0 0 24 24"-->
-    <!--                                stroke="currentColor"-->
-    <!--                                stroke-width="2"-->
-    <!--                        >-->
-    <!--                            <path-->
-    <!--                                    stroke-linecap="round"-->
-    <!--                                    stroke-linejoin="round"-->
-    <!--                                    d="M4 6h16M4 10h16M4 14h16M4 18h16"-->
-    <!--                            />-->
-    <!--                        </svg>-->
-    <!--                        {{ $t("topbar.new_quotation") }}-->
-    <!--                    </router-link>-->
-    <!-- </div>
-            </li>
-            </ul>  -->
     <ul class="navbar-nav ml-auto align-items-center">
       <!-- Notifications Dropdown Menu -->
       <li v-if="$can('restaurant-order')">
@@ -209,41 +85,9 @@
             </svg>
             {{ $t("topbar.sales") }}
           </router-link>
-          <!-- @click="activetab = 2" :class="[activetab === 2 ? 'active' : '']"
-
-
-          <a @click="activetab = 2" :class="[activetab === 2 ? 'active' : '']" class="outline_btn">Orders</a>
-
-          <div v-if="activetab" class="tabcontent">
-            <div class="mt-3"> />
-              <RestaurantOrders v-if="activetab === 2" />
-            </div>
-          </div> -->
-          <!--                    <div class="dropdown-divider"></div>-->
-          <!--                    <router-link-->
-          <!--                            v-if="$can('quotation-create')"-->
-          <!--                            :to="{ name: 'quotations.create' }"-->
-          <!--                            class="dropdown-item dropdown-icon-center"-->
-          <!--                    >-->
-          <!--                        <svg-->
-          <!--                                xmlns="http://www.w3.org/2000/svg"-->
-          <!--                                class="h-6 w-6"-->
-          <!--                                fill="none"-->
-          <!--                                viewBox="0 0 24 24"-->
-          <!--                                stroke="currentColor"-->
-          <!--                                stroke-width="2"-->
-          <!--                        >-->
-          <!--                            <path-->
-          <!--                                    stroke-linecap="round"-->
-          <!--                                    stroke-linejoin="round"-->
-          <!--                                    d="M4 6h16M4 10h16M4 14h16M4 18h16"-->
-          <!--                            />-->
-          <!--                        </svg>-->
-          <!--                        {{ $t("topbar.new_quotation") }}-->
-          <!--                    </router-link>-->
         </div>
       </li>
-      <li class="nav-item dropdown" v-if="$can('restaurant-order')">
+      <!-- <li class="nav-item dropdown" v-if="$can('restaurant-order')">
         <a class="nav-link" data-toggle="dropdown" href="javascript:void(0)">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
             stroke-width="2">
@@ -263,26 +107,7 @@
             {{ $t("common.stock_notification_empty") }}
           </a>
         </div>
-      </li>
-
-      <!-- <li class="nav-item full_scr">
-                <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                    <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            stroke-width="2"
-                    >
-                        <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                        />
-                    </svg>
-                </a>
-            </li> -->
+      </li> -->
       <li class="nav-item">
         <a class="nav-link" @click="sideBarControl" href="javascript:void(0)" v-if="$can('expense-create')">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
