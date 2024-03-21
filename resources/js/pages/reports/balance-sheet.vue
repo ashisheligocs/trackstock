@@ -14,7 +14,7 @@
         >
             {{ $t("common.filter") }}<i class="fas ml-1" :class="filterOpen ? 'fa-angle-up' : 'fa-angle-down '"/>
         </button>
-           
+
         </div>
       <div class="col-lg-5 position-absolute bal_filter" v-if="filterOpen">
         <div class="filter_card">

@@ -18,7 +18,7 @@
             >
                 All
             </a> -->
-            
+
             <a
                     v-for="(value, key) in shops"
                     :key="key"
@@ -78,7 +78,7 @@
                     this.setHotel(response.data)
                   });
                 }
-                console.log('selected',this.shops);
+
                 if (this.shops && this.shops.length === 1) {
                   Cookies.remove('selectedHotel')
                   this.setHotel(this.shops[0])
