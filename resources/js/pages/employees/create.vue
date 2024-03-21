@@ -336,9 +336,11 @@ export default {
   async created() {
     await this.getDepartments();
     await this.getRoles();
+     this.run();
+
     await this.getHotelDataList();
     if (this.selectedHotel && this.selectedHotel !== 'all') {
-
+      // console.log('total',this.hotelItems);
       this.hotelItems.forEach((hotel) => {
         if (hotel.id == this.selectedHotel) {
           this.selectedHotels.push(hotel)
@@ -417,6 +419,10 @@ export default {
           toast.fire({ type: 'error', title: message })
         });
     },
+
+    run(){
+      console.log(this.selectedHotel);
+    }
   },
 };
 </script>

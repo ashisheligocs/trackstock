@@ -11,6 +11,7 @@
         <router-link :to="{ name: 'home' }" class="small-box-footer">
           <button class="outline_btn">Back</button>
         </router-link>
+        
       </div>
       <div v-if="activetab" class="tabcontent">
         <div class="mt-3">

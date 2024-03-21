@@ -47,9 +47,9 @@
                     <div class="small-box mb-0">
                       <div class="inner p-4 text-center">
                         <h3>
-                        <!-- <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} -->
-                        Sales
-                      </h3>
+                          <!-- <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} -->
+                          Sales
+                        </h3>
                         <!-- <p>
                           {{ $t("dashboard.summery_items.cashbook") }}
                         </p> -->
@@ -57,15 +57,14 @@
                     </div>
                   </router-link>
                 </div>
-
                 <div class="col-md-3 col-6 mb-4">
                   <router-link :to="{ name: 'transferBalances.index' }" class="small-box-footer">
                     <div class="small-box mb-0">
                       <div class="inner p-4 text-center">
                         <h3>
-                        <!-- <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} -->
-                   Stock
-                      </h3>
+                          <!-- <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} -->
+                          Stock
+                        </h3>
                         <!-- <p>
                           {{ $t("dashboard.summery_items.balance_transfers") }}
                         </p> -->
@@ -73,16 +72,16 @@
                     </div>
                   </router-link>
                 </div>
-</div>
-<div class="row justify-content-center">
+              </div>
+              <div class="row justify-content-center">
                 <div class="col-md-3 col-6 mb-4">
                   <router-link :to="{ name: 'transferBalances.index' }" class="small-box-footer">
                     <div class="small-box mb-0">
                       <div class="inner p-4 text-center">
                         <h3>
-                        <!-- <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} -->
-                   Today Sales
-                      </h3>
+                          <!-- <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} -->
+                          Today Sales
+                        </h3>
                         <!-- <p>
                           {{ $t("dashboard.summery_items.balance_transfers") }}
                         </p> -->
@@ -96,15 +95,53 @@
                     <div class="small-box mb-0">
                       <div class="inner p-4 text-center">
                         <h3>
-                        <!-- <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} -->
-                   Cash
-                      </h3>
+                          <!-- <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} -->
+                          Cash
+                          {{ getHotelDataList.shop_name }}
+                        </h3>
                         <!-- <p>
                           {{ $t("dashboard.summery_items.balance_transfers") }}
                         </p> -->
                       </div>
                     </div>
                   </router-link>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <div v-for="(data, i) in hotelItems" :key="i">
+                    <div class="mb-4">
+                      <router-link :to="{ name: 'transferBalances.index', params: { id: data.id } }"
+                        class="small-box-footer">
+                        <div class="small-box mb-0">
+                          <div class="inner p-4 text-center">
+                            <h3>{{ data.shop_name }}</h3>
+                          </div>
+                        </div>
+                      </router-link>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="table-responsive table-custom">
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <td>QR</td>
+                          <td>20,000</td>
+                        </tr>
+
+                        <tr>
+                          <td>Cash</td>
+                          <td>1,20,000</td>
+                        </tr>
+                        <tr>
+                          <th>Total</th>
+                          <th>1,40,000</th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -254,7 +291,7 @@ import VueApexCharts from 'vue-apexcharts';
 import Form from "vform";
 import axios from "axios";
 import { use } from "echarts/core";
-import "echarts/lib/component/grid";
+// import "echarts/lib/component/grid";
 import { BarChart, LineChart, PieChart } from "echarts/charts";
 import VChart, { THEME_KEY } from "vue-echarts";
 import { CanvasRenderer } from "echarts/renderers";
@@ -286,6 +323,7 @@ export default {
   },
 
   data: () => ({
+    list_all: '',
     breadcrumbsCurrent: "dashboard.breadcrumbs_current",
     breadcrumbs: [
       {
@@ -384,21 +422,21 @@ export default {
 
   }),
   computed: {
-
-    ...mapGetters("operations", ["selectedHotel", "hotelCategoryItems", "appInfo"]),
+    ...mapGetters("operations", ["selectedHotel", "hotelCategoryItems", "appInfo", "hotelItems"]),
   },
-  created() {
+  async created() {
     this.loading = true;
     let currentDate = new Date();
     currentDate.setDate(currentDate.getDate() - 6);
-    this.generateLinechart(currentDate, new Date())
-    this.generateBarchart(currentDate, new Date())
+    // this.generateLinechart(currentDate, new Date())
+    // this.generateBarchart(currentDate, new Date())
+    await this.getHotelDataList();
     // this.getData();
     // this.getD();
-
-
+    console.log('this', this.hotelItems);
 
     this.inr = this.appInfo.currency.symbol;
+    this.list_all = (this.selectedHotel);
     if (this.$can("account-summery")) {
       this.getSummery();
     }
@@ -435,6 +473,11 @@ export default {
     }
   },
   methods: {
+    async getHotelDataList() {
+      await this.$store.dispatch('operations/getHotelData', {
+        path: '/api/shop',
+      });
+    },
     async generateLinechart(startDate, endDate) {
       endDate.setDate(startDate.getDate() + 6); // Adding 7 days to the end date
       const dayLabels = [];
@@ -592,6 +635,7 @@ export default {
       this.barChartOptions.series[0].data = data.purchase;
       this.barChartOptions.series[1].data = data.sales;
     },
+
   },
 };
 </script>
