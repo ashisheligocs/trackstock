@@ -111,14 +111,14 @@
                 <div class="col-4">
                   <div v-for="(data, i) in hotelItems" :key="i">
                     <div class="mb-4">
-                      <router-link :to="{ name: 'transferBalances.index', params: { id: data.id } }"
-                        class="small-box-footer">
-                        <div class="small-box mb-0">
-                          <div class="inner p-4 text-center">
+                      <div class="small-box mb-0">
+                        <div class="inner p-4 text-center">
+                          <router-link :to="{ name: 'ShopView' }">
                             <h3>{{ data.shop_name }}</h3>
-                          </div>
+                          </router-link>
                         </div>
-                      </router-link>
+                      </div>
+
                     </div>
                   </div>
                 </div>
