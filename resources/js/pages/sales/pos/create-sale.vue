@@ -44,23 +44,22 @@
                     </th>
                   </tr>
                 </thead>
-                {{ selectedItemList }}
+                <!-- {{ selectedItemList }} -->
                 <tbody v-if="selectedItemList && selectedItemList.length > 0">
                   <tr v-for="(singleItem, i) in selectedItemList" :key="i">
-                    <td>1</td>
+                    <td>{{ i + 1 }}</td>
                     <td>
                       <div class="form-group">
                         <div>
                             <input v-model="singleItem.inputText" @input="getSuggestions(singleItem)"  />
-                            {{ singleItem.showSuggestions }}
+                            
                             <ul v-if="singleItem.showSuggestions">
-                              <li v-for="(suggestion, index) in suggestions" :key="index" @click="selectSuggestion(singleItem,suggestion)">
+                              <li v-for="(suggestion, index) in singleItem.suggestions" :key="index" @click="selectSuggestion(singleItem,suggestion)">
                                 {{ suggestion.code }}
                               </li>
                             </ul>
                           </div>
-                        <!-- <input type="text" v-model="searchiteamCode" placeholder="Batch No" class="form-control"> -->
-                      </div>
+                       </div>
                     </td>
                     <td>
                       {{ singleItem.name }}
@@ -70,13 +69,14 @@
                     <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td>
                     <td>
                       <div class="d-flex custom-qty-input">
-                        <input type="button" value="-" class="button-minus icon-shape icon-sm btn-danger"
-                          data-field="quantity" @click="adjustQuantity($event, i, 'decrement')" />
+                        <!-- <input type="button" value="-" class="button-minus icon-shape icon-sm btn-danger"
+                          data-field="quantity" @click="adjustQuantity($event, i, 'decrement')" /> -->
                         <input type="number" step="any" :id="`Qty-${i}`" :value="singleItem.quantity" name="quantity"
-                          class="quantity-field border-0 incrementor" required @input="adjustQuantity($event, i)"
-                          @change="preventZeroValue($event, i)" placeholder="Quantity" />
-                        <input type="button" value="+" class="button-plus icon-shape icon-sm btn-primary"
-                          data-field="quantity" @click="adjustQuantity($event, i, 'increment')" />
+                          class="quantity-field border-0 incrementor"placeholder="Quantity" readonly/> 
+                          <!-- required @input="adjustQuantity($event, i)"
+                          @change="preventZeroValue($event, i)"  -->
+                        <!-- <input type="button" value="+" class="button-plus icon-shape icon-sm btn-primary"
+                          data-field="quantity" @click="adjustQuantity($event, i, 'increment')" /> -->
                       </div>
                     </td>
                     <td class="text-right">{{ itemSubtotal(singleItem) | withCurrency }}</td>
@@ -536,11 +536,11 @@
             currentAddon: [],
             selectedItemList: [{
                 name: '' ,
-                id: '',
+                id: 0,
                 addon: '',
                 addonString: '',
-                quantity: '',
-                price: '',
+                quantity: 0,
+                price: 0,
                 available_qty: '',
                 inputText: '',
                 suggestions: [],
@@ -687,9 +687,7 @@
         },
         methods: {
           getSuggestions(item) {
-            console.log(item);
-             console.log(item.suggestions);
-             console.log(this.products)
+            
               item.suggestions = this.products.filter(suggestion =>
                     suggestion.code && suggestion.code.toLowerCase().includes(item.inputText.toLowerCase())
 
@@ -706,10 +704,10 @@
               }
 
                 this.currentProduct = suggestion;
-                index.inputText = suggestion.code;
+                index.inputText = '';
                 index.showSuggestions = false;
                 toast.fire({ type: "success", title: "Order Added Successfully" });
-                return this.addItemInList();
+                return this.addItemInList(suggestion.code);
             },
           async   order_recipt(){
       try {
@@ -757,7 +755,20 @@
           },
 
             async changeHotel() {
-                // this.selectedItemList = [];
+                this.selectedItemList = [
+                {
+                name: '' ,
+                id: 0,
+                addon: '',
+                addonString: '',
+                quantity: 0,
+                price: 0,
+                available_qty: '',
+                inputText: '',
+                suggestions: [],
+                showSuggestions: false
+            }
+                ];
                 this.form.category = null;
                 await this.getProducts();
             },
@@ -788,7 +799,7 @@
                 toast.fire({ type: "success", title: "Order Added Successfully" });
                 return this.addItemInList();
             },
-            addItemInList() {
+            addItemInList(code) {
 
                 const addonNames = this.currentAddon?.map(add => add.name);
                 const addonString = addonNames ? addonNames.join(' + ') : '';
@@ -804,10 +815,10 @@
                       quantitySumByCode[item.code] = 0;
                   }
                   quantitySumByCode[item.code] += item.quantity;
-              });
-                // if (alreadyAddedItem >= 0) {
+                });
+                
                   if(alreadyAddedItem >= 0){
-                    if(quantitySumByCode[item.code] >= this.selectedItemList[alreadyAddedItem].available_qty){
+                    if(quantitySumByCode[this.selectedItemList[alreadyAddedItem].code]  >= this.selectedItemList[alreadyAddedItem].available_qty){
                         return toast.fire({
                             type: "error",
                             title: 'Insufficient Stock ! you can not added more than '+this.selectedItemList[alreadyAddedItem].available_qty+' Quantity',
@@ -828,7 +839,8 @@
                 //   });
 
                 // } else {
-                    this.selectedItemList.push({
+                  
+                    this.selectedItemList.unshift({
                         name: `${this.currentProduct?.name}`,
                         id: this.currentProduct.id,
                         addon: this.currentAddon,
@@ -836,6 +848,8 @@
                         quantity: 1,
                         price: parseFloat(this.currentProduct?.sellingPrice || 0),
                         available_qty: this.currentProduct?.available_qty ?? 0,
+                        inputText : code,
+
                     })
                 // }
                 this.currentVariant = null;
@@ -999,7 +1013,20 @@
             resetForm() {
                 this.listBackup = _.cloneDeep(this.selectedItemList)
                 this.formBackup = _.cloneDeep(this.form)
-                // this.selectedItemList = [];
+                this.selectedItemList = [
+                        {
+                        name: '' ,
+                        id: 0,
+                        addon: '',
+                        addonString: '',
+                        quantity: 0,
+                        price: 0,
+                        available_qty: '',
+                        inputText: '',
+                        suggestions: [],
+                        showSuggestions: false
+                    }
+                ];
                 this.form.discount = 0;
                 this.form.netTotal = this.foodItemNetTotal;
                 this.form.orderTax = this.foodItemTax;
@@ -1452,4 +1479,22 @@ span.stock_no {
   padding-top: 5px !important;
   padding-bottom: 5px !important;
 }
+
+/* Style the suggestions list */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+}
+
+li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: #f1f1f1;
+}
+
 </style>
