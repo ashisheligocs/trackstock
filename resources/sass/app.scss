@@ -2648,3 +2648,34 @@ input:checked+.slider {
 .radius-20 {
     border-radius: 20px!important;
 }
+body .content-wrapper,
+body .main-header{
+    transition: margin-left 0.3s ease-in-out;
+    margin-left: 0px !important;
+}
+
+aside.main-sidebar {
+    display: none;
+}
+
+nav.main-header ul li:first-child a {
+    display: none;
+}
+
+nav.main-header ul {
+    margin-left: 25px;
+}
+
+.pos-card-footer.bg-white {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    
+    bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.pos-net-total.noi-print {
+    padding: 10px 25px;
+}

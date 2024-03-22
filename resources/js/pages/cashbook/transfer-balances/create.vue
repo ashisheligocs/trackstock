@@ -1,18 +1,22 @@
 <template>
+  
   <div>
     <!-- breadcrumbs Start -->
-    <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" />
+    <breadcrumbs :current="breadcrumbsCurrent" />
+    <div class="row">
+    <router-link :to="{ name: 'home' }" class="btn btn-secondary float-right mt-2 mb-2">
+            <i class="fas fa-long-arrow-alt-left" /> {{ $t('common.back') }}
+      </router-link>
+      </div>
     <!-- breadcrumbs end -->
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">
+            <!-- <h3 class="card-title">
               {{ $t('cashbook.transfers.create.form_title') }}
-            </h3>
-            <router-link :to="{ name: 'transferBalances.index' }" class="btn btn-secondary float-right">
-              <i class="fas fa-long-arrow-alt-left" /> {{ $t('common.back') }}
-            </router-link>
+            </h3> -->
+           
           </div>
 
 

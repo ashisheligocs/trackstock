@@ -1,22 +1,11 @@
 <template>
   <div class="p-0 position-relative mt-2 ledger-account">
     <div id="tabs" class="justify-content-end">
-      <div class="tabs w-100 pa-2 d-flex justify-content-between">
-        <!-- <div v-if="activetab === 2">
-          <a @click="activetab = 1" :class="[activetab === 1 ? 'active' : '']" class="outline_btn">Create Sale</a>
-        </div>
-        <div v-if="activetab === 1">
-          <a @click="activetab = 2" :class="[activetab === 2 ? 'active' : '']" class="outline_btn text-left">Sales</a>
-        </div> -->
-        <router-link :to="{ name: 'home' }" class="small-box-footer">
-          <button class="outline_btn">Back</button>
-        </router-link>
-
-        <div>
-          <!-- Your other content goes here -->
-          <button @click="goBack">Back</button>
-        </div>
-
+      <div class="w-100 pa-2 d-flex justify-content-between">
+        
+        
+          <button class="btn btn-secondary mt-2 mb-2" @click="goBack"><i class="fas fa-long-arrow-alt-left" /> {{ $t("common.back") }}</button>
+        
 
       </div>
       <div v-if="activetab" class="tabcontent">

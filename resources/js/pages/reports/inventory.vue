@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <button @click="goBack">Back</button>
+      <button class="btn btn-secondary mt-2 mb-2" @click="goBack"><i class="fas fa-long-arrow-alt-left" /> {{ $t("common.back") }}</button>
     </div>
     <div class="row no-print">
       <div class="col-lg-12">
@@ -137,8 +137,8 @@
               class="col-sm-6 offset-sm-2 invoice-col float-right text-md-right"
             >
               <h5>{{ $t("reports.inventory.page_title") }}</h5>
-              <br />
-              <span
+              <!-- <br /> -->
+              <!-- <span
                 ><strong>{{ $t("common.date") }}:</strong>
                 {{ date | moment("Do MMM, YYYY") }}</span
               ><br />
@@ -154,7 +154,7 @@
               /></span>
               <strong>{{ $t("reports.date_range") }}:</strong>
               {{ form.fromDate | moment("Do MMM, YYYY") }} -
-              {{ form.toDate | moment("Do MMM, YYYY") }} <br />
+              {{ form.toDate | moment("Do MMM, YYYY") }} <br /> -->
             </div>
           </div>
 
@@ -165,7 +165,7 @@
                 <thead>
                   <tr>
                     <th>{{ $t("common.s_no") }}</th>
-                    <th>{{ $t("common.code") }}</th>
+                    <th>Batch No.</th>
                     <th>{{ $t("common.shop") }}</th>
                     <th>{{ $t("common.name") }}</th>
                     <th>{{ $t("reports.stock_in") }}</th>
@@ -184,7 +184,7 @@
                             params: { slug: data.slug , id: selectedHotel },
                           }"
                     >
-                      {{ data.productCode | withPrefix(prefix) }}
+                      {{ data.productCode }}
                     </router-link></td>
                     <td>{{ data.hotel_name }}</td>
                     <td>{{ data.productName }}</td>
@@ -211,7 +211,7 @@
               </table>
             </div>
           </div>
-          <div class="row no-print mt-5">
+          <!-- <div class="row no-print mt-5">
             <div class="col-12">
               <router-link
                 :to="{ name: 'inventory.index' }"
@@ -223,7 +223,7 @@
                 ><i class="fas fa-print"></i> {{ $t("common.print") }}</a
               >
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

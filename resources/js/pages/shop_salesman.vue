@@ -1,9 +1,8 @@
 <template>
   <div>
     <div>
-      <button @click="goback">
-        Go Back
-      </button>
+      
+      <button class="btn btn-secondary mt-2 mb-2"  @click="goBack"><i class="fas fa-long-arrow-alt-left" /> {{ $t("common.back") }}</button>
     </div>
     <div class="card-body position-relative">
       <table-loading v-show="loading" />
