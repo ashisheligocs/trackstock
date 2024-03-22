@@ -20,6 +20,7 @@ use Modules\Restaurant\Entities\RestroItem;
 use Modules\Restaurant\Entities\Restroorder;
 use Modules\Restaurant\Transformers\RestaurantOrderResource;
 use Modules\Restaurant\Transformers\RestaurantOrderShowResource;
+use Modules\Restaurant\Transformers\TodaySalesResource;
 use Modules\Accounts\Entities\PlutusEntries;
 use Modules\Shops\Entities\Shop;
 use App\Models\Product;
@@ -148,14 +149,31 @@ class OrderController extends Controller
 
         $orderItems = $data['selectedProducts'];
 
+        
+        foreach ($orderItems as $item) {
+            if($item['id'] != 0){
+                    $id = $item['id'];
+                if (isset($newArray[$id])) {
+                    $newArray[$id]['quantity'] += $item['quantity'];
+                } else {
+                    $newArray[$id] = $item;
+                }
+            }
+        }
+        
+        $newArray = array_values($newArray);
+        
         if ($orderItems && !empty($orderItems)) {
             foreach ($orderItems as $item) {
                 // $optionalItems = @$item['addon'] ? Arr::pluck($item['addon'], 'id') : [];
-                RestroItem::create([
-                    'order_id'           => $order->id,
-                    'restaurant_item_id' => $item['id'],
-                    'qty'                => $item['quantity'],
-                ]);
+                if($item->id != 0){
+                    RestroItem::create([
+                        'order_id'           => $order->id,
+                        'restaurant_item_id' => $item['id'],
+                        'qty'                => $item['quantity'],
+                    ]);
+                }
+                
             }
         }
 
@@ -349,7 +367,6 @@ class OrderController extends Controller
     {
         try {
             
-
             $order = $this->storeOrder($request->all());
 
             NonInvoicePayment::create([
@@ -446,5 +463,19 @@ class OrderController extends Controller
         } catch (Exception $e) {
             return $this->responseWithError($e->getMessage());
         }
+    }
+
+    //today sales
+
+    public function todaySale(Request $request){
+       
+        $today = date('Y-m-d');
+        
+        $todaySale = RestroItem::with('restaurantItem','restaurantorder')->whereHas('restaurantorder', function ($newQuery) use ($request,$today) {
+            $newQuery->where('shop_id', $request->shop_id);
+            $newQuery->whereBetween('order_date', [$today, $request->todayDate]);
+        })->get();
+ 
+        return TodaySalesResource::collection($todaySale);
     }
 }

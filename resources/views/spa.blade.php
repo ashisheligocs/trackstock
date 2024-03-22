@@ -21,7 +21,24 @@
         rel="stylesheet">
     <link rel="stylesheet" href="{{ mix('/dist/css/app.css') }}">
 
+<<<<<<< HEAD
     
+=======
+    {{-- <script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="/bower_components/paper-progress/paper-progress.html">
+    <link rel="import" href="/bower_components/paper-slider/paper-slider.html">
+    <link rel="import" href="/bower_components/paper-button/paper-button.html">
+    <link rel="import" href="/bower_components/paper-card/paper-card.html">
+    <link rel="import" href="/bower_components/paper-dialog/paper-dialog.html">
+    <link rel="import" href="/bower_components/paper-input/paper-input.html">
+    <link rel="import" href="/bower_components/paper-input/paper-input-container.html">
+    <link rel="import" href="/bower_components/paper-input/paper-input-error.html">
+    <link rel="import" href="/bower_components/paper-input/paper-input-char-counter.html">
+    <link rel="import" href="/bower_components/paper-input/paper-textarea.html"> 
+    <link rel="import" href="/bower_components/paper-styles/color.html">
+    <link rel="stylesheet" href="/bower_components/paper-styles/demo.css">
+    <link rel="import" href="../polymer/polymer.html"> --}}
+>>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
 
 </head>
 

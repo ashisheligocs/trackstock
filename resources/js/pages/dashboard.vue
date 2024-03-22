@@ -1,5 +1,6 @@
 <template>
   <div>
+<<<<<<< HEAD
     <!-- breadcrumbs Start -->
     <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" />
     <!-- breadcrumbs end -->
@@ -15,6 +16,16 @@
               <div class="row">
                 <div class="col-xl-2 col-md-3 col-6" @onload="cashbook()">
                   <router-link :to="{ name: 'invoicePayments.index' }" class="small-box-footer">
+=======
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="my-4">
+            <div class="">
+              <div class="row justify-content-center">
+                <div class="col-md-3 col-6 mb-4">
+                  <router-link :to="{ name: 'pos.create' }" class="small-box-footer">
+>>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
                     <div class="small-box mb-0">
                       <div class="inner">
                         <!-- Testing -->
@@ -22,28 +33,60 @@
                       <i class="fas fa-sign-in-alt"></i>
                     </div> -->
                         <h3>
-                          <!-- <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} -->
                           Sales
                         </h3>
+<<<<<<< HEAD
                         <!-- <p>
                           {{ $t("dashboard.summery_items.cashbook") }}
                         </p>
+=======
+                      </div>
+                    </div>
+                  </router-link>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                  <router-link :to="{ name: 'reports.inventory' }" class="small-box-footer">
+                    <div class="small-box mb-0">
+                      <div class="inner p-4 text-center">
+                        <h3>
+                          Stock
+                        </h3>
+                      </div>
+                    </div>
+                  </router-link>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-md-3 col-6 mb-4">
+                  <router-link :to="{ name: 'today.sale' }" class="small-box-footer">
+                    <div class="small-box mb-0">
+                      <div class="inner p-4 text-center">
+                        <h3>
+                          Today Sales
+                        </h3>
+>>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
                       </div>
                     </div>
                   </router-link>
                 </div>
 
                 <div class="col-md-3 col-6 mb-4">
-                  <router-link :to="{ name: 'transferBalances.index' }" class="small-box-footer">
+                  <router-link :to="{ name: 'shop_balance' }" class="small-box-footer">
                     <div class="small-box mb-0">
                       <div class="inner p-4 text-center">
                         <h3>
+<<<<<<< HEAD
                         <!-- <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} -->
                    Stock
                       </h3>
                         <!-- <p>
                           {{ $t("dashboard.summery_items.balance_transfers") }}
                         </p> -->
+=======
+                          Cash
+                          {{ getHotelDataList.shop_name }}
+                        </h3>
+>>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
                       </div>
                     </div>
                   </router-link>
@@ -93,7 +136,6 @@
                           </router-link>
                         </div>
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -103,16 +145,16 @@
                       <tbody>
                         <tr>
                           <td>QR</td>
-                          <td>20,000</td>
+                          <td>{{ shop_bank_balance | forBalanceSheetCurrencyDecimalOnly }}</td>
                         </tr>
 
                         <tr>
                           <td>Cash</td>
-                          <td>1,20,000</td>
+                          <td>{{ shop_cash_balance | forBalanceSheetCurrencyDecimalOnly }}</td>
                         </tr>
                         <tr>
                           <th>Total</th>
-                          <th>1,40,000</th>
+                          <th>{{ shop_total_balance | forBalanceSheetCurrencyDecimalOnly }}</th>
                         </tr>
                       </tbody>
                     </table>
@@ -123,6 +165,7 @@
           </div>
         </div>
       </div>
+<<<<<<< HEAD
       <!--  -->
       <!-- Main row -->
       <div v-if="$can('account-summery') && dashboardSummery" class="row today_summry_k">
@@ -253,11 +296,14 @@
           </div>
         </div>
       </div>
+=======
+>>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
     </div>
   </div>
 </template>
 
 <script>
+<<<<<<< HEAD
 import VueApexCharts from 'vue-apexcharts';
 import Form from "vform";
 import axios from "axios";
@@ -269,31 +315,20 @@ import { CanvasRenderer } from "echarts/renderers";
 import moment from "moment";
 // import { LegendComponent, TitleComponent, TooltipComponent, } from "echarts/components";
 import { mapGetters } from "vuex";
+=======
+>>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
 
-use([
-  CanvasRenderer,
-  PieChart,
-  LineChart,
-  BarChart,
-  TitleComponent,
-  TooltipComponent,
-  LegendComponent,
-]);
+import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   middleware: "auth",
   metaInfo() {
     return { title: this.$t("dashboard.page_title") };
   },
-  components: {
-    VChart,
-    apexchart: VueApexCharts
-  },
-  provide: {
-    [THEME_KEY]: "vintage",
-  },
 
   data: () => ({
+<<<<<<< HEAD
     breadcrumbsCurrent: "dashboard.breadcrumbs_current",
     breadcrumbs: [
       {
@@ -312,10 +347,16 @@ export default {
     loading: false,
     rooms: [],
     inr: "",
+=======
+    shop_bank_balance : 0,
+    shop_cash_balance : 0,
+    shop_total_balance : 0,
+>>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
   }),
   computed: {
-    ...mapGetters("operations", ["selectedHotel", "hotelCategoryItems", "appInfo", "hotelItems"]),
+    ...mapGetters("operations", ["selectedHotel", "appInfo", "hotelItems"]),
   },
+<<<<<<< HEAD
   created() {
     this.loading = true;
     let currentDate = new Date();
@@ -459,11 +500,29 @@ export default {
       if (event) {
         summerType = event.target.value;
       }
-      const { data } = await axios.get(
-        window.location.origin + "/api/dashboard-summery/" + summerType
-      );
-      this.dashboardSummery = data;
+=======
+  async created() {
+    await this.getHotelDataList();
+    await this.getShopAvailableBalance();
+  },
+  methods: {
+    async getHotelDataList() {
+      await this.$store.dispatch('operations/getHotelData', {
+        path: '/api/shop',
+      });
     },
+    async getShopAvailableBalance() {
+>>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
+      const { data } = await axios.get(
+        window.location.origin + "/api/shop-balance/" + this.selectedHotel
+      );
+
+      this.shop_bank_balance = data.bank;
+      this.shop_cash_balance = data.cash;
+      this.shop_total_balance = data.total_balance;
+
+    },
+<<<<<<< HEAD
 
     // async cashbook() {
     //   const { data } = await axios.get(
@@ -501,16 +560,13 @@ export default {
       this.barChartOptions.series[0].data = data.purchase;
       this.barChartOptions.series[1].data = data.sales;
     },
+=======
+>>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
   },
+  watch:{
+    selectedHotel(){
+      this.getShopAvailableBalance();
+    }
+  }
 };
 </script>
-<style scoped>
-.chart {
-  height: 400px;
-}
-
-/* tr,td {
-  text-align: left;
-  border: 1px solid black;
-} */
-</style>
