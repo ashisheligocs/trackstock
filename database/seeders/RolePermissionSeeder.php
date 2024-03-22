@@ -20,12 +20,13 @@ class RolePermissionSeeder extends Seeder
             $permissions = DB::table('permissions')->get();
             foreach ($roles as $role) {
                 foreach ($permissions as $permission) {
-                    if($role->slug == 'incharge'){
+                    if($role->slug == 'incharge' || $role->slug == 'sale'){
                         if($permission->guard_name == 'shop Management' || 
                            $permission->guard_name == 'Balance Transfer Management' || 
                            $permission->guard_name == 'Ledger Account Management' || 
                            $permission->guard_name == 'Ledger Group Management' ||
-                           $permission->guard_name == 'Report View' ||
+                           $permission->guard_name == 'Report View' || 
+                           $permission->guard_name == 'Dashboard View' ||
                            $permission->guard_name == 'Setup') {
                                 DB::table('role_permission')->insert([
                                     'role_id' => $role->id,

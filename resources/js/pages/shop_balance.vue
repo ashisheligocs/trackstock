@@ -47,7 +47,7 @@ Shop balance page
                   </div>
                 </div>
               </div>
-              <div class="row justify-content-center">
+              <div class="row justify-content-center" v-if="$can('incharge-activities')">
                 <button class="btn btn-primary" @click="toggleVisibility">Collect Cash</button>
               </div>
               <div class="col-12 m-auto mw500" v-show="isVisible">
