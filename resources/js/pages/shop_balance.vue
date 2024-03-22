@@ -50,41 +50,6 @@ Shop balance page
               <div class="row justify-content-center">
                 <button class="btn btn-primary" @click="toggleVisibility">Collect Cash</button>
               </div>
-<<<<<<< HEAD
-              <div class="col-12 m-auto mw500">
-                  <div class="table-responsive mt-4 ">
-                    <table class="table table-bordered bg-white">
-                      <tbody>
-                        <tr>
-                          <td class="align-middle">QR</td>
-                          <td class="align-middle text-right">20,000</td>
-                          <td class="align-middle text-right">20,000</td>
-                        </tr>
-
-                        <tr>
-                          <td class="align-middle">Cash</td>
-                          <td class="align-middle text-right">1,20,000</td>
-                          <td class="align-middle text-right">
-                            <div class="form-group mb-0">
-                              <input type="text" class="form-control text-right">
-                            </div>
-
-                          </td>
-                        </tr>
-                        <tr>
-                          <th class="align-middle">Total</th>
-                          <th class="align-middle text-right">1,40,000</th>
-                          <th class="align-middle text-right">Balance : 40,000</th>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div class="row justify-content-center">
-                <button class="btn btn-outline-danger mt-3">Collect Cash</button>
-              </div>
-                </div>
-=======
               <div class="col-12 m-auto mw500" v-show="isVisible">
                 <div class="table-responsive mt-4 ">
                   <table class="table table-bordered bg-white">
@@ -119,7 +84,6 @@ Shop balance page
                   <button class="btn btn-outline-danger mt-3">Collect Cash</button>
                 </div>
               </div>
->>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
               <v-modal>
                 <h4>Receipt Number</h4>
                 <table>

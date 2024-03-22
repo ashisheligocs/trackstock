@@ -45,8 +45,6 @@
                 <!-- {{ selectedItemList }} -->
                 <tbody v-if="selectedItemList && selectedItemList.length > 0">
                   <tr v-for="(singleItem, i) in selectedItemList" :key="i">
-<<<<<<< HEAD
-=======
                     <td>{{ i + 1 }}</td>
                     <td>
                       <div class="form-group">
@@ -61,7 +59,6 @@
                           </div>
                        </div>
                     </td>
->>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
                     <td>
                       {{ singleItem.name }}
                       <span v-if="singleItem.addonString != ''" style="font-size: 11px;"><br />{{
@@ -559,10 +556,6 @@
         computed: {
             ...mapGetters("operations", ["items", "appInfo", "hotelItems", "selectedHotel"]),
 
-<<<<<<< HEAD
-          
-=======
->>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
             filteredProducts() {
               if (!this.selectedSubCategory) {
                 return this.products;
@@ -801,13 +794,8 @@
                 toast.fire({ type: "success", title: "Order Added Successfully" });
                 return this.addItemInList();
             },
-<<<<<<< HEAD
-            addItemInList() {
-                
-=======
             addItemInList(code) {
 
->>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
                 const addonNames = this.currentAddon?.map(add => add.name);
                 const addonString = addonNames ? addonNames.join(' + ') : '';
 
@@ -815,21 +803,11 @@
                     return item.id == this.currentProduct.id && item.variant == this.currentVariant
                 })
 
-<<<<<<< HEAD
-                if (alreadyAddedItem >= 0) {
-                  
-                  if(this.selectedItemList[alreadyAddedItem].quantity >= this.selectedItemList[alreadyAddedItem].available_qty){
-                    return toast.fire({
-                        type: "error",
-                        title: 'Insufficient Stock ! you can not added more than '+this.selectedItemList[alreadyAddedItem].available_qty+' Quantity',
-                    });
-=======
                 let quantitySumByCode = {};
 
                 this.selectedItemList.forEach(item => {
                   if (!quantitySumByCode[item.code]) {
                       quantitySumByCode[item.code] = 0;
->>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
                   }
                   quantitySumByCode[item.code] += item.quantity;
                 });
@@ -844,21 +822,6 @@
                   }
                   
 
-<<<<<<< HEAD
-                  this.$set(this.selectedItemList, alreadyAddedItem, {
-                      name: `${this.currentProduct?.name}`,
-                      id: this.currentProduct.id,
-                      addon: this.currentAddon,
-                      addonString:addonString,
-                      quantity: parseFloat(this.selectedItemList[alreadyAddedItem].quantity) + 1,
-                      price: parseFloat(this.currentProduct?.sellingPrice || 0),
-                      total: parseFloat(this.currentProduct?.sellingPrice || 0),
-                      available_qty: this.currentProduct?.available_qty ?? 0,
-                  });  
-                  
-                } else {
-                    this.selectedItemList.push({
-=======
                 //   this.$set(this.selectedItemList, alreadyAddedItem, {
                 //       name: `${this.currentProduct?.name}`,
                 //       id: this.currentProduct.id,
@@ -873,7 +836,6 @@
                 // } else {
                   
                     this.selectedItemList.unshift({
->>>>>>> 84a23ec0dd14a3fb24326b601eda3953ac145c69
                         name: `${this.currentProduct?.name}`,
                         id: this.currentProduct.id,
                         addon: this.currentAddon,
