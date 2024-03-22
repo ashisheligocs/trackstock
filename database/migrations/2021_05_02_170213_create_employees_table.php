@@ -32,7 +32,7 @@ class CreateEmployeesTable extends Migration
             $table->boolean('status')->nullable()->default(1);
             $table->string('image_path')->nullable();
             $table->timestamps();
-            $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('department_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
 
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade')->onUpdate('no action');

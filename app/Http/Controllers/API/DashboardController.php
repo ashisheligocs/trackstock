@@ -32,6 +32,8 @@ use App\Http\Resources\InvoiceListResource;
 use App\Http\Resources\PurchaseListResource;
 use App\Http\Resources\ProductListingResource;
 use App\Http\Resources\AccountTransactionResource;
+use App\Models\Employee;
+use App\Models\Role;
 use Modules\Shops\Transformers\CommonResource;
 use Modules\Accounts\Entities\Ledger;
 use Modules\Accounts\Entities\LedgerAccount;
@@ -648,6 +650,19 @@ class DashboardController extends Controller
             'bank'=> round($bankBalance,2),
             'cash'=> round($cashBalance,2),
         ]); 
+    }
+
+    // Get Shop Wise Sales Man
+
+    public function shopSalesMan($id){
+        
+        $getSalesRole = Role::where('slug','sale')->first();
+
+        $getSalesPerson = Employee::with('user')->where('shop_id',$id)->whereHas('user.roles', function ($newQuery) use ($getSalesRole) {
+            $newQuery->where('role_id', $getSalesRole->id);
+        })->get();
+
+        return CommonResource::collection($getSalesPerson);
     }
 
     // Room Category & Availability

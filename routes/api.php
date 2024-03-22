@@ -83,6 +83,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::get('dashboard', [DashboardController::class, 'cashbook_total']);
     Route::get('shop-balance/{id}', [DashboardController::class, 'shopBalance']);
+    Route::get('shop-sales-man/{id}', [DashboardController::class, 'shopSalesMan']);
+    
     Route::get('getAgentCoupons', [CouponController::class, 'getAgentCoupons']);
 
     // Dashboard top selling products
