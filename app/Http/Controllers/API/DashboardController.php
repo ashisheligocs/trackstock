@@ -610,6 +610,46 @@ class DashboardController extends Controller
         }
     }
 
+    //Get Shop Available Balance
+
+    public function shopBalance($id){
+
+        $bankBalance = 0;
+        $cashBalance = 0;
+        $totalBalance = 0;
+
+        // echo "<pre/>"; print_r($id); exit();
+        $bankLedger = LedgerAccount::where('code', 'bank')->first();
+        $cashLedger = LedgerAccount::where('code', 'CASH-0001')->first();
+
+        $getBankLedgerBalance = AccountTransaction::where('account_id',$bankLedger->id)->where('shop_id',$id)->get();
+        $getCashLedgerBalance = AccountTransaction::where('account_id',$cashLedger->id)->where('shop_id',$id)->get();
+
+        foreach($getBankLedgerBalance as $value){
+            if($value->type == 1){
+                $bankBalance += $value->amount;
+            } else {
+                $bankBalance -= $value->amount;
+            }
+        }
+
+        foreach($getCashLedgerBalance as $values){
+            if($values->type == 1){
+                $cashBalance += $values->amount;
+            } else {
+                $cashBalance -= $values->amount;
+            }
+        }
+
+        $totalBalance = $cashBalance + $bankBalance;
+
+        return response()->json([
+            'total_balance'=>round($totalBalance,2),
+            'bank'=> round($bankBalance,2),
+            'cash'=> round($cashBalance,2),
+        ]); 
+    }
+
     // Room Category & Availability
 
     public function roomCategoryAvailability(Request $request)
