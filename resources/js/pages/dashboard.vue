@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="col-md-3 col-6 mb-4">
-                  <router-link :to="{ name: 'transferBalances.index' }" class="small-box-footer">
+                  <router-link :to="{ name: 'shop_balance' }" class="small-box-footer">
                     <div class="small-box mb-0">
                       <div class="inner p-4 text-center">
                         <h3>

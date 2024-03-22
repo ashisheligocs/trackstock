@@ -31,7 +31,7 @@ Shop balance page
                       <h3>
                         QR
                       </h3>
-                      <span>20,000</span>
+                      <span>{{ shop_bank_balance | forBalanceSheetCurrencyDecimalOnly }}</span>
                     </div>
                   </div>
                 </div>
@@ -42,7 +42,7 @@ Shop balance page
                       <h3>
                         Cash
                       </h3>
-                      <span>50,000</span>
+                      <span>{{ shop_cash_balance | forBalanceSheetCurrencyDecimalOnly }}</span>
                     </div>
                   </div>
                 </div>
@@ -86,7 +86,7 @@ Shop balance page
               </div>
               <v-modal>
                 <h4>Receipt Number</h4>
-                <tabel>
+                <table>
                   <tr>
                     <td>
                       Incharge Name
@@ -148,7 +148,7 @@ Shop balance page
                       </div>
                     </td>
                   </tr>
-                </tabel>
+                </table>
               </v-modal>
             </div>
           </div>
@@ -170,17 +170,35 @@ export default {
   metaInfo() {
     return { title: this.$t("dashboard.page_title") };
   },
+  computed: {
+    ...mapGetters("operations", ["selectedHotel", "appInfo"]),
+  },
   data: () => ({
     isVisible: false,
-
+    shop_bank_balance : 0,
+    shop_cash_balance : 0,
+    shop_total_balance : 0,
   }),
+  created(){
+    this.getShopAvailableBalance();
+  },
   methods: {
     goback() {
       this.$router.go(-1);
     },
     toggleVisibility() {
       this.isVisible = !this.isVisible;
-    }
+    },
+    async getShopAvailableBalance() {
+      const { data } = await axios.get(
+        window.location.origin + "/api/shop-balance/" + this.selectedHotel
+      );
+
+      this.shop_bank_balance = data.bank;
+      this.shop_cash_balance = data.cash;
+      this.shop_total_balance = data.total_balance;
+
+    },
   }
 };
 </script>
