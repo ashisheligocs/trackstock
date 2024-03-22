@@ -1318,5 +1318,13 @@ export default [
     component: page("daybook.vue")
   },
 
+  //route for today sale
+
+  {
+    path: "/today-sale",
+    name: "today.sale",
+    component: page("sales/pos/today-sale.vue"),
+  },
+
 
 ];

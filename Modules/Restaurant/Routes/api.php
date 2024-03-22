@@ -71,6 +71,8 @@ Route::prefix('food')->group(function () {
         Route::post('/invoice', 'Api\OrderController@createInvoice');
         Route::post('/invoice/update/{id}', 'Api\OrderController@updateInvoice');
         Route::post('/invoice/pay', 'Api\OrderController@payInvoice');
+        Route::post('/todaysale', 'Api\OrderController@todaySale');
+        
         Route::resource('/delete', 'Api\OrderController', [
             'as' => 'order.'
         ]);

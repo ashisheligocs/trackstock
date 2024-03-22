@@ -558,9 +558,6 @@
         computed: {
             ...mapGetters("operations", ["items", "appInfo", "hotelItems", "selectedHotel"]),
 
-         
-
-
             filteredProducts() {
               if (!this.selectedSubCategory) {
                 return this.products;
