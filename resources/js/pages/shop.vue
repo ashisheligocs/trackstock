@@ -3,16 +3,15 @@
     <div class="container-fluid">
       <div class="row">
         <div>
-          <button @click="goBack">Back</button>
+          <button @click="goBack" class="btn btn-secondary mt-2 mb-2"><i class="fas fa-long-arrow-alt-left"></i> Back</button>
         </div>
-
 
         <div class="col-md-12">
           <div class="my-4">
             <div class="">
               <div class="row justify-content-center">
                 <div class="col-md-3 col-6 mb-4">
-                  <router-link :to="{ name: 'pos.create' }" class="small-box-footer">
+                  <router-link :to="{ name: 'today.sale' }" class="small-box-footer">
                     <div class="small-box mb-0">
                       <div class="inner p-4 text-center">
                         <h3>

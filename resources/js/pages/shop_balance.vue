@@ -81,15 +81,15 @@ Shop balance page
                 </div>
 
                 <div class="row justify-content-center">
-                  
-                  
+
+
                 </div>
               </div>
-              <div class="row justify-content-center"> 
-                <router-link :to="{ name: 'transferBalances.create' }" class="small-box-footer">
+              <div class="row justify-content-center">
+                <router-link :to="{ name: 'transferBalances.create' }" class="small-box-footer" v-if="$can('incharge-activities')">
                       <button class="btn btn-primary" >Collect Cash</button>
                       </router-link>
-                
+
               </div>
               <v-modal>
                 <h4>Receipt Number</h4>

@@ -37,18 +37,6 @@
                       <i class="fa-solid fa-eye-slash"></i>
                     </div>
                   </div>
-                  <div class="row mb-5">
-                    <div class="col-md-6">
-                      <checkbox v-model="remember" name="remember">
-                        {{ $t("remember_me") }}
-                      </checkbox>
-                    </div>
-                    <div class="col-md-6 text-right">
-                      <router-link :to="{ name: 'password.request' }" class="ml-auto my-auto">
-                        {{ $t("forgot_password") }}
-                      </router-link>
-                    </div>
-                  </div>
                   <!-- Submit Button -->
                   <v-button :loading="form.busy"
                     class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm">
@@ -245,23 +233,12 @@ export default {
       this.redirect();
     },
     redirect() {
-
       const intendedUrl = Cookies.get("intended_url");
       if (intendedUrl) {
-        if(this.user.roles[0] == 'Super Admin'){
-          Cookies.remove("intended_url");
+        Cookies.remove("intended_url");
         this.$router.push({ path: intendedUrl });
-        } else {
-          this.$router.push({ name: "pos.create" });
-        }
-
       } else {
-        if(this.user.roles[0] == 'Super Admin'){
-          this.$router.push({ name: "home" });
-        } else {
-          this.$router.push({ name: "pos.create" });
-        }
-
+        this.$router.push({ name: "home" });
       }
     },
     loginCredential(email, pass) {
