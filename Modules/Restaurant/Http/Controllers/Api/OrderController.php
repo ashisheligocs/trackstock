@@ -148,14 +148,31 @@ class OrderController extends Controller
 
         $orderItems = $data['selectedProducts'];
 
+        
+        
+
         if ($orderItems && !empty($orderItems)) {
             foreach ($orderItems as $item) {
+                if($item['id'] != 0){
+                        $id = $item['id'];
+                    if (isset($newArray[$id])) {
+                        $newArray[$id]['quantity'] += $item['quantity'];
+                    } else {
+                        $newArray[$id] = $item;
+                    }
+                }
+            }
+            
+            $newArray = array_values($newArray);
+
+            foreach ($newArray as $item) {
                 // $optionalItems = @$item['addon'] ? Arr::pluck($item['addon'], 'id') : [];
-                RestroItem::create([
-                    'order_id'           => $order->id,
-                    'restaurant_item_id' => $item['id'],
-                    'qty'                => $item['quantity'],
-                ]);
+                
+                    RestroItem::create([
+                        'order_id'           => $order->id,
+                        'restaurant_item_id' => $item['id'],
+                        'qty'                => $item['quantity'],
+                    ]);
             }
         }
 
@@ -349,7 +366,6 @@ class OrderController extends Controller
     {
         try {
             
-
             $order = $this->storeOrder($request->all());
 
             NonInvoicePayment::create([
