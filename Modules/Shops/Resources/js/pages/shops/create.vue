@@ -10,9 +10,10 @@
                         <h3 class="card-title">
                             {{ $t('shop.shopAdd.create.form_title') }}
                         </h3>
-                        <router-link :to="{ name: 'shops' }" class="btn btn-secondary float-right">
-                            <i class="fas fa-long-arrow-alt-left" /> {{ $t('common.back') }}
-                        </router-link>
+                        
+
+                        <button class="btn btn-secondary mt-2 mb-2"  @click="goBack"><i class="fas fa-long-arrow-alt-left" /> {{ $t("common.back") }}</button>
+
                     </div>
                     <!-- /.card-header -->
 
