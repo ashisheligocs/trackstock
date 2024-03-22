@@ -618,14 +618,17 @@ class DashboardController extends Controller
 
         $bankBalance = 0;
         $cashBalance = 0;
+        $inchargeBalance = 0;
         $totalBalance = 0;
 
-        // echo "<pre/>"; print_r($id); exit();
         $bankLedger = LedgerAccount::where('code', 'bank')->first();
         $cashLedger = LedgerAccount::where('code', 'CASH-0001')->first();
 
+        $inchargeLedger = LedgerAccount::where('code', 'in-charge')->first();
+
         $getBankLedgerBalance = AccountTransaction::where('account_id',$bankLedger->id)->where('shop_id',$id)->get();
         $getCashLedgerBalance = AccountTransaction::where('account_id',$cashLedger->id)->where('shop_id',$id)->get();
+        $getInchargeLedgerBalance = AccountTransaction::where('account_id',$inchargeLedger->id)->where('shop_id',$id)->get();
 
         foreach($getBankLedgerBalance as $value){
             if($value->type == 1){
@@ -643,12 +646,21 @@ class DashboardController extends Controller
             }
         }
 
+        foreach($getInchargeLedgerBalance as $values){
+            if($values->type == 1){
+                $inchargeBalance += $values->amount;
+            } else {
+                $inchargeBalance -= $values->amount;
+            }
+        }
+
         $totalBalance = $cashBalance + $bankBalance;
 
         return response()->json([
             'total_balance'=>round($totalBalance,2),
             'bank'=> round($bankBalance,2),
             'cash'=> round($cashBalance,2),
+            'total_balance_incharge' => round($inchargeBalance,2)
         ]); 
     }
 

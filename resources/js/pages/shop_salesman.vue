@@ -29,7 +29,7 @@
               <td>{{ data.mobile_number }}</td>
               <td>
                 <div class="btn-group">
-                  <button class="btn btn-secondary mt-1 mb-1">Change Shop</button>
+                  <button @click="changeShop(data.id)" class="btn btn-secondary mt-1 mb-1">Change Shop</button>
                 </div>
               </td>
             </tr>
@@ -39,6 +39,23 @@
       </div>
     </div>
    
+    <VModal v-if="changeShopModal" v-model="changeShopModal" @close="changeShopModal = false">
+            <h3 slot="title" class="text-center">Change Shop</h3>
+            <div class="mt-1">    
+                <div class="form-group">
+                    <label for="note">Change Shop</label>
+                    <v-select
+                        label="shop_name"
+                        name="shop"
+                        :options="shopTransfer"
+                        placeholder="Select Shop"
+                    />
+                </div>
+            </div>
+            <div slot="modal-footer">
+                <button @click="updateShop(allData.id)" class="btn btn-primary">Change Shop</button>
+            </div>
+        </VModal>
   </div>
 </template>
 
@@ -55,6 +72,10 @@ export default {
   },
   computed: {
     ...mapGetters("operations", ["selectedHotel", "appInfo","hotelItems"]),
+
+    shopTransfer(){
+        return this.hotelItems.filter(shop => shop.id != this.selectedHotel);      
+    }
   },
   created(){
     this.getShopDataList();
@@ -62,7 +83,7 @@ export default {
   },
   data: () => ({
     salePerson : [],
-
+    changeShopModal:false,
   }),
   methods:{
     goback() {
@@ -80,6 +101,12 @@ export default {
 
       this.salePerson = data.data;
     },
+    async changeShop(id){
+      this.changeShopModal = true
+    },
+    async updateShop(id){
+      this.changeShopModal = false
+    }
   },
   watch:{
     selectedHotel(){

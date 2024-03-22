@@ -550,6 +550,7 @@ class ReportController extends Controller
             $purchaseIns = PurchaseProduct::with('purchase.supplier')->where('product_id', $product->id)->whereHas('purchase', function ($newQuery) use ($request) {
                 $newQuery->whereBetween('purchase_date', [$request->fromDate, $request->toDate]);
             })->sum('quantity');
+          
 
             $invoiceReturnIns = InvoiceReturnProduct::with('invoiceReturn.invoice.client')->where('product_id', $product->id)->whereHas('invoiceReturn', function ($newQuery) use ($request) {
                 $newQuery->whereBetween('date', [$request->fromDate, $request->toDate]);
@@ -600,7 +601,7 @@ class ReportController extends Controller
                 $allProducts[$key]['hotel_name'] = (@$getHotel[0]) ? $getHotel[0]->inventoryAdjustment->shop->shop_name : ((@$getHotel1[0]) ? $getHotel1[0]->purchase->shop->shop_name : '');
             }
         }
-
+       
         return $allProducts;
     }
 }
