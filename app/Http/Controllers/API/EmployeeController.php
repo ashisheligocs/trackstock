@@ -105,7 +105,7 @@ class EmployeeController extends Controller
             Employee::create([
                 'name' => $request->employeeName,
                 'emp_id' => $code,
-                'department_id' => @$request->department ? $request->department['id'] : NULL,           
+                'department_id' => @$request->department ? $request->department['id'] : NULL,
                 'designation' => $request->designation,
                 'salary' => $request->salary,
                 'commission' => $request->commission,
@@ -164,7 +164,7 @@ class EmployeeController extends Controller
         // validate request
         $this->validate($request, [
             'employeeName' => 'required|string|max:255',
-            'department' => 'required',
+            'department' => 'nullable',
             'designation' => 'required|string|max:255',
             'salary' => 'nullable',
             'commission' => 'nullable|numeric',
