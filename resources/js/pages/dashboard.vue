@@ -9,7 +9,11 @@
                 <div class="col-md-3 col-6 mb-4">
                   <router-link :to="{ name: 'pos.create' }" class="small-box-footer">
                     <div class="small-box mb-0">
-                      <div class="inner p-4 text-center">
+                      <div class="inner">
+                        <!-- Testing -->
+                        <!-- <div class="icon mb-2">
+                      <i class="fas fa-sign-in-alt"></i>
+                    </div> -->
                         <h3>
                           Sales
                         </h3>
@@ -50,6 +54,39 @@
                           Cash
                           {{ getHotelDataList.shop_name }}
                         </h3>
+                      </div>
+                    </div>
+                  </router-link>
+                </div>
+</div>
+<div class="row justify-content-center">
+                <div class="col-md-3 col-6 mb-4">
+                  <router-link :to="{ name: 'transferBalances.index' }" class="small-box-footer">
+                    <div class="small-box mb-0">
+                      <div class="inner p-4 text-center">
+                        <h3>
+                        <!-- <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} -->
+                   Today Sales
+                      </h3>
+                        <!-- <p>
+                          {{ $t("dashboard.summery_items.balance_transfers") }}
+                        </p> -->
+                      </div>
+                    </div>
+                  </router-link>
+                </div>
+
+                <div class="col-xl-2 col-md-3 col-6">
+                  <router-link :to="{ name: 'transferBalances.index' }" class="small-box-footer">
+                    <div class="small-box mb-0">
+                      <div class="inner">
+                        <h3>
+                        <!-- <span>{{ inr }}</span> {{ dashboardSummery.cashbook }} -->
+                   Cash
+                      </h3>
+                        <!-- <p>
+                          {{ $t("dashboard.summery_items.balance_transfers") }}
+                        </p> -->
                       </div>
                     </div>
                   </router-link>

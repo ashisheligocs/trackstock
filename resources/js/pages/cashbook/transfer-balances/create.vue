@@ -1,5 +1,5 @@
 <template>
-  <div> 
+  <div>
     <!-- breadcrumbs Start -->
     <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" />
     <!-- breadcrumbs end -->
@@ -14,6 +14,8 @@
               <i class="fas fa-long-arrow-alt-left" /> {{ $t('common.back') }}
             </router-link>
           </div>
+
+
           <!-- /.card-header -->
           <!-- form start -->
           <form role="form" @submit.prevent="saveTransfer" @keydown="form.onKeydown($event)">
@@ -22,15 +24,8 @@
                 <div class="form-group col-md-6">
                   <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                     <span class="required">*</span></label>
-                  <v-select
-                    class="flex-grow-1"
-                    v-model="selectedHotelId"
-                    :options="hotelItems"
-                    label="shop_name"
-                    name="shop_id"
-                    placeholder="Search a Shop"
-                    @input="getAccoutns"
-                  />
+                  <v-select class="flex-grow-1" v-model="selectedHotelId" :options="hotelItems" label="shop_name"
+                    name="shop_id" placeholder="Search a Shop" @input="getAccoutns" />
                 </div>
                 <div class="form-group col-md-6">
                   <label for="transferReason">{{ $t('cashbook.common.transfer_reason') }}
@@ -47,7 +42,7 @@
                     <span class="required">*</span></label>
                   <v-select v-model="form.fromAccount" :options="items" label="ledgerName"
                     :class="{ 'is-invalid': form.errors.has('fromAccount') }" name="fromAccount"
-                    :placeholder="$t('common.account_placeholder')" @input="updateBalance"/>
+                    :placeholder="$t('common.account_placeholder')" @input="updateBalance" />
                   <has-error :form="form" field="fromAccount" />
                 </div>
                 <div class="form-group col-md-6">
@@ -55,19 +50,19 @@
                     <span class="required">*</span></label>
                   <v-select v-model="form.toAccount" :options="items" label="ledgerName"
                     :class="{ 'is-invalid': form.errors.has('toAccount') }" name="toAccount"
-                    :placeholder="$t('common.account_placeholder')"/>
+                    :placeholder="$t('common.account_placeholder')" />
                   <has-error :form="form" field="toAccount" />
                 </div>
               </div>
               <div class="row" v-if="form.fromAccount">
                 <div class="form-group col-md-6">
                   <label for="availableBalance">{{
-                      $t('common.available_balance')
-                  }}</label>
+      $t('common.available_balance')
+    }}</label>
                   <input id="availableBalance" v-model="form.availableBalance" type="number" step="any"
                     class="form-control" :class="{
-                      'is-invalid': form.errors.has('availableBalance'),
-                    }" name="availableBalance" readonly />
+      'is-invalid': form.errors.has('availableBalance'),
+    }" name="availableBalance" readonly />
                   <has-error :form="form" field="availableBalance" />
                 </div>
                 <div class="form-group col-md-6">
@@ -82,7 +77,7 @@
                 <div class="form-group col-md-6">
                   <label for="date">{{ $t('common.date') }}</label>
                   <input id="date" v-model="form.date" type="date" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('date') }" name="date" min="" :readonly="readonly"/>
+                    :class="{ 'is-invalid': form.errors.has('date') }" name="date" min="" :readonly="readonly" />
                   <has-error :form="form" field="date" />
                 </div>
                 <div class="form-group col-md-6" v-if="!readonly">
@@ -121,38 +116,34 @@
     </div>
 
     <Modal v-if="showPrintModal">
-            <h5 slot="header" class="no-print">Receipt</h5>
-            <div class="w-100" slot="body">
-                <div id="invoice-POS">
-                    <div style="max-width: 400px; margin: 0px auto">
-                        <div class="info">
-                           
-                            <div class="text-bold text-md">
-                              Shop Name : {{ selectedHotelId.shop_name }}
-                                <br />
-                            </div>
-                            <div class="text-bold text-md">
-                              Date : {{ form.date }}
-                                <br />
-                            </div>
-                            <div class="text-bold text-md">
-                              Cash Received : {{ form.amount }}
-                                <br />
-                            </div>
-                            <div class="text-bold text-md">
-                              By : {{ user.name }}
-                                <br />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <h5 slot="header" class="no-print">Receipt</h5>
+      <div class="w-100" slot="body">
+        <div id="invoice-POS">
+          <div style="max-width: 400px; margin: 0px auto">
+            <div class="info">
+
+              <p class="text-bold text-md" style="text-align:center;">Receipt Number : 0005</p>
+              <p class="text-bold text-md" style="text-align:center;">Incharge Name : {{ user.name }}</p>
+              <p class="text-bold text-md" style="text-align:center;">Date : {{ this.todaydate }}</p>
+              <p class="text-bold text-md" style="text-align:center;">Shop Name : {{ selectedHotelId.shop_name }}</p>
+              <p class="text-bold text-md" style="text-align:center;">Cash Received : {{ form.amount }}</p>
+              <p class="text-bold text-md" style="text-align:center;">Remarks : <textarea class="form-control"
+                  v-model="billContent"></textarea></p>
+              <p class="text-bold text-md" style="text-align:center;">Sign : ______________ </p>
+
             </div>
-            <div class="pos-modal-footer no-print" slot="modal-footer">
-                <button class="modal-default-button btn btn-danger" @click="closeReceiptModal">
-                    {{ $t("common.close") }}
-                </button>
-            </div>
-        </Modal>
+          </div>
+        </div>
+      </div>
+      <div class="pos-modal-footer no-print" slot="modal-footer">
+        <button @click="connectAndPrint">Print Bill</button>
+        <!-- <textarea v-model="billContent" placeholder="Enter bill content"></textarea> -->
+        <button class="modal-default-button btn btn-danger" @click="closeReceiptModal">
+          {{ $t("common.close") }}
+        </button>
+      </div>
+    </Modal>
+
   </div>
 
 </template>
@@ -160,7 +151,7 @@
 <script>
 import Form from 'vform'
 import { mapGetters } from 'vuex'
-import VModal from "../../../components/VModal"; 
+import VModal from "../../../components/VModal";
 // import PaperCard from './PaperCard.vue';
 export default {
   middleware: ['auth', 'check-permissions'],
@@ -171,6 +162,12 @@ export default {
     VModal,
   },
   data: () => ({
+    todaydate: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
+    billContent: '',
+    printerServiceUUID: '000018f0-0000-1000-8000-00805f9b34fb',
+    device: null,
+    server: null,
+    characteristic: null,
     breadcrumbsCurrent: 'cashbook.transfers.create.breadcrumbs_current',
     breadcrumbs: [
       {
@@ -204,20 +201,20 @@ export default {
     selectedHotelId: null,
     loading: true,
     readonly: false,
-    showPrintModal:false,
+    showPrintModal: false,
   }),
-  watch:{
-      selectedHotel: function () {
-          this.getHotelDataList();
-          this.getAccoutns();
-          this.form.reset();
-      },
+  watch: {
+    selectedHotel: function () {
+      this.getHotelDataList();
+      this.getAccoutns();
+      this.form.reset();
+    },
   },
   computed: {
     ...mapGetters('operations', ['items', 'appInfo', "selectedHotel", "hotelItems"]),
     ...mapGetters({
-            user: "auth/user",
-        }),
+      user: "auth/user",
+    }),
   },
   async created() {
 
@@ -366,27 +363,97 @@ export default {
     //       }
     //     });
     //   });
-   
+
     await this.getHotelDataList();
     if (this.selectedHotel && this.selectedHotel !== 'all') {
-        this.hotelItems.forEach((hotel) => {
-            if (hotel.id == this.selectedHotel) this.selectedHotelId = hotel
-        })
+      this.hotelItems.forEach((hotel) => {
+        if (hotel.id == this.selectedHotel) this.selectedHotelId = hotel
+      })
     }
-    if(this.user.back_days != '' && this.user.back_days != 'All'){
-            var today = new Date();
-            var minDate = new Date();
+    if (this.user.back_days != '' && this.user.back_days != 'All') {
+      var today = new Date();
+      var minDate = new Date();
 
-            minDate.setDate(today.getDate() - this.user.back_days);
-            document.getElementById("date").min = minDate.toISOString().split("T")[0];
-        }
-      if(this.user?.roles[0] == "incharge"){
-        this.readonly = true;
-    } 
-    await this.getAccoutns();   
+      minDate.setDate(today.getDate() - this.user.back_days);
+      document.getElementById("date").min = minDate.toISOString().split("T")[0];
+    }
+    if (this.user?.roles[0] == "incharge") {
+      this.readonly = true;
+    }
+    await this.getAccoutns();
   },
   methods: {
-    async getHotelDataList () {
+
+    async connectAndPrint() {
+      const receiptheader = document.querySelector('#invoice-POS .info .text-bold:nth-of-type(1)').innerText.trim();
+      const shopName = document.querySelector('#invoice-POS .info .text-bold:nth-of-type(2)').innerText.trim();
+      const date = document.querySelector('#invoice-POS .info  .text-bold:nth-of-type(3)').innerText.trim();
+      const cashReceived = document.querySelector('#invoice-POS .info  .text-bold:nth-of-type(4)').innerText.trim();
+      const cashBalance = document.querySelector('#invoice-POS .info  .text-bold:nth-of-type(5)').innerText.trim();
+      const by = document.querySelector('#invoice-POS .text-bold:nth-of-type(6)').innerText.trim();
+      const billContent = this.billContent;
+      const sign = document.querySelector('#invoice-POS .text-bold:nth-of-type(7)').innerText.trim();
+      var printableContent = '';
+      if (receiptheader) printableContent += `${receiptheader.trim()}\n`;
+      if (shopName) printableContent += `${shopName.trim()}\n`;
+      if (date) printableContent += `${date.trim()}\n`;
+      if (cashReceived) printableContent += `${cashReceived.trim()}\n`;
+      if (cashBalance) printableContent += `${cashBalance.trim()}\n`;
+      if (by) printableContent += `${by.trim()}\n ${this.billContent.trim()}`;
+      if (billContent) printableContent += `\n`;
+      if (sign) printableContent += `${sign.trim()}\n`;
+      console.log(printableContent)
+      try {
+        this.device = await navigator.bluetooth.requestDevice({
+          filters: [{ services: [this.printerServiceUUID] }]
+        });
+        this.server = await this.device.gatt.connect();
+        this.characteristic = await this.server.getPrimaryService(this.printerServiceUUID)
+          .then(service => service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb'));
+        let encoder = new TextEncoder("utf-8");
+        let encodedBillContent = encoder.encode(printableContent + '\u000A\u000D');
+        await this.characteristic.writeValue(encodedBillContent);
+        console.log('Bill sent to printer successfully.');
+      } catch (error) {
+        console.error('Error printing bill:', error);
+      }
+    },
+    // try {
+    // Get the content from the invoice HTML structure
+    //     const companyName = document.querySelector('#invoice-POS .text-bold:nth-of-type(1)').innerText.trim();
+    //     const shopName = document.querySelector('#invoice-POS .text-bold:nth-of-type(2)').innerText.trim();
+    //     const date = document.querySelector('#invoice-POS .text-bold:nth-of-type(3)').innerText.trim();
+    //     const cashReceived = document.querySelector('#invoice-POS .text-bold:nth-of-type(4)').innerText.trim();
+    //     const cashBalance = document.querySelector('#invoice-POS .text-bold:nth-of-type(5)').innerText.trim();
+    //     const by = document.querySelector('#invoice-POS .text-bold:nth-of-type(6)').innerText.trim();
+
+    //     // Construct the printable content
+    //     let printableContent = '';
+    //     if (companyName) printableContent += `${companyName.trim()}\n`;
+    //     if (shopName) printableContent += `${shopName.trim()}\n`;
+    //     if (date) printableContent += `${date.trim()}\n`;
+    //     if (cashReceived) printableContent += `${cashReceived.trim()}\n`;
+    //     if (cashBalance) printableContent += `${cashBalance.trim()}\n`;
+    //     if (by) printableContent += `${by.trim()}\n`;
+    //     alert(printableContent)
+    //     // Send the content to the printer
+    //     this.device = await navigator.bluetooth.requestDevice({
+    //         filters: [{ services: [this.printerServiceUUID] }]
+    //     });
+    //     this.server = await this.device.gatt.connect();
+    //     this.characteristic = await this.server.getPrimaryService(this.printerServiceUUID)
+    //         .then(service => service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb'));
+    //     let encoder = new TextEncoder("utf-8");
+    //     let encodedPrintableContent = encoder.encode(printableContent + '\u000A\u000D');
+    //     await this.characteristic.writeValue(encodedPrintableContent);
+    //     console.log('Bill sent to printer successfully.');
+    // } catch (error) {
+    //     console.error('Error printing bill:', error);
+    // }
+    // },
+
+
+    async getHotelDataList() {
       await this.$store.dispatch('operations/getHotelData', {
         path: '/api/shop',
       });
@@ -394,15 +461,15 @@ export default {
     // get all accounts
     async getAccoutns() {
       await this.$store.dispatch('operations/allData', {
-        path: (typeof this.selectedHotelId?.id === 'undefined') ? '/api/all-accounts' : '/api/all-accounts?shop_id='+this.selectedHotelId?.id,
+        path: (typeof this.selectedHotelId?.id === 'undefined') ? '/api/all-accounts' : '/api/all-accounts?shop_id=' + this.selectedHotelId?.id,
       })
       // assign default account
       if (this.items && this.items.length > 0) {
         let defaultAccountSlug = this.appInfo.defaultAccountSlug;
-        
+
         this.form.fromAccount = this.items.find(account => account.slug == defaultAccountSlug);
         this.form.toAccount = this.items.find(account => account.slug == 'in-charge');
-                
+
         this.updateBalance()
       }
     },
@@ -416,7 +483,7 @@ export default {
     // save transfer
     async saveTransfer() {
       if (!this.selectedHotelId) return toast.fire({ type: 'error', title: 'Please select hotel' })
-      if(this.form.amount > this.form.availableBalance){
+      if (this.form.amount > this.form.availableBalance) {
         return toast.fire({ type: 'error', title: 'Please enter valid amount' })
       }
 
@@ -438,53 +505,52 @@ export default {
     },
 
     printInvoice() {
-                var divContents = document.getElementById("invoice-POS").innerHTML;
-                var a = window.open("", "", "height=500, width=500");
-                a.document.write(
-                    '<link rel="stylesheet" href="/css/pos_print.css"><html>'
-                );
-                a.document.write("<body >");
-                a.document.write(divContents);
-                a.document.write("</body></html>");
-                a.document.close();
-                a.print();
-            },
+      var divContents = document.getElementById("invoice-POS").innerHTML;
+      var a = window.open("", "", "height=500, width=500");
+      a.document.write(
+        '<link rel="stylesheet" href="/css/pos_print.css"><html>'
+      );
+      a.document.write("<body >");
+      a.document.write(divContents);
+      a.document.write("</body></html>");
+      a.document.close();
+      a.print();
+    },
 
-            closeReceiptModal() {
-              this.showPrintModal = false;
-              this.$router.push({ name: 'transferBalances.index' })
-            },
+    closeReceiptModal() {
+      this.showPrintModal = false;
+      this.$router.push({ name: 'transferBalances.index' })
+    },
   },
 
-  
+
 }
 </script>
 <style scoped>
-
 #invoice-POS td,
 #invoice-POS th,
 #invoice-POS tr,
 #invoice-POS table {
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 #invoice-POS tr {
-    border-bottom: 2px dotted #05070b;
+  border-bottom: 2px dotted #05070b;
 }
 
 #invoice-POS table {
-    width: 100%;
+  width: 100%;
 }
 
 #invoice-POS tfoot tr th:first-child {
-    text-align: left;
+  text-align: left;
 }
 
 #invoice-POS .info {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #invoice-POS .info>p {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 </style>
