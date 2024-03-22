@@ -17,8 +17,7 @@ class PermissionSeeder extends Seeder
         // check if table is empty
         if (DB::table('permissions')->count() == 0) {
             DB::table('permissions')->insert([
-                // Hotel permission
-
+              
                 [
                     'name' => 'Create',
                     'guard_name' => 'shop Management',
@@ -69,75 +68,75 @@ class PermissionSeeder extends Seeder
                 ],
 
                 // expense category permission
-                [
-                    'name' => 'Create',
-                    'guard_name' => 'Expense Category Management',
-                    'slug' => 'expense-category-create',
-                ],
-                [
-                    'name' => 'List',
-                    'guard_name' => 'Expense Category Management',
-                    'slug' => 'expense-category-list',
-                ],
-                [
-                    'name' => 'Edit',
-                    'guard_name' => 'Expense Category Management',
-                    'slug' => 'expense-category-edit',
-                ],
-                [
-                    'name' => 'Delete',
-                    'guard_name' => 'Expense Category Management',
-                    'slug' => 'expense-category-delete',
-                ],
+                // [
+                //     'name' => 'Create',
+                //     'guard_name' => 'Expense Category Management',
+                //     'slug' => 'expense-category-create',
+                // ],
+                // [
+                //     'name' => 'List',
+                //     'guard_name' => 'Expense Category Management',
+                //     'slug' => 'expense-category-list',
+                // ],
+                // [
+                //     'name' => 'Edit',
+                //     'guard_name' => 'Expense Category Management',
+                //     'slug' => 'expense-category-edit',
+                // ],
+                // [
+                //     'name' => 'Delete',
+                //     'guard_name' => 'Expense Category Management',
+                //     'slug' => 'expense-category-delete',
+                // ],
 
                 // expense sub category permission
-                [
-                    'name' => 'Create',
-                    'guard_name' => 'Expense Subcategory Management',
-                    'slug' => 'expense-sub-category-create',
-                ],
-                [
-                    'name' => 'List',
-                    'guard_name' => 'Expense Subcategory Management',
-                    'slug' => 'expense-sub-category-list',
-                ],
-                [
-                    'name' => 'Edit',
-                    'guard_name' => 'Expense Subcategory Management',
-                    'slug' => 'expense-sub-category-edit',
-                ],
-                [
-                    'name' => 'Delete',
-                    'guard_name' => 'Expense Subcategory Management',
-                    'slug' => 'expense-sub-category-delete',
-                ],
+                // [
+                //     'name' => 'Create',
+                //     'guard_name' => 'Expense Subcategory Management',
+                //     'slug' => 'expense-sub-category-create',
+                // ],
+                // [
+                //     'name' => 'List',
+                //     'guard_name' => 'Expense Subcategory Management',
+                //     'slug' => 'expense-sub-category-list',
+                // ],
+                // [
+                //     'name' => 'Edit',
+                //     'guard_name' => 'Expense Subcategory Management',
+                //     'slug' => 'expense-sub-category-edit',
+                // ],
+                // [
+                //     'name' => 'Delete',
+                //     'guard_name' => 'Expense Subcategory Management',
+                //     'slug' => 'expense-sub-category-delete',
+                // ],
 
                 // expense permission
-                [
-                    'name' => 'Create',
-                    'guard_name' => 'Expense Management',
-                    'slug' => 'expense-create',
-                ],
-                [
-                    'name' => 'List',
-                    'guard_name' => 'Expense Management',
-                    'slug' => 'expense-list',
-                ],
-                [
-                    'name' => 'Edit',
-                    'guard_name' => 'Expense Management',
-                    'slug' => 'expense-edit',
-                ],
-                [
-                    'name' => 'View',
-                    'guard_name' => 'Expense Management',
-                    'slug' => 'expense-view',
-                ],
-                [
-                    'name' => 'Expense Delete',
-                    'guard_name' => 'Expense Management',
-                    'slug' => 'expense-delete',
-                ],
+                // [
+                //     'name' => 'Create',
+                //     'guard_name' => 'Expense Management',
+                //     'slug' => 'expense-create',
+                // ],
+                // [
+                //     'name' => 'List',
+                //     'guard_name' => 'Expense Management',
+                //     'slug' => 'expense-list',
+                // ],
+                // [
+                //     'name' => 'Edit',
+                //     'guard_name' => 'Expense Management',
+                //     'slug' => 'expense-edit',
+                // ],
+                // [
+                //     'name' => 'View',
+                //     'guard_name' => 'Expense Management',
+                //     'slug' => 'expense-view',
+                // ],
+                // [
+                //     'name' => 'Expense Delete',
+                //     'guard_name' => 'Expense Management',
+                //     'slug' => 'expense-delete',
+                // ],
 
                 // purchase permission
                 [
@@ -167,31 +166,31 @@ class PermissionSeeder extends Seeder
                 ],
 
                 // purchase return permission
-                [
-                    'name' => 'Create',
-                    'guard_name' => 'Purchase Return Management',
-                    'slug' => 'purchase-return-create',
-                ],
-                [
-                    'name' => 'List',
-                    'guard_name' => 'Purchase Return Management',
-                    'slug' => 'purchase-return-list',
-                ],
-                [
-                    'name' => 'Edit',
-                    'guard_name' => 'Purchase Return Management',
-                    'slug' => 'purchase-return-edit',
-                ],
-                [
-                    'name' => 'View',
-                    'guard_name' => 'Purchase Return Management',
-                    'slug' => 'purchase-return-view',
-                ],
-                [
-                    'name' => 'Delete',
-                    'guard_name' => 'Purchase Return Management',
-                    'slug' => 'purchase-return-delete',
-                ],
+                // [
+                //     'name' => 'Create',
+                //     'guard_name' => 'Purchase Return Management',
+                //     'slug' => 'purchase-return-create',
+                // ],
+                // [
+                //     'name' => 'List',
+                //     'guard_name' => 'Purchase Return Management',
+                //     'slug' => 'purchase-return-list',
+                // ],
+                // [
+                //     'name' => 'Edit',
+                //     'guard_name' => 'Purchase Return Management',
+                //     'slug' => 'purchase-return-edit',
+                // ],
+                // [
+                //     'name' => 'View',
+                //     'guard_name' => 'Purchase Return Management',
+                //     'slug' => 'purchase-return-view',
+                // ],
+                // [
+                //     'name' => 'Delete',
+                //     'guard_name' => 'Purchase Return Management',
+                //     'slug' => 'purchase-return-delete',
+                // ],
 
                 // quotation permission
 //                [
@@ -250,33 +249,6 @@ class PermissionSeeder extends Seeder
                     'name' => 'Delete',
                     'guard_name' => 'Invoice Management',
                     'slug' => 'invoice-delete',
-                ],
-
-                // invoice return permission
-                [
-                    'name' => 'Create',
-                    'guard_name' => 'Invoice Return Management',
-                    'slug' => 'invoice-return-create',
-                ],
-                [
-                    'name' => 'List',
-                    'guard_name' => 'Invoice Return Management',
-                    'slug' => 'invoice-return-list',
-                ],
-                [
-                    'name' => 'Edit',
-                    'guard_name' => 'Invoice Return Management',
-                    'slug' => 'invoice-return-edit',
-                ],
-                [
-                    'name' => 'View',
-                    'guard_name' => 'Invoice Return Management',
-                    'slug' => 'invoice-return-view',
-                ],
-                [
-                    'name' => 'Delete',
-                    'guard_name' => 'Invoice Return Management',
-                    'slug' => 'invoice-return-delete',
                 ],
 
                 // account permission
@@ -463,86 +435,6 @@ class PermissionSeeder extends Seeder
                     'slug' => 'invoice-payment-delete',
                 ],
 
-                // loan authority permission
-//                [
-//                    'name' => 'Create',
-//                    'guard_name' => 'Loan Authority Management',
-//                    'slug' => 'loan-authority-create',
-//                ],
-//                [
-//                    'name' => 'List',
-//                    'guard_name' => 'Loan Authority Management',
-//                    'slug' => 'loan-authority-list',
-//                ],
-//                [
-//                    'name' => 'Edit',
-//                    'guard_name' => 'Loan Authority Management',
-//                    'slug' => 'loan-authority-edit',
-//                ],
-//                [
-//                    'name' => 'View',
-//                    'guard_name' => 'Loan Authority Management',
-//                    'slug' => 'loan-authority-view',
-//                ],
-//                [
-//                    'name' => 'Delete',
-//                    'guard_name' => 'Loan Authority Management',
-//                    'slug' => 'loan-authority-delete',
-//                ],
-
-                // loan permission
-//                [
-//                    'name' => 'Create',
-//                    'guard_name' => 'Loan Management',
-//                    'slug' => 'loan-create',
-//                ],
-//                [
-//                    'name' => 'List',
-//                    'guard_name' => 'Loan Management',
-//                    'slug' => 'loan-list',
-//                ],
-//                [
-//                    'name' => 'Edit',
-//                    'guard_name' => 'Loan Management',
-//                    'slug' => 'loan-edit',
-//                ],
-//                [
-//                    'name' => 'View',
-//                    'guard_name' => 'Loan Management',
-//                    'slug' => 'loan-view',
-//                ],
-//                [
-//                    'name' => 'Delete',
-//                    'guard_name' => 'Loan Management',
-//                    'slug' => 'loan-delete',
-//                ],
-
-                // loan payment permission
-//                [
-//                    'name' => 'Create',
-//                    'guard_name' => 'Loan Payment Management',
-//                    'slug' => 'loan-payment-create',
-//                ],
-//                [
-//                    'name' => 'List',
-//                    'guard_name' => 'Loan Payment Management',
-//                    'slug' => 'loan-payment-list',
-//                ],
-//                [
-//                    'name' => 'Edit',
-//                    'guard_name' => 'Loan Payment Management',
-//                    'slug' => 'loan-payment-edit',
-//                ],
-//                [
-//                    'name' => 'View',
-//                    'guard_name' => 'Loan Payment Management',
-//                    'slug' => 'loan-payment-view',
-//                ],
-//                [
-//                    'name' => 'Delete',
-//                    'guard_name' => 'Loan Payment Management',
-//                    'slug' => 'loan-payment-delete',
-//                ],
 
                 // asset type permission
                 [
@@ -723,32 +615,6 @@ class PermissionSeeder extends Seeder
                     'slug' => 'employee-delete',
                 ],
 
-                // increment permission
-                [
-                    'name' => 'Create',
-                    'guard_name' => 'Increment Management',
-                    'slug' => 'increment-create',
-                ],
-                [
-                    'name' => 'List',
-                    'guard_name' => 'Increment Management',
-                    'slug' => 'increment-list',
-                ],
-                [
-                    'name' => 'Edit',
-                    'guard_name' => 'Increment Management',
-                    'slug' => 'increment-edit',
-                ],
-                [
-                    'name' => 'View',
-                    'guard_name' => 'Increment Management',
-                    'slug' => 'increment-view',
-                ],
-                [
-                    'name' => 'Delete',
-                    'guard_name' => 'Increment Management',
-                    'slug' => 'increment-delete',
-                ],
 
                 // product category permission
                 [
@@ -883,27 +749,27 @@ class PermissionSeeder extends Seeder
 //                ],
 
                 // report permissions
-                [
-                    'name' => 'Balance Sheet',
-                    'guard_name' => 'Report View',
-                    'slug' => 'balance-sheet',
-                ],
+                // [
+                //     'name' => 'Balance Sheet',
+                //     'guard_name' => 'Report View',
+                //     'slug' => 'balance-sheet',
+                // ],
 
-                [
-                    'name' => 'Summary Report',
-                    'guard_name' => 'Report View',
-                    'slug' => 'summary-report',
-                ],
-                [
-                    'name' => 'Profit/Loss',
-                    'guard_name' => 'Report View',
-                    'slug' => 'profit-loss',
-                ],
-                [
-                    'name' => 'Expense Report',
-                    'guard_name' => 'Report View',
-                    'slug' => 'expense-report',
-                ],
+                // [
+                //     'name' => 'Summary Report',
+                //     'guard_name' => 'Report View',
+                //     'slug' => 'summary-report',
+                // ],
+                // [
+                //     'name' => 'Profit/Loss',
+                //     'guard_name' => 'Report View',
+                //     'slug' => 'profit-loss',
+                // ],
+                // [
+                //     'name' => 'Expense Report',
+                //     'guard_name' => 'Report View',
+                //     'slug' => 'expense-report',
+                // ],
                 [
                     'name' => 'Item Report',
                     'guard_name' => 'Report View',
@@ -921,11 +787,11 @@ class PermissionSeeder extends Seeder
                     'guard_name' => 'Setup',
                     'slug' => 'general-settings',
                 ],
-                [
-                    'name' => 'Mail Configuration',
-                    'guard_name' => 'Setup',
-                    'slug' => 'mail-configuration',
-                ],
+                // [
+                //     'name' => 'Mail Configuration',
+                //     'guard_name' => 'Setup',
+                //     'slug' => 'mail-configuration',
+                // ],
 //                [
 //                    'name' => 'SMS Configuration',
 //                    'guard_name' => 'Setup',
@@ -984,70 +850,80 @@ class PermissionSeeder extends Seeder
                     'slug' => 'recent-activities',
                 ],
                 [
-                    'name' => 'Payment Sent vs Payment Received',
+                    'name' => 'Sales Activities',
                     'guard_name' => 'Dashboard View',
-                    'slug' => 'payment-sent-vs-payment-received',
+                    'slug' => 'sales-activities',
                 ],
                 [
-                    'name' => 'Top Clients',
+                    'name' => 'Incharge Activities',
                     'guard_name' => 'Dashboard View',
-                    'slug' => 'top-clients',
+                    'slug' => 'incharge-activities',
                 ],
-                [
-                    'name' => 'Stock Alert',
-                    'guard_name' => 'Dashboard View',
-                    'slug' => 'stock-alert',
-                ],
-                [
-                    'name' => 'Sales vs Purchases',
-                    'guard_name' => 'Dashboard View',
-                    'slug' => 'sales-vs-purchases',
-                ],
+                // [
+                //     'name' => 'Payment Sent vs Payment Received',
+                //     'guard_name' => 'Dashboard View',
+                //     'slug' => 'payment-sent-vs-payment-received',
+                // ],
+                // [
+                //     'name' => 'Top Clients',
+                //     'guard_name' => 'Dashboard View',
+                //     'slug' => 'top-clients',
+                // ],
+                // [
+                //     'name' => 'Stock Alert',
+                //     'guard_name' => 'Dashboard View',
+                //     'slug' => 'stock-alert',
+                // ],
+                // [
+                //     'name' => 'Sales vs Purchases',
+                //     'guard_name' => 'Dashboard View',
+                //     'slug' => 'sales-vs-purchases',
+                // ],
 
                 //Insert Coupon Data Into Permission
 
-                [
-                    'name' => 'Create',
-                    'guard_name' => 'Coupon Management',
-                    'slug' => 'coupon-create',
-                ],
-                [
-                    'name' => 'List',
-                    'guard_name' => 'Coupon Management',
-                    'slug' => 'coupon-list',
-                ],
-                [
-                    'name' => 'Edit',
-                    'guard_name' => 'Coupon Management',
-                    'slug' => 'coupon-edit',
-                ],
-                [
-                    'name' => 'Delete',
-                    'guard_name' => 'Coupon Management',
-                    'slug' => 'coupon-delete',
-                ],
+                // [
+                //     'name' => 'Create',
+                //     'guard_name' => 'Coupon Management',
+                //     'slug' => 'coupon-create',
+                // ],
+                // [
+                //     'name' => 'List',
+                //     'guard_name' => 'Coupon Management',
+                //     'slug' => 'coupon-list',
+                // ],
+                // [
+                //     'name' => 'Edit',
+                //     'guard_name' => 'Coupon Management',
+                //     'slug' => 'coupon-edit',
+                // ],
+                // [
+                //     'name' => 'Delete',
+                //     'guard_name' => 'Coupon Management',
+                //     'slug' => 'coupon-delete',
+                // ],
 
                 // Insert Journal Entry Data Into Permission
-                [
-                    'name' => 'Create',
-                    'guard_name' => 'Journal Entry Management',
-                    'slug' => 'journal-entry-create',
-                ],
-                [
-                    'name' => 'List',
-                    'guard_name' => 'Journal Entry Management',
-                    'slug' => 'journal-entry-list',
-                ],
-                [
-                    'name' => 'Edit',
-                    'guard_name' => 'Journal Entry Management',
-                    'slug' => 'journal-entry-edit',
-                ],
-                [
-                    'name' => 'Delete',
-                    'guard_name' => 'Journal Entry Management',
-                    'slug' => 'journal-entry-delete',
-                ],
+                // [
+                //     'name' => 'Create',
+                //     'guard_name' => 'Journal Entry Management',
+                //     'slug' => 'journal-entry-create',
+                // ],
+                // [
+                //     'name' => 'List',
+                //     'guard_name' => 'Journal Entry Management',
+                //     'slug' => 'journal-entry-list',
+                // ],
+                // [
+                //     'name' => 'Edit',
+                //     'guard_name' => 'Journal Entry Management',
+                //     'slug' => 'journal-entry-edit',
+                // ],
+                // [
+                //     'name' => 'Delete',
+                //     'guard_name' => 'Journal Entry Management',
+                //     'slug' => 'journal-entry-delete',
+                // ],
 
                 // Insert Ledger Group Data Into Permission
 

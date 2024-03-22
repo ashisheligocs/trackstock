@@ -5,7 +5,7 @@
         <div class="col-md-12">
           <div class="my-4">
             <div class="">
-              <div class="row justify-content-center">
+              <div class="row justify-content-center" v-if="$can('sales-activities')">
                 <div class="col-md-3 col-6 mb-4">
                   <router-link :to="{ name: 'pos.create' }" class="small-box-footer">
                     <div class="small-box mb-0">
@@ -29,7 +29,7 @@
                   </router-link>
                 </div>
               </div>
-              <div class="row justify-content-center">
+              <div class="row justify-content-center" v-if="$can('sales-activities')">
                 <div class="col-md-3 col-6 mb-4">
                   <router-link :to="{ name: 'today.sale' }" class="small-box-footer">
                     <div class="small-box mb-0">
@@ -55,7 +55,7 @@
                   </router-link>
                 </div>
               </div>
-              <div class="row">
+              <div class="row" v-if="$can('incharge-activities')">
                 <div class="col-4">
                   <div v-for="(data, i) in hotelItems" :key="i">
                     <div class="mb-4">

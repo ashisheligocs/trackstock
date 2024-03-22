@@ -22,12 +22,12 @@ class RoleSeeder extends Seeder
                     'slug' => 'super-admin',
                 ],
                 [
-                    'name' => 'Employee',
-                    'slug' => 'employee',
+                    'name' => 'Store',
+                    'slug' => 'store',
                 ],
                 [
-                    'name' => 'Agent',
-                    'slug' => 'agent',
+                    'name' => 'Sale',
+                    'slug' => 'sale',
                 ],
                 [
                     'name' => 'Incharge',
