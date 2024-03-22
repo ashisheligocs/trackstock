@@ -1,3 +1,5 @@
+Shop balance page  
+
 <template>
   <div>
     <div class="container-fluid">
@@ -6,7 +8,7 @@
           <div class="my-4">
             <div class="">
               <div class="row justify-content-center">
-                <div class="col-md-3 col-6 mb-4">
+                <div class="col-md-4 col-6 mb-4">
 
                   <div class="small-box mb-0">
                     <div class="inner p-4 text-center">
@@ -45,7 +47,40 @@
               <div class="row justify-content-center">
                 <button class="btn btn-primary">Collect Cash</button>
               </div>
+              <div class="col-12 m-auto mw500">
+                  <div class="table-responsive mt-4 ">
+                    <table class="table table-bordered bg-white">
+                      <tbody>
+                        <tr>
+                          <td class="align-middle">QR</td>
+                          <td class="align-middle text-right">20,000</td>
+                          <td class="align-middle text-right">20,000</td>
+                        </tr>
 
+                        <tr>
+                          <td class="align-middle">Cash</td>
+                          <td class="align-middle text-right">1,20,000</td>
+                          <td class="align-middle text-right">
+                            <div class="form-group mb-0">
+                              <input type="text" class="form-control text-right">
+                            </div>
+
+                          </td>
+                        </tr>
+                        <tr>
+                          <th class="align-middle">Total</th>
+                          <th class="align-middle text-right">1,40,000</th>
+                          <!-- hgfghh -->
+                          <th class="align-middle text-right">Balance : 40,000</th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="row justify-content-center">
+                <button class="btn btn-outline-danger mt-3">Collect Cash</button>
+              </div>
+                </div>
               <v-modal>
                 <h4>Receipt Number</h4>
                 <tabel>
