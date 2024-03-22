@@ -97,7 +97,7 @@
                   <has-error :form="form" field="role" />
                 </div>
                 <div class="form-group col-md-6">
-                  {{  hotelItems }}
+                  
                   <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                     <span class="required">*</span></label>
                   <multiselect id="hotel" v-model="selectedHotels" :options="hotelItems" :show-labels="false" tag-placeholder="" :taggable="false" placeholder="Search an hotel"
@@ -217,8 +217,7 @@ export default {
       const { data } = await this.form.get(
         window.location.origin + '/api/employees/' + this.$route.params.slug
       )
-      console.log(data.data.shops);
-      console.log(data.data);
+      
       this.form.employeeName = data.data.name
       this.form.department = data.data.department
       this.form.designation = data.data.designation

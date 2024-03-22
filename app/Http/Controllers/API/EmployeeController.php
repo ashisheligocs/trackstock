@@ -139,7 +139,7 @@ class EmployeeController extends Controller
     {
         try {
             $employee = Employee::with('department', 'user')->where('slug', $slug)->first();
-
+            // dd($employee);
             return new EmployeeResource($employee);
         } catch (Exception $e) {
             return $this->responseWithError($e->getMessage());
@@ -186,7 +186,7 @@ class EmployeeController extends Controller
 
         try {
             // get department
-            $department = Department::where('slug', $request->department['slug'])->first();
+            // $department = Department::where('slug', $request->department['slug'])->first();
 
             // upload thumbnail and set the name
             $imageName = $employee->image_path;
@@ -243,7 +243,7 @@ class EmployeeController extends Controller
             // update employee
             $employee->update([
                 'name' => $request->employeeName,
-                'department_id' => @$request->department ? $request->department['id'] : NULL,
+                'department_id' => NULL,
                 'designation' => $request->designation,
                 'salary' => $request->salary,
                 'commission' => $request->commission,
@@ -263,7 +263,7 @@ class EmployeeController extends Controller
 
             return $this->responseWithSuccess('Employee updated successfully');
         } catch (Exception $e) {
-            return $this->responseWithError($e->getMessage());
+            return $this->responseWithError($e->getMessage().'--'.$e->getLine());
         }
     }
 
