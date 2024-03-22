@@ -71,10 +71,10 @@ class ShopController extends Controller
             $this->validate($request, [
                 "shop_name" => "required",
                 "shop_address" => "required",
-                "shop_prefix" => "required|min:2|max:5|unique:shops,shop_prefix," . $request->shop_id,
-                "shop_phone" => "required|numeric|digits:10|min:1|unique:shops,shop_phone," . $request->shop_id,
-                "shop_email" => 'required|email|unique:shops,shop_email,' . $request->shop_id,
-                "contact_phone" => 'nullable|numeric|digits:10|min:1',
+                "shop_prefix" => "nullable",
+                "shop_phone" => "nullable",
+                "shop_email" => "nullable",
+                "contact_phone" => "nullable",
             ]);
             try {
 
@@ -122,10 +122,10 @@ class ShopController extends Controller
             $this->validate($request, [
                 "shop_name" => "required",
                 "shop_address" => "required",
-                "shop_phone" => "required|numeric|digits:10|min:1|unique:shops,shop_phone",
-                "shop_email" => 'required|email|unique:shops,shop_email',
-                "shop_prefix" => "required|min:2|max:5|unique:shops,shop_prefix",
-                "contact_phone" => 'nullable|numeric|digits:10|min:1',
+                "shop_prefix" => "nullable",
+                "shop_phone" => "nullable",
+                "shop_email" => "nullable",
+                "contact_phone" => "nullable",
             ]);
 
             try {

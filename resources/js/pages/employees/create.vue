@@ -33,14 +33,14 @@
       " />
                   <has-error :form="form" field="employeeName" />
                 </div>
-                <div class="form-group col-md-4">
+                <!-- <div class="form-group col-md-4">
                   <label for="department">{{ $t("common.department") }}
                     <span class="required">*</span></label>
                   <v-select v-if="items" v-model="form.department" :options="items" label="name"
                     :class="{ 'is-invalid': form.errors.has('department') }" name="department"
                     :placeholder="$t('common.department_placeholder')" />
                   <has-error :form="form" field="department" />
-                </div>
+                </div> -->
 
                 <!-- <div class="form-group col-md-3">
                   <label for="designation"
@@ -210,11 +210,11 @@
               </div>
               <div class="row mt-3">
                 <div class="form-group col-md-6">
-                  <label for="email">{{ $t("common.email") }}
+                  <label for="email">Username
                     <span class="required">*</span></label>
                   <input id="email" v-model="form.username" type="text" class="form-control"
                     :class="{ 'is-invalid': form.errors.has('username') }" name="username"
-                    :placeholder="$t('common.email_placeholder')" />
+                    placeholder="Enter Your Username" />
                   <has-error :form="form" field="username" />
                 </div>
                 <div class="form-group col-md-6">
@@ -234,7 +234,7 @@
                   <has-error :form="form" field="role" />
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="hotel" class="d-block">Hotel Access
+                  <label for="hotel" class="d-block">Shop Access
                     <span class="required">*</span></label>
 
                   <multiselect id="hotel" v-model="selectedHotels" :options="hotelItems" :show-labels="false"
