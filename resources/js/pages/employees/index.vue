@@ -58,6 +58,7 @@
                 </thead>
                 <tbody>
                   <tr v-show="items.length" v-for="(data, i) in items" :key="i">
+
                     <td>
                       <span v-if="pagination && pagination.current_page > 1">
                         {{
@@ -74,8 +75,8 @@
                       {{data?.shop?.shop_name}}
                     </td>
                     <td>
-                      <span v-if="data.department"
-                        >{{ data.role.name }}
+                      <span
+                        >{{ data?.role?.name }}
                       </span>
                     </td>
                     <td>{{ data.mobileNumber }}</td>
