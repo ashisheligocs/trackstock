@@ -75,16 +75,16 @@
                       <tbody>
                         <tr>
                           <td>QR</td>
-                          <td>20,000</td>
+                          <td>{{ shop_bank_balance | forBalanceSheetCurrencyDecimalOnly }}</td>
                         </tr>
 
                         <tr>
                           <td>Cash</td>
-                          <td>1,20,000</td>
+                          <td>{{ shop_cash_balance | forBalanceSheetCurrencyDecimalOnly }}</td>
                         </tr>
                         <tr>
                           <th>Total</th>
-                          <th>1,40,000</th>
+                          <th>{{ shop_total_balance | forBalanceSheetCurrencyDecimalOnly }}</th>
                         </tr>
                       </tbody>
                     </table>
@@ -100,8 +100,8 @@
 </template>
 
 <script>
-// import Form from "vform";
-// import axios from "axios";
+
+import axios from "axios";
 import { mapGetters } from "vuex";
 
 export default {
@@ -111,16 +111,16 @@ export default {
   },
 
   data: () => ({
-    list_all: '',
+    shop_bank_balance : 0,
+    shop_cash_balance : 0,
+    shop_total_balance : 0,
   }),
   computed: {
-    ...mapGetters("operations", ["selectedHotel", "hotelCategoryItems", "appInfo", "hotelItems"]),
+    ...mapGetters("operations", ["selectedHotel", "appInfo", "hotelItems"]),
   },
   async created() {
     await this.getHotelDataList();
-    console.log('this', this.hotelItems);
-    // console.log('this', this.getHotelDataList);
-    this.list_all = (this.selectedHotel);
+    await this.getShopAvailableBalance();
   },
   methods: {
     async getHotelDataList() {
@@ -128,6 +128,21 @@ export default {
         path: '/api/shop',
       });
     },
+    async getShopAvailableBalance() {
+      const { data } = await axios.get(
+        window.location.origin + "/api/shop-balance/" + this.selectedHotel
+      );
+
+      this.shop_bank_balance = data.bank;
+      this.shop_cash_balance = data.cash;
+      this.shop_total_balance = data.total_balance;
+
+    },
   },
+  watch:{
+    selectedHotel(){
+      this.getShopAvailableBalance();
+    }
+  }
 };
 </script>
