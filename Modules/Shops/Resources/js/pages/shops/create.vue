@@ -28,57 +28,6 @@
                                         :placeholder="$t('common.name_placeholder')" />
                                     <has-error :form="form" field="shop_name" />
                                 </div>
-                                
-                                <div class="form-group col-md-6">
-                                    <label for="state">{{
-            $t("common.state")
-        }}</label>
-                                    <v-select class="flex-grow-1" v-model="form.state" :options="states" label="label"
-                                        :class="{ 'is-invalid': form.errors.has('state') }" name="state"
-                                        placeholder="Search State"></v-select>
-                                    <has-error :form="form" field="state" />
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="state">{{
-            $t("common.city")
-        }}</label>
-                                    <input id="city" v-model="form.city" type="text" class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('city') }" name="city"
-                                        :placeholder="$t('common.city_placeholder')" />
-                                    <has-error :form="form" field="city" />
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="shop_phone">{{ $t('shop.common.hotel_phone') }}
-                                        <span class="required">*</span></label>
-                                    <input id="shop_phone" v-model="form.shop_phone" type="tel" class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('shop_phone') }" name="shop_phone"
-                                        :placeholder="$t('shop.common.number_placeholder')" pattern="[0-9]{10}" />
-                                    <has-error :form="form" field="shop_phone" />
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="shop_email">{{ $t('shop.common.hotel_email') }}
-                                        <span class="required">*</span></label>
-                                    <input id="shop_email" v-model="form.shop_email" type="text" class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('shop_email') }" name="shop_email"
-                                        :placeholder="$t('shop.common.hotel_email')" />
-                                    <has-error :form="form" field="shop_email" />
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="shop_prefix">{{ $t('shop.common.hotel_head') }}
-                                        <span class="required">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">INV</span>
-                                        </div>
-                                        <input id="shop_prefix" v-model="form.shop_prefix" type="text"
-                                            class="form-control"
-                                            :class="{ 'is-invalid': form.errors.has('shop_prefix') }"
-                                            name="shop_prefix" :placeholder="$t('shop.common.hotel_prefix')" />
-                                        <has-error :form="form" field="shop_prefix" />
-
-                                    </div>
-                                </div>
-                                
                                 <div class="form-group col-md-12">
                                     <label for="hotel_address">{{ $t('shop.common.hotel_address') }} <span
                                             class="required">*</span></label>
@@ -86,25 +35,6 @@
                                         :class="{ 'is-invalid': form.errors.has('shop_address') }"
                                         :placeholder="$t('shop.common.hotel_address')" />
                                     <has-error :form="form" field="shop_address" />
-                                </div>
-                                <div class="form-group col-md-12">
-                                  
-                                    <label class="image_label" for="file-upload">  <i class="fa fa-upload" aria-hidden="true"></i> Upload Image</label>
-                                    <input type="file" id="file-upload" multiple @change="handleFileUpload">
-
-                                    <div class="image-container">
-                                        <div v-for="(image, index) in images" :key="index" class="image-item">
-                                            <img :src="image.previewUrl" alt="Preview" class="profile-pic"
-                                                @click="showImage(index)">
-                                            <button class="remove-button" @click="removeImage(index)">X</button>
-                                        </div>
-                                    </div>
-                                    <div v-if="showModal" class="modal" @click.self="closeModal">
-                                        <div class="modal-content">
-                                            <span class="close" @click="closeModal">&times;</span>
-                                            <img :src="selectedImage.previewUrl" alt="Preview" class="modal-image">
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -208,7 +138,7 @@ export default {
     computed: {
         ...mapGetters('operations', ['items', 'facilityItems', 'hotelCategoryItems']),
     },
-    
+
     methods: {
         handleFileUpload(event) {
             const files = event.target.files;
@@ -241,7 +171,7 @@ export default {
             }
             if (error) this.images = [];
         },
-       
+
 
         removeImage(index) {
             this.images.splice(index, 1);
@@ -258,7 +188,7 @@ export default {
         async saveFacility() {
             this.form.images = [];
             this.form.images = this.images && this.images.length ? _.map(this.images, 'file') : [];
-          
+
             await this.form
                 .post(window.location.origin + '/api/shop/add')
                 .then(() => {
@@ -273,7 +203,7 @@ export default {
                     toast.fire({ type: 'error', title: message })
                 })
         },
-       
+
     },
 }
 </script>

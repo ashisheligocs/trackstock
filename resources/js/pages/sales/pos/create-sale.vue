@@ -52,7 +52,7 @@
                       <div class="form-group">
                         <div>
                             <input v-model="singleItem.inputText" @input="getSuggestions(singleItem)"  />
-                            
+
                             <ul v-if="singleItem.showSuggestions">
                               <li v-for="(suggestion, index) in singleItem.suggestions" :key="index" @click="selectSuggestion(singleItem,suggestion)">
                                 {{ suggestion.code }}
@@ -72,7 +72,7 @@
                         <!-- <input type="button" value="-" class="button-minus icon-shape icon-sm btn-danger"
                           data-field="quantity" @click="adjustQuantity($event, i, 'decrement')" /> -->
                         <input type="number" step="any" :id="`Qty-${i}`" :value="singleItem.quantity" name="quantity"
-                          class="quantity-field border-0 incrementor"placeholder="Quantity" readonly/> 
+                          class="quantity-field border-0 incrementor"placeholder="Quantity" readonly/>
                           <!-- required @input="adjustQuantity($event, i)"
                           @change="preventZeroValue($event, i)"  -->
                         <!-- <input type="button" value="+" class="button-plus icon-shape icon-sm btn-primary"
@@ -120,7 +120,7 @@
       <!-- POS Right area end -->
 
       <!-- pos left area start -->
-      <div class="col-12">
+      <!-- <div class="col-12">
         <div class="card bg-transparent">
           <div class="pos-r-head bg-white">
             <div class="row">
@@ -131,7 +131,7 @@
                     @reload="reload" />
                 </div>
                 <has-error :form="form" field="selectedProducts" />
-              </div>
+              </div> -->
               <!-- <div v-if="categoryOptions.length" class="form-group col-md-6">
                 <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
                   :class="{ 'is-invalid': form.errors.has('category') }" name="category" placeholder="Select a Brand" />
@@ -143,7 +143,7 @@
                   placeholder="Select Subcategory"></v-select>
               </div> -->
 
-            </div>
+            <!-- </div>
           </div>
 
           <div class="card-body bg-white mt-3 pos-body">
@@ -190,9 +190,9 @@
                 </div>
               </div>
 
-            </div>
+            </div> -->
 
-
+<!--
             <div class="row">
               <div class="col-12 d-flex justify-content-center">
                 <pagination v-if="pagination && pagination.last_page > 1" :pagination="pagination" :offset="5"
@@ -201,7 +201,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- pos left area end -->
 
 
@@ -684,7 +684,7 @@
         },
         methods: {
           getSuggestions(item) {
-            
+
               item.suggestions = this.products.filter(suggestion =>
                     suggestion.code && suggestion.code.toLowerCase().includes(item.inputText.toLowerCase())
 
@@ -813,7 +813,7 @@
                   }
                   quantitySumByCode[item.code] += item.quantity;
                 });
-                
+
                   if(alreadyAddedItem >= 0){
                     if(quantitySumByCode[this.selectedItemList[alreadyAddedItem].code]  >= this.selectedItemList[alreadyAddedItem].available_qty){
                         return toast.fire({
@@ -822,7 +822,7 @@
                         });
                       }
                   }
-                  
+
 
                 //   this.$set(this.selectedItemList, alreadyAddedItem, {
                 //       name: `${this.currentProduct?.name}`,
@@ -836,7 +836,7 @@
                 //   });
 
                 // } else {
-                  
+
                     this.selectedItemList.unshift({
                         name: `${this.currentProduct?.name}`,
                         id: this.currentProduct.id,

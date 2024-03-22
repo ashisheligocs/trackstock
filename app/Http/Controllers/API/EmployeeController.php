@@ -50,7 +50,7 @@ class EmployeeController extends Controller
         // validate request
         $this->validate($request, [
             'employeeName' => 'required|string|max:255',
-            'department' => 'required',
+            'department' => 'nullable',
             'designation' => 'nullable',
             'salary' => 'nullable',
             'commission' => 'nullable|numeric',

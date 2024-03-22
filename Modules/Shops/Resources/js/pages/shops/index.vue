@@ -45,10 +45,7 @@
                               <thead>
                                   <tr>
                                       <th>{{ $t("common.s_no") }}</th>
-                                      <th>{{ $t("common.image") }}</th>
                                       <th>{{ $t("shop.common.name") }}</th>
-                                      <th>{{ $t("shop.common.hotel_email") }}</th>
-                                      <th>{{ $t("common.phone") }}</th>
                                       <th v-if="$can('shop-edit') || $can('shop-delete')" class="text-right no-print">
                                           {{ $t("common.action") }}
                                       </th>
@@ -74,8 +71,6 @@
                                           </div>
                                       </td>
                                       <td>{{ data.shop_name }}</td>
-                                      <td>{{ data.shop_email }}</td>
-                                      <td>{{ data.shop_phone }}</td>
                                       <td v-if="$can('shop-edit') ||
                                           $can('shop-delete')
                                           " class="text-right no-print">
@@ -86,10 +81,6 @@
                                               }" class="btn btn-info btn-sm">
                                                   <i class="fas fa-edit" />
                                               </router-link>
-                                              <a v-if="$can('shop-delete')" v-tooltip="$t('common.delete')" href="#"
-                                                  class="btn btn-danger btn-sm" @click="deleteData(data.id)">
-                                                  <i class="fas fa-trash" />
-                                              </a>
                                           </div>
                                       </td>
                                   </tr>
