@@ -165,19 +165,19 @@ class EmployeeController extends Controller
         $this->validate($request, [
             'employeeName' => 'required|string|max:255',
             'department' => 'nullable',
-            'designation' => 'required|string|max:255',
+            'designation' => 'nullable',
             'salary' => 'nullable',
             'commission' => 'nullable|numeric',
             'mobileNumber' => 'required|string|max:20',
             'birthDate' => 'nullable',
             'appointmentDate' => 'nullable',
-            'joiningDate' => 'required|date|date_format:Y-m-d',
+            'joiningDate' => 'nullable',
             'gender' => 'nullable',
             'bloodGroup' => 'nullable|string',
             'religion' => 'nullable|string',
             'address' => 'nullable|string|max:255',
-            'email' => $request->allowLogin == true ? 'required|string|email|max:255|unique:users,email,'.$userId : 'nullable',
-            'password' => ($request->allowLogin == true) && (isset($request->password) || empty($employee->user_id)) ? 'required|string|max:255|min:8' : 'nullable',
+            'username' => $request->allowLogin == true ? 'required|string|max:255|unique:users,email,'.$userId : 'nullable',
+            'password' => ($request->allowLogin == true) && (isset($request->password) || empty($employee->user_id)) ? 'required|string|max:255|min:4' : 'nullable',
             'role' => $request->allowLogin == true ? 'required' : 'nullable',
             'shop_id' => $request->allowLogin == true ? 'required | array' : 'nullable',
             'shop' => 'required',
@@ -211,7 +211,7 @@ class EmployeeController extends Controller
                     }
                     $user->update([
                         'name' => $request->employeeName,
-                        'email' => $request->email,
+                        'email' => $request->username,
                         'password' => $password,
                         'is_active' => 1,
                         'back_days' => $request->back_days,
@@ -222,7 +222,7 @@ class EmployeeController extends Controller
                     // store user login
                     $user = User::create([
                         'name' => $request->employeeName,
-                        'email' => $request->email,
+                        'email' => $request->username,
                         'password' => Hash::make($request->password),
                         'account_role' => 0,
                         'back_days' => 'All',
@@ -243,7 +243,7 @@ class EmployeeController extends Controller
             // update employee
             $employee->update([
                 'name' => $request->employeeName,
-                'department_id' => $request->department['id'],
+                'department_id' => @$request->department ? $request->department['id'] : NULL,
                 'designation' => $request->designation,
                 'salary' => $request->salary,
                 'commission' => $request->commission,

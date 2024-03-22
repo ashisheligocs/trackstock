@@ -40,14 +40,6 @@
                     " />
                   <has-error :form="form" field="employeeName" />
                 </div>
-                <!-- <div class="form-group col-md-4">
-                  <label for="department">{{ $t('common.department') }}
-                    <span class="required">*</span></label>
-                  <v-select v-if="items" v-model="form.department" :options="items" label="name"
-                    :class="{ 'is-invalid': form.errors.has('department') }" name="department"
-                    :placeholder="$t('common.department_placeholder')" />
-                  <has-error :form="form" field="department" />
-                </div> -->
               </div>
               <div class="row">
 
@@ -84,7 +76,7 @@
                 <div class="form-group col-md-6">
                   <label for="text">User Name
                     <span class="required">*</span></label>
-                  <input id="text" v-model="form.email" type="text" class="form-control"
+                  <input id="text" v-model="form.username" type="text" class="form-control"
                     :class="{ 'is-invalid': form.errors.has('text') }" name="text"
                     :placeholder="$t('common.email_placeholder')" />
                   <has-error :form="form" field="text" />
@@ -160,8 +152,8 @@ export default {
     selectedHotels: [],
     chosenHotel: null,
     form: new Form({
-      hotel_id: [],
-      hotel: '',
+      shop_id: [],
+      shop: '',
       employeeName: '',
       department: '',
       designation: '',
@@ -242,7 +234,7 @@ export default {
       this.form.address = data.data.address
       this.form.status = data.data.status
       this.form.allowLogin = data.data.allowLogin
-      this.form.email = data.data.email
+      this.form.username = data.data.email
       this.form.role = data.data.role
       this.form.back_days = data.data.back_days
       this.selectedHotels = data.data.shops
@@ -278,11 +270,11 @@ export default {
     async updateEmployee() {
       if (this.form.allowLogin) {
         if (this.selectedHotels.length <= 0) return toast.fire({ type: 'error', title: 'select atleast one hotel' })
-        this.form.hotel_id = _.map(this.selectedHotels, 'id');
+        this.form.shop_id = _.map(this.selectedHotels, 'id');
       }
       if (!this.chosenHotel) return toast.fire({ type: 'error', title: 'select hotel' })
 
-      this.form.hotel = this.chosenHotel?.id;
+      this.form.shop = this.chosenHotel?.id;
       await this.form
         .patch(
           window.location.origin + '/api/employees/' + this.$route.params.slug

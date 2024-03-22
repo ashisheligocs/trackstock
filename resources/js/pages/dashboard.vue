@@ -56,6 +56,7 @@
                   </router-link>
                 </div>
               </div>
+              
               <div class="row" v-if="$can('incharge-activities')">
                 <div class="col-4 shop_list">
                   <div v-for="(data, i) in hotelItems" :key="i">
