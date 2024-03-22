@@ -7,7 +7,7 @@
             <div class="">
               <div class="row justify-content-center" v-if="$can('sales-activities')">
                 <div class="col-md-3 col-6 mb-4">
-                  
+
                   <router-link :to="{ name: 'pos.create' }" class="small-box-footer">
                     <div class="small-box mb-0">
                       <div class="inner p-4 text-center">
@@ -56,7 +56,7 @@
                   </router-link>
                 </div>
               </div>
-              
+
               <div class="row" v-if="$can('incharge-activities')">
                 <div class="col-4 shop_list">
                   <div v-for="(data, i) in hotelItems" :key="i">
@@ -71,7 +71,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-6" v-if="$can('incharge-activities')">
                   <div class="table-responsive table-custom">
                     <table class="table">
                       <tbody>

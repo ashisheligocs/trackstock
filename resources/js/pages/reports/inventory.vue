@@ -14,57 +14,7 @@
           >
             <div class="card-body">
               <div class="row">
-                <!-- <div v-if="items" class="form-group col-md-6">
-                  <label for="category"
-                    >{{ $t("common.category") }}
-                    <span class="required">*</span></label
-                  >
-                  <v-select
-                    v-model="form.category"
-                    :options="items"
-                    label="name"
-                    :class="{ 'is-invalid': form.errors.has('category') }"
-                    name="category"
-                    :placeholder="$t('common.category_name_placeholder')"
-                    @input="getSubCategories"
-                  />
-                  <has-error :form="form" field="category" />
-                </div> -->
-                <div v-if="items" class="form-group col-md-6">
-                  <label for="subCategory"
-                    >{{ $t("common.sub_category_name") }}
-                    <span class="required">*</span></label
-                  >
-                  <!-- {{subCategories}} -->
-                  <v-select
-                    v-model="form.subCategory"
-                    :options="subCategories"
-                    label="name"
-                    :class="{ 'is-invalid': form.errors.has('subCategory') }"
-                    name="subCategory"
-                    :placeholder="$t('common.category_name_placeholder')"
-                    @input="getProducts"
-                  />
-                  <has-error :form="form" field="subCategory" />
-                </div>
-                <div v-if="items" class="form-group col-md-6">
-                  <label for="itemName"
-                    >{{ $t("common.product_name") }}
-                    <span class="required">*</span></label
-                  >
-                  <v-select
-                    v-model="form.itemName"
-                    :options="products"
-                    label="name"
-                    :class="{ 'is-invalid': form.errors.has('itemName') }"
-                    name="itemName"
-                    :placeholder="$t('common.product_name_placeholder')"
-                  />
-                  <has-error :form="form" field="itemName" />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6   "> 
+                <div class="col-md-6   ">
                   </div>
                 <div class="col-md-6 d-flex align-items-center inv_filter_cont position-relative">
                   <div class="col w-100 text-right float-right mt-4 d-flex justify-content-end">
@@ -86,39 +36,7 @@
                 </template>
               </div>
                 </div>
-                
               </div>
-
-              <div class="row">
-                <div class="col-8 w-100 text-right float-right mb-2 d-flex">
-                  <button type="button" class="btn btn-primary" @click="getInventoryData()">
-                      Submit
-                  </button>
-                </div>
-                <!-- <div class="col-4 w-100 text-right float-right mb-2 d-flex">
-                  <span class="px-2 py-1">
-                    {{ form.fromDate | moment("Do MMM, YYYY") }} TO {{ form.toDate | moment("Do MMM, YYYY") }}
-                  </span>
-                  <button type="button" class="modal-default-button btn btn-primary float-left" @click="filterOpen = !filterOpen">
-                      {{ $t("common.filter") }}<i class="fas ml-1" :class="filterOpen ? 'fa-angle-up' : 'fa-angle-down '"/>
-                  </button>
-                </div> -->
-              </div>
-              
-              <!-- <div class="row">
-                <div class="col-7"></div>
-                <div class="col-3" v-if="filterOpen">
-                <template :class="w - 100">
-                  <date-range-picker
-                    :from="form.fromDate"
-                    :to="form.toDate"
-                    :panel="$route.query.panel"
-                    @update="update"
-                  />
-                </template>
-              </div>
-              </div> -->
-              
             </div>
           </form>
         </div>
@@ -176,16 +94,9 @@
                 <tbody>
                   <tr v-for="(data, i) in inventoryData" :key="i">
                     <td>{{ ++i }}</td>
-                    <td><router-link
-                      v-if="$can('inventory-history')"
-                      v-tooltip="$t('inventory.common.inventory_history')"
-                      :to="{
-                            name: 'inventory.history',
-                            params: { slug: data.slug , id: selectedHotel },
-                          }"
-                    >
+                    <td>
                       {{ data.productCode }}
-                    </router-link></td>
+</td>
                     <td>{{ data.hotel_name }}</td>
                     <td>{{ data.productName }}</td>
                     <td>{{ data.stockIn }}</td>
@@ -302,9 +213,10 @@ export default {
       } else {
         this.currentHotel = '';
       }
-    this.prefix = this.appInfo.productPrefix; 
+    this.prefix = this.appInfo.productPrefix;
     this.form.category = 1;
-    this.getProducts()
+    this.getProducts();
+    this.getInventoryData();
   },
   methods: {
     goBack() {
@@ -394,7 +306,7 @@ export default {
 
     async getInventoryData(){
       this.loading = true;
-      this.form.shop_id = (this.selectedHotel != 'all') ? this.selectedHotel : '' 
+      this.form.shop_id = (this.selectedHotel != 'all') ? this.selectedHotel : ''
       await this.form
         .post(window.location.origin + "/api/reports/inventory")
         .then((response) => {
