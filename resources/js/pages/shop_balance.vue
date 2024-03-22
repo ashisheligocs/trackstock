@@ -1,9 +1,12 @@
-Shop balance page  
+Shop balance page
 
 <template>
   <div>
     <div class="container-fluid">
       <div class="row">
+        <div>
+          <button @click="goback">Go Back</button>
+        </div>
         <div class="col-md-12">
           <div class="my-4">
             <div class="">
@@ -45,42 +48,42 @@ Shop balance page
                 </div>
               </div>
               <div class="row justify-content-center">
-                <button class="btn btn-primary">Collect Cash</button>
+                <button class="btn btn-primary" @click="toggleVisibility">Collect Cash</button>
               </div>
-              <div class="col-12 m-auto mw500">
-                  <div class="table-responsive mt-4 ">
-                    <table class="table table-bordered bg-white">
-                      <tbody>
-                        <tr>
-                          <td class="align-middle">QR</td>
-                          <td class="align-middle text-right">20,000</td>
-                          <td class="align-middle text-right">20,000</td>
-                        </tr>
+              <div class="col-12 m-auto mw500" v-show="isVisible">
+                <div class="table-responsive mt-4 ">
+                  <table class="table table-bordered bg-white">
+                    <tbody>
+                      <tr>
+                        <td class="align-middle">QR</td>
+                        <td class="align-middle text-right">20,000</td>
+                        <td class="align-middle text-right">20,000</td>
+                      </tr>
 
-                        <tr>
-                          <td class="align-middle">Cash</td>
-                          <td class="align-middle text-right">1,20,000</td>
-                          <td class="align-middle text-right">
-                            <div class="form-group mb-0">
-                              <input type="text" class="form-control text-right">
-                            </div>
+                      <tr>
+                        <td class="align-middle">Cash</td>
+                        <td class="align-middle text-right">1,20,000</td>
+                        <td class="align-middle text-right">
+                          <div class="form-group mb-0">
+                            <input type="text" class="form-control text-right">
+                          </div>
 
-                          </td>
-                        </tr>
-                        <tr>
-                          <th class="align-middle">Total</th>
-                          <th class="align-middle text-right">1,40,000</th>
-                          <!-- hgfghh -->
-                          <th class="align-middle text-right">Balance : 40,000</th>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div class="row justify-content-center">
-                <button class="btn btn-outline-danger mt-3">Collect Cash</button>
-              </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th class="align-middle">Total</th>
+                        <th class="align-middle text-right">1,40,000</th>
+                        <!-- hgfghh -->
+                        <th class="align-middle text-right">Balance : 40,000</th>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
+
+                <div class="row justify-content-center">
+                  <button class="btn btn-outline-danger mt-3">Collect Cash</button>
+                </div>
+              </div>
               <v-modal>
                 <h4>Receipt Number</h4>
                 <tabel>
@@ -126,7 +129,7 @@ Shop balance page
                   </tr>
                   <tr>
                     <td colspan="2">
-                     Remarks
+                      Remarks
                     </td>
 
                   </tr>
@@ -140,9 +143,9 @@ Shop balance page
 
                   <tr>
                     <td colspan="2">
-                     <div>
-                      
-                     </div>
+                      <div>
+
+                      </div>
                     </td>
                   </tr>
                 </tabel>
@@ -168,7 +171,16 @@ export default {
     return { title: this.$t("dashboard.page_title") };
   },
   data: () => ({
+    isVisible: false,
 
   }),
+  methods: {
+    goback() {
+      this.$router.go(-1);
+    },
+    toggleVisibility() {
+      this.isVisible = !this.isVisible;
+    }
+  }
 };
 </script>

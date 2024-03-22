@@ -2,6 +2,11 @@
   <div>
     <div class="container-fluid">
       <div class="row">
+        <div>
+          <button @click="goBack">Back</button>
+        </div>
+
+
         <div class="col-md-12">
           <div class="my-4">
             <div class="">
@@ -76,5 +81,11 @@ export default {
   data: () => ({
 
   }),
+
+  methods:{
+    goBack() {
+      this.$router.go(-1);
+    }
+  }
 };
 </script>
