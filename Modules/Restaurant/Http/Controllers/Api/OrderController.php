@@ -163,17 +163,13 @@ class OrderController extends Controller
         
         $newArray = array_values($newArray);
         
-        if ($orderItems && !empty($orderItems)) {
-            foreach ($orderItems as $item) {
-                // $optionalItems = @$item['addon'] ? Arr::pluck($item['addon'], 'id') : [];
-                if($item->id != 0){
-                    RestroItem::create([
-                        'order_id'           => $order->id,
-                        'restaurant_item_id' => $item['id'],
-                        'qty'                => $item['quantity'],
-                    ]);
-                }
-                
+        if ($newArray && !empty($newArray)) {
+            foreach ($newArray as $item) {
+                RestroItem::create([
+                    'order_id'           => $order->id,
+                    'restaurant_item_id' => $item['id'],
+                    'qty'                => $item['quantity'],
+                ]);
             }
         }
 
