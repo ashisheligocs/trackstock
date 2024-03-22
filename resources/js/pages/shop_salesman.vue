@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div>
+      <button @click="goback">
+        Go Back
+      </button>
+    </div>
     <div class="card-body position-relative">
       <table-loading v-show="loading" />
       <div class="table-responsive table-custom mt-3" id="printMe">
@@ -82,5 +87,10 @@ export default {
   data: () => ({
 
   }),
+  methods:{
+    goback(){
+      this.$router.go(-1);
+    }
+  }
 };
 </script>

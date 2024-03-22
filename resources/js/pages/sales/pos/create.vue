@@ -11,7 +11,13 @@
         <router-link :to="{ name: 'home' }" class="small-box-footer">
           <button class="outline_btn">Back</button>
         </router-link>
-        
+
+        <div>
+          <!-- Your other content goes here -->
+          <button @click="goBack">Back</button>
+        </div>
+
+
       </div>
       <div v-if="activetab" class="tabcontent">
         <div class="mt-3">
@@ -36,7 +42,12 @@ export default {
   },
   data: () => ({
     activetab: 1,
-  })
+  }),
+  methods: {
+    goBack() {
+      this.$router.go(-1);
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

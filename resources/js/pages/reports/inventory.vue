@@ -1,8 +1,8 @@
 <template>
   <div>
-    <!-- breadcrumbs Start -->
-    <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" />
-    <!-- breadcrumbs end -->
+    <div>
+      <button @click="goBack">Back</button>
+    </div>
     <div class="row no-print">
       <div class="col-lg-12">
         <div class="card">
@@ -307,6 +307,9 @@ export default {
     this.getProducts()
   },
   methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
     // get all categories
     async getCatgories() {
       await this.$store.dispatch("operations/allData", {
