@@ -30,6 +30,7 @@ class ShopController extends Controller
     public function index(Request $request)
     {
         // dd($request->input());
+        
         $search = $request->search ?? '';
         if($request->has('search')){
             $shop = Shop::when($search, function ($q) use ($search) {
@@ -37,7 +38,11 @@ class ShopController extends Controller
             })->latest()->paginate($request->perPage);
 
         } else {
-            $shop = Shop::withoutGlobalScope(SelectedHotel::class)->when($search, function ($q) use ($search) {
+            $shop = count(auth()->user()->shops) > 0
+            ? Shop::withoutGlobalScope(SelectedHotel::class)->whereHas('users', function ($query) {
+                $query->where('users.id', auth()->id());
+            })->latest()->get()
+            : Shop::withoutGlobalScope(SelectedHotel::class)->when($search, function ($q) use ($search) {
                 $q->where('shop_name', 'like', "%$search%")->orWhere('shop_name', 'like', "%$search%");
             })->latest()->paginate($request->perPage);
         }
