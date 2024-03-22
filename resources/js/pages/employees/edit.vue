@@ -84,7 +84,7 @@
                 <div class="form-group col-md-6">
                   <label for="text">User Name
                     <span class="required">*</span></label>
-                  <input id="text" v-model="form.text" type="text" class="form-control"
+                  <input id="text" v-model="form.email" type="text" class="form-control"
                     :class="{ 'is-invalid': form.errors.has('text') }" name="text"
                     :placeholder="$t('common.email_placeholder')" />
                   <has-error :form="form" field="text" />
@@ -105,10 +105,11 @@
                   <has-error :form="form" field="role" />
                 </div>
                 <div class="form-group col-md-6">
+                  {{  hotelItems }}
                   <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                     <span class="required">*</span></label>
                   <multiselect id="hotel" v-model="selectedHotels" :options="hotelItems" :show-labels="false" tag-placeholder="" :taggable="false" placeholder="Search an hotel"
-                               class="form-control" label="hotel_name" track-by="hotel_name" :allowEmpty="false" :multiple="true"/>
+                               class="form-control" label="shop_name" track-by="shop_name" :allowEmpty="false" :multiple="true"/>
                 </div>
               </div>
             </div>
@@ -224,6 +225,8 @@ export default {
       const { data } = await this.form.get(
         window.location.origin + '/api/employees/' + this.$route.params.slug
       )
+      console.log(data.data.shops);
+      console.log(data.data);
       this.form.employeeName = data.data.name
       this.form.department = data.data.department
       this.form.designation = data.data.designation
