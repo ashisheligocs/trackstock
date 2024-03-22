@@ -7,7 +7,7 @@
     <div class="row sm-col-reverse">
 
       <!-- POS Right area start -->
-      <div class="col-12">
+      <div class="col-12 col-md-6">
         <div class="card">
           <div class="card-body-l p-0">
             <div class="form-group pl-3 pt-3 pr-3 d-none">
@@ -29,8 +29,6 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th scope="col">Sr. No.</th>
-                    <th>Batch No</th>
                     <th scope="col">{{ $t("common.product") }}</th>
                     <th scope="col">{{ $t("common.price") }}</th>
                     <th scope="col" class="text-center">
@@ -64,7 +62,7 @@
                     <td>
                       {{ singleItem.name }}
                       <span v-if="singleItem.addonString != ''" style="font-size: 11px;"><br />{{
-                  singleItem.addonString }}</span>
+                singleItem.addonString }}</span>
                     </td>
                     <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td>
                     <td>
@@ -269,9 +267,9 @@
             <span>{{ form.netTotal | forBalanceSheetCurrencyDecimalOnly }}</span>
           </div>
           <div class="row" v-if="accounts &&
-                  form.selectedProducts &&
-                  form.selectedProducts.length > 0
-                  ">
+                form.selectedProducts &&
+                form.selectedProducts.length > 0
+                ">
             <div class="form-group col-md-6">
               <input type="hidden" v-model="form.account">
               QR :
@@ -286,9 +284,9 @@
           </div>
 
           <div class="row" v-if="accounts &&
-                  form.selectedProducts &&
-                  form.selectedProducts.length > 0
-                  ">
+                form.selectedProducts &&
+                form.selectedProducts.length > 0
+                ">
             <div class="form-group col-md-6">
               <input type="hidden" v-model="form.account">
               Cash :
@@ -460,11 +458,11 @@
         },
         data: () => ({
           billContent: '',
-      printerServiceUUID: '000018f0-0000-1000-8000-00805f9b34fb',
+      printerServiceUUID: '000018f0-0000-1000-8000-00805f9b34fb', 
       device: null,
       server: null,
       characteristic: null,
-
+       
             breadcrumbsCurrent: "pos.breadcrumbs_current",
             breadcrumbs: [
                 {
@@ -1046,7 +1044,7 @@
                         this.form.invoice_id = data.data.id;
                         this.form.invoice_slug = data.data.order_id_uniq;
                         this.form.receiptNo = data.data.order_id_uniq;
-
+            
                         if (this.form.invoice_id != null) {
                            this.form
                             .post(window.location.origin + "/api/food/order/invoice/pay")
@@ -1058,7 +1056,7 @@
                                 this.resetForm();
                                 this.form.reset();
                                 this.againDefaultSettings();
-
+                                
                             })
                             .catch(() => {
                                 toast.fire({ type: "error", title: this.$t("common.error_msg") });
