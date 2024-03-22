@@ -16,7 +16,7 @@ class CreateEmployeesTable extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('emp_id');
+            $table->string('emp_id')->nullable();
             $table->string('slug');
             $table->string('designation')->nullable();
             $table->double('salary', 12, 2)->nullable();
@@ -32,7 +32,7 @@ class CreateEmployeesTable extends Migration
             $table->boolean('status')->nullable()->default(1);
             $table->string('image_path')->nullable();
             $table->timestamps();
-            $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('department_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
 
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade')->onUpdate('no action');
