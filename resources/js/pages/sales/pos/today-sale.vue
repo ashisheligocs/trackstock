@@ -1,6 +1,10 @@
 <template>
     <div class="mb-50">
-        <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" />
+        <breadcrumbs :current="breadcrumbsCurrent" />
+        <router-link :to="{ name: 'home' }" class="small-box-footer">
+            <!-- <button class="btn btn-secondary mt-2 mb-2"><i class="fas fa-long-arrow-alt-left" /> {{ $t("common.back") }}</button> -->
+            <span class="btn btn-secondary mt-2 mb-2"><i class="fas fa-long-arrow-alt-left" /> Back</span>
+        </router-link>
 
         <div class="row">
             <div class="col-lg-12">
@@ -8,10 +12,6 @@
                     <!-- /.card-header -->
                     <div class="card-body position-relative">
 
-
-                        <router-link :to="{ name: 'home' }" class="small-box-footer">
-                            <button class="outline_btn">Back</button>
-                        </router-link>
 
                         <table-loading v-show="loading" />
                         <div id="printMe" class="table-responsive table-custom mt-3">
@@ -118,7 +118,7 @@ export default {
               .post(window.location.origin + '/api/food/order/todaysale')
               .then((response) => {
                     this.todaySale = response.data.data
-                  
+
               });
         }
     }

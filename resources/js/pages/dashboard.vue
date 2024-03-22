@@ -10,7 +10,6 @@
                   <router-link :to="{ name: 'pos.create' }" class="small-box-footer">
                     <div class="small-box mb-0">
                       <div class="inner p-4 text-center">
-                        
                         <h3>
                           Sales
                         </h3>
@@ -54,7 +53,7 @@
                       </div>
                     </div>
                   </router-link>
-                </div> 
+                </div>
               </div>
               
               <div class="row" v-if="$can('incharge-activities')">

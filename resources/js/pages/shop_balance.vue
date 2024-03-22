@@ -5,7 +5,7 @@ Shop balance page
     <div class="container-fluid">
       <div class="row">
         <div>
-          <button @click="goback">Go Back</button>
+           <button class="btn btn-secondary mt-2 mb-2" @click="goback"><i class="fas fa-long-arrow-alt-left" /> {{ $t("common.back") }}</button>
         </div>
         <div class="col-md-12">
           <div class="my-4">
@@ -48,7 +48,7 @@ Shop balance page
                 </div>
               </div>
               <div class="row justify-content-center" v-if="$can('incharge-activities')">
-                <button class="btn btn-primary" @click="toggleVisibility">Collect Cash</button>
+                <!-- <button class="btn btn-primary" @click="toggleVisibility">Collect Cash</button> -->
               </div>
               <div class="col-12 m-auto mw500" v-show="isVisible">
                 <div class="table-responsive mt-4 ">
@@ -81,11 +81,15 @@ Shop balance page
                 </div>
 
                 <div class="row justify-content-center">
-                  <router-link :to="{ name: 'transferBalances.create' }" class="small-box-footer">
-                    Collect Cash
-                    </router-link>
-                  <!-- <button class="btn btn-outline-danger mt-3">Collect Cash</button> -->
+                  
+                  
                 </div>
+              </div>
+              <div class="row justify-content-center"> 
+                <router-link :to="{ name: 'transferBalances.create' }" class="small-box-footer">
+                      <button class="btn btn-primary" >Collect Cash</button>
+                      </router-link>
+                
               </div>
               <v-modal>
                 <h4>Receipt Number</h4>

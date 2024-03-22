@@ -7,7 +7,7 @@
     <div class="row sm-col-reverse">
 
       <!-- POS Right area start -->
-      <div class="col-12 col-md-6">
+      <div class="col-12">
         <div class="card">
           <div class="card-body-l p-0">
             <div class="form-group pl-3 pt-3 pr-3 d-none">
@@ -29,14 +29,14 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
+                    <th scope="col">Sr.No</th>
+                    <th scope="col">Batch No.</th>
                     <th scope="col">{{ $t("common.product") }}</th>
-                    <th scope="col">{{ $t("common.price") }}</th>
+                    <!-- <th scope="col">{{ $t("common.price") }}</th> -->
                     <th scope="col" class="text-center">
                       {{ $t("common.quantity") }}
                     </th>
-                    <th scope="col" class="text-center">
-                      Total
-                    </th>
+                    <th scope="col" class="text-center"> Rate </th>
                     <th scope="col" class="text-center">
                       {{ $t("common.action") }}
                     </th>
@@ -49,7 +49,7 @@
                     <td>
                       <div class="form-group">
                         <div>
-                            <input v-model="singleItem.inputText" @input="getSuggestions(singleItem)"  />
+                            <input v-model="singleItem.inputText" @input="getSuggestions(singleItem)" class="form-control"  />
 
                             <ul v-if="singleItem.showSuggestions">
                               <li v-for="(suggestion, index) in singleItem.suggestions" :key="index" @click="selectSuggestion(singleItem,suggestion)">
@@ -64,9 +64,9 @@
                       <span v-if="singleItem.addonString != ''" style="font-size: 11px;"><br />{{
                 singleItem.addonString }}</span>
                     </td>
-                    <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td>
+                    <!-- <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td> -->
                     <td>
-                      <div class="d-flex custom-qty-input">
+                      <div class="text-center">
                         <!-- <input type="button" value="-" class="button-minus icon-shape icon-sm btn-danger"
                           data-field="quantity" @click="adjustQuantity($event, i, 'decrement')" /> -->
                         <input type="number" step="any" :id="`Qty-${i}`" :value="singleItem.quantity" name="quantity"
@@ -77,8 +77,8 @@
                           data-field="quantity" @click="adjustQuantity($event, i, 'increment')" /> -->
                       </div>
                     </td>
-                    <td class="text-right">{{ itemSubtotal(singleItem) | withCurrency }}</td>
-                    <td class="text-right">
+                    <td class="text-center">{{ itemSubtotal(singleItem) }}</td>
+                    <td class="text-center">
                       <button type="button" class="btn btn-danger" @click="removeItem(i)">
                         <i class="fas fa-times"></i>
                       </button>
@@ -103,8 +103,7 @@
               <div class="row">
                 <button class="btn btn-primary btn-block col-6" @click="saveOrder($event, true)"
                   :disabled="selectedItemList.length <= 0">
-                  <i class="fas fa-credit-card" />
-                  Save & Payment
+                  <i class="fas fa-credit-card" /> &nbsp;Payment
                 </button>
                 <div class="col-6">
                   Net Total: {{ foodItemNetTotal | withCurrency }}
@@ -259,13 +258,24 @@
     </VModal>
 
     <Modal class="pay-modal" v-if="showModal" :form="form">
-      <h5 slot="header" style="margin: 1rem">{{ $t("pos.add_payment") }}</h5>
-      <div class="w-100" slot="body">
-        <div>
-          <div class="font-weight-bold">
+      <!-- <h5 slot="header" style="margin: 1rem">{{ $t("pos.add_payment") }}</h5> -->
+      <div slot="header" style="margin: 1rem" class="font-weight-bold">
             <span>Net payable amount :</span>
             <span>{{ form.netTotal | forBalanceSheetCurrencyDecimalOnly }}</span>
           </div>
+      <div class="w-100" slot="body">
+        <div>
+
+          <div class="row mb-3">
+            <div class="form-group col-md-6">
+              Date :
+            </div>
+            <div class="form-group col-md-6">
+              {{ form.date }}
+              <input id="date" v-model="form.date" type="hidden" class="form-control" />
+            </div>
+          </div>
+         
           <div class="row" v-if="accounts &&
                 form.selectedProducts &&
                 form.selectedProducts.length > 0
@@ -299,15 +309,7 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="form-group col-md-6">
-              Date :
-            </div>
-            <div class="form-group col-md-6">
-              {{ form.date }}
-              <input id="date" v-model="form.date" type="hidden" class="form-control" />
-            </div>
-          </div>
+          
         </div>
       </div>
       <div class="payment-modal-footer" slot="modal-footer">
@@ -315,10 +317,7 @@
           <button class="btn btn-primary" @click="addPayment" @keydown="form.onKeydown($event)">
             <i class="fas fa-save" /> {{ $t("common.save") }}
           </button>
-
-          <button class="btn btn-primary" @click="order_recipt" @keydown="form.onKeydown($event)">
-            <i class="fas fa-save" /> {{ $t("common.save") }}
-          </button>
+ 
           <button class="modal-default-button btn btn-danger" @click="closeModalAndClearFormData">
             {{ $t("common.close") }}
           </button>
@@ -1269,14 +1268,7 @@
   width: 80px;
 }
 
-.table-wrap .custom-qty-input {
-  display: inline-flex !important;
-  justify-content: center;
-  border: 1px solid #ececfdb8;
-  padding: 0;
-  border-radius: 18px;
-  /* background: #ddd; */
-}
+
 
 .table-wrap .btn-danger {
   width: 25px;
