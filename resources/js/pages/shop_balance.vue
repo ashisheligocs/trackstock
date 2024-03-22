@@ -86,7 +86,7 @@ Shop balance page
               </div>
               <v-modal>
                 <h4>Receipt Number</h4>
-                <tabel>
+                <table>
                   <tr>
                     <td>
                       Incharge Name
@@ -148,7 +148,7 @@ Shop balance page
                       </div>
                     </td>
                   </tr>
-                </tabel>
+                </table>
               </v-modal>
             </div>
           </div>
