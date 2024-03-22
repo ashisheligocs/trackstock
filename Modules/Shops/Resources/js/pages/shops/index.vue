@@ -17,12 +17,6 @@
                           </div>
                           <div class="col-6 col-xl-4 text-right mb-2" v-if="$can('shop-create')">
                               <div class="btn-group c-w-100">
-                                  <a @click="refreshTable()" href="#" v-tooltip="'Refresh'" class="btn btn-success">
-                                      <i class="fas fa-sync"></i>
-                                  </a>
-                                  <a href="/hotel/excel" v-tooltip="$t('common.export_table')" class="btn btn-dark ">
-                                      <i class="fas fa-file-export"></i>
-                                  </a>
                                   <router-link :to="{ name: 'shop.create' }" class="btn btn-primary">
                                       {{ $t("common.create") }}
                                       <i class="fas fa-plus-circle d-none d-sm-inline-block" />
@@ -61,14 +55,6 @@
                                               }}
                                           </span>
                                           <span v-else>{{ i + 1 }}</span>
-                                      </td>
-                                      <td> <a v-if="data?.images" href="#" id="show-modal">
-                                              <img :src="'images/shop/' + data?.image_path" class="rounded preview-sm"
-                                                  loading="lazy" />
-                                          </a>
-                                          <div v-else class="bg-secondary rounded no-preview-sm">
-                                              <small>{{ $t("common.no_preview") }}</small>
-                                          </div>
                                       </td>
                                       <td>{{ data.shop_name }}</td>
                                       <td v-if="$can('shop-edit') ||

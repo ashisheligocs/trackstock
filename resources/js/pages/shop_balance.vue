@@ -81,7 +81,10 @@ Shop balance page
                 </div>
 
                 <div class="row justify-content-center">
-                  <button class="btn btn-outline-danger mt-3">Collect Cash</button>
+                  <router-link :to="{ name: 'transferBalances.create' }" class="small-box-footer">
+                    Collect Cash
+                    </router-link>
+                  <!-- <button class="btn btn-outline-danger mt-3">Collect Cash</button> -->
                 </div>
               </div>
               <v-modal>

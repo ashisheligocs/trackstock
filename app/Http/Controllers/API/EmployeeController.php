@@ -105,7 +105,7 @@ class EmployeeController extends Controller
             Employee::create([
                 'name' => $request->employeeName,
                 'emp_id' => $code,
-                'department_id' => $request->department['id'],
+                'department_id' => @$request->department ? $request->department['id'] : NULL,           
                 'designation' => $request->designation,
                 'salary' => $request->salary,
                 'commission' => $request->commission,

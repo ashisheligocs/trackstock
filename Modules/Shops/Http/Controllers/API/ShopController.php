@@ -30,7 +30,7 @@ class ShopController extends Controller
     public function index(Request $request)
     {
         // dd($request->input());
-        
+
         $search = $request->search ?? '';
         if($request->has('search')){
             $shop = Shop::when($search, function ($q) use ($search) {
