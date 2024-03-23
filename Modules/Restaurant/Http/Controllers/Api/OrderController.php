@@ -282,8 +282,21 @@ class OrderController extends Controller
 
             $orderItems = $input['selectedProducts'];
 
-            if ($orderItems && !empty($orderItems)) {
-                foreach ($orderItems as $item) {
+            foreach ($orderItems as $item) {
+                if($item['id'] != 0){
+                        $id = $item['id'];
+                    if (isset($newArray[$id])) {
+                        $newArray[$id]['quantity'] += $item['quantity'];
+                    } else {
+                        $newArray[$id] = $item;
+                    }
+                }
+            }
+            
+            $newArray = array_values($newArray);
+
+            if ($newArray && !empty($newArray)) {
+                foreach ($newArray as $item) {
                     $product = Product::where('id', $item['id'])->first();
                     if ($product) {
                         $updatedInventoryCount = $product->inventory_count - $item['quantity'];
@@ -471,7 +484,41 @@ class OrderController extends Controller
             $newQuery->where('shop_id', $request->shop_id);
             $newQuery->whereBetween('order_date', [$today, $request->todayDate]);
         })->get();
- 
-        return TodaySalesResource::collection($todaySale);
+
+      
+        $finalArray = [];
+        $totalQty = 0;
+        $totalAmount = 0;
+
+        foreach($todaySale as $value){
+            
+            $productId = $value->restaurantItem->id;
+            $totalQty += $value->qty;
+            $totalAmount += $value->restaurantItem->selling_price;
+            if (isset($finalArray[$productId])) {
+                $finalArray[$productId]['quantity'] += $value->qty;
+                
+            } else {
+                $finalArray[$productId] = [
+                    'product_id' => $value->restaurantItem->id,
+                    'name' => $value->restaurantItem->name,
+                    'shop' => $value->restaurantorder->shop_id,
+                    'orderId' => $value->restaurantorder->order_id_uniq,
+                    'price' => $value->restaurantItem->selling_price,
+                    'quantity' => $value->qty,
+                    'order_date' => $value->restaurantorder->order_date
+                ];
+            }
+           
+        }
+
+         $newArray = array_values($finalArray);
+         return response()->json([
+            'data'=> $newArray,
+            'qty'=> $totalQty,
+            'amount'=> $totalAmount,
+        ]); 
+       
+        // return TodaySalesResource::collection($todaySale);
     }
 }
