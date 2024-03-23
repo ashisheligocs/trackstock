@@ -13,7 +13,7 @@
                     <div class="card-body position-relative">
 
 
-                        <table-loading v-show="loading" />
+                        <!-- <table-loading v-show="loading" /> -->
                         <div id="printMe" class="table-responsive table-custom mt-3">
                             <table class="table">
                                 <thead>
@@ -29,24 +29,24 @@
                                 <tbody>
 
                                     <tr v-if="todaySale && todaySale?.length" v-for="(data, i) in todaySale" :key="i">
-
+                                        
                                         <td>
                                             <span>{{ i + 1 }}</span>
                                         </td>
                                         <td>{{ data.name }}</td>
                                         <td>{{ data.quantity }}</td>
                                         <td>{{ data.price }}</td>
-                                        <td class="text-right">{{ data?.total_price |
+                                        <td class="text-right">{{ data.quantity * data.price |
                                             forBalanceSheetCurrencyDecimalOnly }}</td>
                                     </tr>
                                     <tr>
                                       <th></th>
-                                      <th></th>
-                                      <th></th>
+                                      <th>Qty</th>
+                                      <th>{{ total_qty_sale }}</th>
                                       <th class="text-right">Total</th>
-                                      <th class="text-right">1234</th>
+                                      <th class="text-right">{{ total_amount }}</th>
                                     </tr>
-                                    <tr v-show="!loading && !todaySale?.length">
+                                    <tr v-show="!todaySale?.length">
                                         <td colspan="12">
                                             <EmptyTable />
                                         </td>
@@ -102,6 +102,8 @@ export default {
             },
         ],
         todaySale: [],
+        total_qty_sale:0,
+        total_amount:0,
         form: new Form({
             todayDate: moment().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSS'),
             shop_id: '',
@@ -125,7 +127,10 @@ export default {
             await this.form
               .post(window.location.origin + '/api/food/order/todaysale')
               .then((response) => {
-                    this.todaySale = response.data.data
+                console.log(response);
+                    this.todaySale = response.data.data;
+                    this.total_qty_sale = response.data.qty;
+                    this.total_amount = response.data.amount;
 
               });
         }
