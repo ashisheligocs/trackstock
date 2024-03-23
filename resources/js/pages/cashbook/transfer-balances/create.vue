@@ -24,7 +24,7 @@
           <!-- form start -->
           <form role="form" @submit.prevent="saveTransfer" @keydown="form.onKeydown($event)">
             <div class="card-body">
-              <div class="row" v-if="!readonly">
+              <!-- <div class="row" v-if="!readonly">
                 <div class="form-group col-md-6">
                   <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                     <span class="required">*</span></label>
@@ -39,8 +39,8 @@
                     :placeholder="$t('common.return_reason_placeholder')" name="transferReason" />
                   <has-error :form="form" field="transferReason" />
                 </div>
-              </div>
-              <div class="row" v-if="items && !readonly">
+              </div> -->
+              <!-- <div class="row" v-if="items && !readonly">
                 <div class="form-group col-md-6">
                   <label for="fromAccount">{{ $t('cashbook.common.from_account') }}
                     <span class="required">*</span></label>
@@ -57,8 +57,8 @@
                     :placeholder="$t('common.account_placeholder')" />
                   <has-error :form="form" field="toAccount" />
                 </div>
-              </div>
-              <div class="row" v-if="form.fromAccount">
+              </div> -->
+              <div class="row">
                 <div class="form-group col-md-6">
                   <label for="availableBalance">{{
       $t('common.available_balance')
@@ -72,7 +72,7 @@
                 <div class="form-group col-md-6">
                   <label for="amount">{{ $t('common.amount') }}
                     <span class="required">*</span></label>
-                  <input id="amount" v-model="form.amount" type="number" step="any" class="form-control"
+                  <input id="amount" v-model="form.amount" type="number"   step="any" class="form-control"
                     :class="{ 'is-invalid': form.errors.has('amount') }" name="amount" placeholder="Enter an amount" />
                   <has-error :form="form" field="amount" />
                 </div>
@@ -84,7 +84,7 @@
                     :class="{ 'is-invalid': form.errors.has('date') }" name="date" min="" :readonly="readonly" />
                   <has-error :form="form" field="date" />
                 </div>
-                <div class="form-group col-md-6" v-if="!readonly">
+                <!-- <div class="form-group col-md-6" v-if="!readonly">
                   <label for="status">{{ $t('common.status') }}</label>
                   <select id="status" v-model="form.status" class="form-control"
                     :class="{ 'is-invalid': form.errors.has('status') }">
@@ -96,14 +96,14 @@
                     </option>
                   </select>
                   <has-error :form="form" field="status" />
-                </div>
+                </div> -->
               </div>
-              <div class="form-group" v-if="!readonly">
+              <!-- <div class="form-group" v-if="!readonly">
                 <label for="note">{{ $t('common.note') }}</label>
                 <textarea id="note" v-model="form.note" class="form-control"
                   :class="{ 'is-invalid': form.errors.has('note') }" :placeholder="$t('common.note_placeholder')" />
                 <has-error :form="form" field="note" />
-              </div>
+              </div> -->
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
@@ -221,153 +221,6 @@ export default {
     }),
   },
   async created() {
-
-
-    // 'use strict';
-    //   document.addEventListener('WebComponentsReady', function() {
-    //     let progress = document.querySelector('#progress');
-    //     let dialog = document.querySelector('#dialog');
-    //     let message = document.querySelector('#message');
-    //     let printButton = document.querySelector('#print');
-    //     let printCharacteristic;
-    //     let index = 0;
-    //     let data;
-    //     progress.hidden = true;
-
-    //     let image = document.querySelector('#image');
-    //     // Use the canvas to get image data
-    //     let canvas = document.createElement('canvas');
-    //     // Canvas dimensions need to be a multiple of 40 for this printer
-    //     canvas.width = 120;
-    //     canvas.height = 120;
-    //     let context = canvas.getContext("2d");
-    //     context.drawImage(image, 0, 0, canvas.width, canvas.height);
-    //     let imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
-
-    //     function getDarkPixel(x, y) {
-    //       // Return the pixels that will be printed black
-    //       let red = imageData[((canvas.width * y) + x) * 4];
-    //       let green = imageData[((canvas.width * y) + x) * 4 + 1];
-    //       let blue = imageData[((canvas.width * y) + x) * 4 + 2];
-    //       return (red + green + blue) > 0 ? 1 : 0;
-    //     }
-
-    //     function getImagePrintData() {
-    //       if (imageData == null) {
-    //         console.log('No image to print!');
-    //         return new Uint8Array([]);
-    //       }
-    //       // Each 8 pixels in a row is represented by a byte
-    //       let printData = new Uint8Array(canvas.width / 8 * canvas.height + 8);
-    //       let offset = 0;
-    //       // Set the header bytes for printing the image
-    //       printData[0] = 29;  // Print raster bitmap
-    //       printData[1] = 118; // Print raster bitmap
-    //       printData[2] = 48; // Print raster bitmap
-    //       printData[3] = 0;  // Normal 203.2 DPI
-    //       printData[4] = canvas.width / 8; // Number of horizontal data bits (LSB)
-    //       printData[5] = 0; // Number of horizontal data bits (MSB)
-    //       printData[6] = canvas.height % 256; // Number of vertical data bits (LSB)
-    //       printData[7] = canvas.height / 256;  // Number of vertical data bits (MSB)
-    //       offset = 7;
-    //       // Loop through image rows in bytes
-    //       for (let i = 0; i < canvas.height; ++i) {
-    //         for (let k = 0; k < canvas.width / 8; ++k) {
-    //           let k8 = k * 8;
-    //           //  Pixel to bit position mapping
-    //           printData[++offset] = getDarkPixel(k8 + 0, i) * 128 + getDarkPixel(k8 + 1, i) * 64 +
-    //                       getDarkPixel(k8 + 2, i) * 32 + getDarkPixel(k8 + 3, i) * 16 +
-    //                       getDarkPixel(k8 + 4, i) * 8 + getDarkPixel(k8 + 5, i) * 4 +
-    //                       getDarkPixel(k8 + 6, i) * 2 + getDarkPixel(k8 + 7, i);
-    //         }
-    //       }
-    //       return printData;
-    //     }
-
-    //     function handleError(error) {
-    //       console.log(error);
-    //       progress.hidden = true;
-    //       printCharacteristic = null;
-    //       dialog.open();
-    //     }
-
-    //     function sendNextImageDataBatch(resolve, reject) {
-    //       // Can only write 512 bytes at a time to the characteristic
-    //       // Need to send the image data in 512 byte batches
-    //       if (index + 512 < data.length) {
-    //         printCharacteristic.writeValue(data.slice(index, index + 512)).then(() => {
-    //           index += 512;
-    //           sendNextImageDataBatch(resolve, reject);
-    //         })
-    //         .catch(error => reject(error));
-    //       } else {
-    //         // Send the last bytes
-    //         if (index < data.length) {
-    //           printCharacteristic.writeValue(data.slice(index, data.length)).then(() => {
-    //             resolve();
-    //           })
-    //           .catch(error => reject(error));
-    //         } else {
-    //           resolve();
-    //         }
-    //       }
-    //     }
-
-    //     function sendImageData() {
-    //       index = 0;
-    //       data = getImagePrintData();
-    //       return new Promise(function(resolve, reject) {
-    //         sendNextImageDataBatch(resolve, reject);
-    //       });
-    //     }
-
-    //     function sendTextData() {
-    //       // Get the bytes for the text
-    //       let encoder = new TextEncoder("utf-8");
-    //       // Add line feed + carriage return chars to text
-    //       let text = encoder.encode(message.value + '\u000A\u000D');
-    //       return printCharacteristic.writeValue(text).then(() => {
-    //         console.log('Write done.');
-    //       });
-    //     }
-
-    //     function sendPrinterData() {
-    //       // Print an image followed by the text
-    //       sendImageData()
-    //       .then(sendTextData)
-    //       .then(() => {
-    //         progress.hidden = true;
-    //       })
-    //       .catch(handleError);
-    //     }
-
-    //     printButton.addEventListener('click', function () {
-    //       progress.hidden = false;
-    //       if (printCharacteristic == null) {
-    //         navigator.bluetooth.requestDevice({
-    //           filters: [{
-    //             services: ['000018f0-0000-1000-8000-00805f9b34fb']
-    //           }]
-    //         })
-    //         .then(device => {
-    //           console.log('> Found ' + device.name);
-    //           console.log('Connecting to GATT Server...');
-    //           return device.gatt.connect();
-    //         })
-    //         .then(server => server.getPrimaryService("000018f0-0000-1000-8000-00805f9b34fb"))
-    //         .then(service => service.getCharacteristic("00002af1-0000-1000-8000-00805f9b34fb"))
-    //         .then(characteristic => {
-    //           // Cache the characteristic
-    //           printCharacteristic = characteristic;
-    //           sendPrinterData();
-    //         })
-    //         .catch(handleError);
-    //       } else {
-    //         sendPrinterData();
-    //       }
-    //     });
-    //   });
-
     await this.getHotelDataList();
     if (this.selectedHotel && this.selectedHotel !== 'all') {
       this.hotelItems.forEach((hotel) => {
@@ -422,41 +275,6 @@ export default {
         console.error('Error printing bill:', error);
       }
     },
-    // try {
-    // Get the content from the invoice HTML structure
-    //     const companyName = document.querySelector('#invoice-POS .text-bold:nth-of-type(1)').innerText.trim();
-    //     const shopName = document.querySelector('#invoice-POS .text-bold:nth-of-type(2)').innerText.trim();
-    //     const date = document.querySelector('#invoice-POS .text-bold:nth-of-type(3)').innerText.trim();
-    //     const cashReceived = document.querySelector('#invoice-POS .text-bold:nth-of-type(4)').innerText.trim();
-    //     const cashBalance = document.querySelector('#invoice-POS .text-bold:nth-of-type(5)').innerText.trim();
-    //     const by = document.querySelector('#invoice-POS .text-bold:nth-of-type(6)').innerText.trim();
-
-    //     // Construct the printable content
-    //     let printableContent = '';
-    //     if (companyName) printableContent += `${companyName.trim()}\n`;
-    //     if (shopName) printableContent += `${shopName.trim()}\n`;
-    //     if (date) printableContent += `${date.trim()}\n`;
-    //     if (cashReceived) printableContent += `${cashReceived.trim()}\n`;
-    //     if (cashBalance) printableContent += `${cashBalance.trim()}\n`;
-    //     if (by) printableContent += `${by.trim()}\n`;
-    //     alert(printableContent)
-    //     // Send the content to the printer
-    //     this.device = await navigator.bluetooth.requestDevice({
-    //         filters: [{ services: [this.printerServiceUUID] }]
-    //     });
-    //     this.server = await this.device.gatt.connect();
-    //     this.characteristic = await this.server.getPrimaryService(this.printerServiceUUID)
-    //         .then(service => service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb'));
-    //     let encoder = new TextEncoder("utf-8");
-    //     let encodedPrintableContent = encoder.encode(printableContent + '\u000A\u000D');
-    //     await this.characteristic.writeValue(encodedPrintableContent);
-    //     console.log('Bill sent to printer successfully.');
-    // } catch (error) {
-    //     console.error('Error printing bill:', error);
-    // }
-    // },
-
-
     async getHotelDataList() {
       await this.$store.dispatch('operations/getHotelData', {
         path: '/api/shop',
