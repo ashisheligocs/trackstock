@@ -529,6 +529,7 @@ class ReportController extends Controller
                     $newQuery->where('id', $catId);
                 });
             })->get();
+
             $allProducts = $this->generateItemsArray($products, $request);
         } elseif (($request->category['slug'] == 'all' && $request->subCategory['slug'] != 'all' && $request->itemName['slug'] == 'all') || ($request->category['slug'] != 'all' && $request->subCategory['slug'] != 'all' && $request->itemName['slug'] == 'all')) {
             $products = Product::where('sub_cat_id', $request->subCategory['id'])->orderBy('code', 'ASC')->get();
