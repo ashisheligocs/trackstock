@@ -103,10 +103,10 @@
             <div class="pos-net-total noi-print">
 
               <div class="row">
-                <button class="btn btn-primary btn-block col-6" @click="saveOrder($event, true)">
+                <button class="btn btn-primary btn-block col-6 fs22" @click="saveOrder($event, true)">
                   <i class="fas fa-credit-card" /> &nbsp;Payment
                 </button>
-                <div class="col-6">
+                <div class="align-items-center col-6 d-flex justify-content-center">
                   Net Total: {{ foodItemNetTotal | withCurrency }}
                 </div>
               </div>
@@ -201,7 +201,7 @@
               <input ref="paidAmountInput" id="paidAmount" v-model="form.paidAmount" type="number" step="any"
                 class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1"
                 :max="form.netTotal" :placeholder="$t('common.paid_amount_placeholder')" />
-              <has-error :form="form" field="paidAmount" />
+              <has-error :form="form" field="paidAmount"  />
             </div>
           </div>
 
