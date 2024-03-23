@@ -24,6 +24,7 @@
                                         <th>Price</th>
                                         <th class="text-right">Total</th>
                                     </tr>
+
                                 </thead>
                                 <tbody>
 
@@ -37,6 +38,13 @@
                                         <td>{{ data.price }}</td>
                                         <td class="text-right">{{ data?.total_price |
                                             forBalanceSheetCurrencyDecimalOnly }}</td>
+                                    </tr>
+                                    <tr>
+                                      <th></th>
+                                      <th></th>
+                                      <th></th>
+                                      <th class="text-right">Total</th>
+                                      <th class="text-right">1234</th>
                                     </tr>
                                     <tr v-show="!loading && !todaySale?.length">
                                         <td colspan="12">

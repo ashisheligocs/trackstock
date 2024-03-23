@@ -26,17 +26,17 @@
             </div>
 
             <div class="table-responsive table-wrap">
-              <table class="table table-striped">
+              <table class="table">
                 <thead>
                   <tr>
                     <th scope="col">Sr.No</th>
                     <th scope="col">Batch No.</th>
                     <th scope="col">{{ $t("common.product") }}</th>
                     <!-- <th scope="col">{{ $t("common.price") }}</th> -->
-                    <th scope="col" class="text-center">
+                    <th class="text-center">
                       {{ $t("common.quantity") }}
                     </th>
-                    <th scope="col" class="text-center"> Rate </th>
+                    <th class="text-center"> Rate </th>
                     <th scope="col" class="text-center">
                       {{ $t("common.action") }}
                     </th>
@@ -47,22 +47,24 @@
                   <tr v-for="(singleItem, i) in selectedItemList" :key="i">
                     <td>{{ i + 1 }}</td>
                     <td>
-                      <div class="form-group">
+                      <div class="form-group mb-0">
                         <div>
-                            <input v-model="singleItem.inputText" @input="getSuggestions(singleItem)" class="form-control"  />
+                          <input v-model="singleItem.inputText" @input="getSuggestions(singleItem)"
+                            class="form-control" />
 
-                            <ul v-if="singleItem.showSuggestions">
-                              <li v-for="(suggestion, index) in singleItem.suggestions" :key="index" @click="selectSuggestion(singleItem,suggestion)">
-                                {{ suggestion.code }}
-                              </li>
-                            </ul>
-                          </div>
-                       </div>
+                          <ul v-if="singleItem.showSuggestions">
+                            <li v-for="(suggestion, index) in singleItem.suggestions" :key="index"
+                              @click="selectSuggestion(singleItem, suggestion)">
+                              {{ suggestion.code }}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
                     </td>
                     <td>
                       {{ singleItem.name }}
                       <span v-if="singleItem.addonString != ''" style="font-size: 11px;"><br />{{
-                singleItem.addonString }}</span>
+                  singleItem.addonString }}</span>
                     </td>
                     <!-- <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td> -->
                     <td>
@@ -70,8 +72,8 @@
                         <!-- <input type="button" value="-" class="button-minus icon-shape icon-sm btn-danger"
                           data-field="quantity" @click="adjustQuantity($event, i, 'decrement')" /> -->
                         <input type="number" step="any" :id="`Qty-${i}`" :value="singleItem.quantity" name="quantity"
-                          class="quantity-field border-0 incrementor"placeholder="Quantity" readonly/>
-                          <!-- required @input="adjustQuantity($event, i)"
+                          class="quantity-field border-0 incrementor" placeholder="Quantity" readonly />
+                        <!-- required @input="adjustQuantity($event, i)"
                           @change="preventZeroValue($event, i)"  -->
                         <!-- <input type="button" value="+" class="button-plus icon-shape icon-sm btn-primary"
                           data-field="quantity" @click="adjustQuantity($event, i, 'increment')" /> -->
@@ -101,11 +103,10 @@
             <div class="pos-net-total noi-print">
 
               <div class="row">
-                <button class="btn btn-primary btn-block col-6" @click="saveOrder($event, true)"
-                  :disabled="selectedItemList.length <= 0">
+                <button class="btn btn-primary btn-block col-6 fs22" @click="saveOrder($event, true)">
                   <i class="fas fa-credit-card" /> &nbsp;Payment
                 </button>
-                <div class="col-6">
+                <div class="align-items-center col-6 d-flex justify-content-center">
                   Net Total: {{ foodItemNetTotal | withCurrency }}
                 </div>
               </div>
@@ -115,92 +116,6 @@
         </div>
       </div>
       <!-- POS Right area end -->
-
-      <!-- pos left area start -->
-      <!-- <div class="col-12">
-        <div class="card bg-transparent">
-          <div class="pos-r-head bg-white">
-            <div class="row">
-
-              <div v-if="products" class="col-md-12 form-group">
-                <div class="d-flex w-100">
-                  <search class="flex-grow-1" :isPosSearch="true" v-model="query" @reset-pagination="resetPagination()"
-                    @reload="reload" />
-                </div>
-                <has-error :form="form" field="selectedProducts" />
-              </div> -->
-              <!-- <div v-if="categoryOptions.length" class="form-group col-md-6">
-                <v-select v-model="selectedCategory" :options="categoryOptions" label="category_name"
-                  :class="{ 'is-invalid': form.errors.has('category') }" name="category" placeholder="Select a Brand" />
-                <has-error :form="form" field="category" />
-              </div> -->
-
-              <!-- <div class="form-group col-md-6">
-                <v-select v-model="selectedSubCategory" :options="subCategoryOptions"
-                  placeholder="Select Subcategory"></v-select>
-              </div> -->
-
-            <!-- </div>
-          </div>
-
-          <div class="card-body bg-white mt-3 pos-body">
-            <table-loading v-show="loading" />
-            <div>
-              <div v-if="filteredProducts.length > 0" class="pos-item-grid">
-                <div v-for="product in filteredProducts" :key="product.id">
-                  <div class="pos-box" @click="openProductModal(product)">
-                    <div class="relative">
-                      <div class="pos-box-img">
-                        <div v-if="product?.image">
-                          <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
-                            alt="product image" />
-                          <span class="stock_no">{{ product.available_qty ?? 0 }} </span>
-                        </div>
-                        <div v-else><span class="stock_no">{{ product.available_qty ?? 0 }}</span></div>
-                      </div>
-                    </div>
-                    <div class="pos-box-content">
-                      <p class="pos-box-text">{{ product.name }}</p>
-                      <span class="text-bold">{{ product.sellingPrice | withCurrency }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-else class="pos-item-grid">
-                <div v-for="product in products" :key="product.id" v-if="product.status == 1">
-                  <div class="pos-box" @click="openProductModal(product)">
-                    <div class="relative">
-                      <div class="pos-box-img">
-                        <div v-if="product?.image">
-                          <img class="pos-box-icon" :src="product?.image?.replace('storage/', '/storage/')"
-                            alt="product image" />
-                          <span class="stock_no">{{ product.available_qty ?? 0 }}</span>
-                        </div>
-                        <div v-else> <span class="stock_no">{{ product.available_qty ?? 0 }}</span></div>
-                      </div>
-                    </div>
-                    <div class="pos-box-content">
-                      <p class="pos-box-text">{{ product.name }} </p>
-                      <span class="text-bold text-lg">{{ product.sellingPrice | withCurrency }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div> -->
-
-<!--
-            <div class="row">
-              <div class="col-12 d-flex justify-content-center">
-                <pagination v-if="pagination && pagination.last_page > 1" :pagination="pagination" :offset="5"
-                  class="justify-flex-end mt-3" @paginate="paginate" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <!-- pos left area end -->
-
 
     </div>
 
@@ -257,12 +172,12 @@
       </div>
     </VModal>
 
-    <Modal class="pay-modal" v-if="showModal" :form="form">
+    <Modal class="pay-modal" v-if="showcash" :form="form">
       <!-- <h5 slot="header" style="margin: 1rem">{{ $t("pos.add_payment") }}</h5> -->
-      <div slot="header" style="margin: 1rem" class="font-weight-bold">
-            <span>Net payable amount :</span>
-            <span>{{ form.netTotal | forBalanceSheetCurrencyDecimalOnly }}</span>
-          </div>
+      <div slot="header" style="margin: 1rem" class="d-flex font-weight-bold justify-content-between w-100">
+        <span>Net payable amount : <span>{{ form.netTotal | forBalanceSheetCurrencyDecimalOnly }}</span></span>
+        <span @click=closeModalAndClearFormData>X</span>
+      </div>
       <div class="w-100" slot="body">
         <div>
 
@@ -275,11 +190,8 @@
               <input id="date" v-model="form.date" type="hidden" class="form-control" />
             </div>
           </div>
-         
-          <div class="row" v-if="accounts &&
-                form.selectedProducts &&
-                form.selectedProducts.length > 0
-                ">
+
+          <div class="row" v-if="form.selectedProducts.length > 0 && isBank">
             <div class="form-group col-md-6">
               <input type="hidden" v-model="form.account">
               QR :
@@ -289,27 +201,25 @@
               <input ref="paidAmountInput" id="paidAmount" v-model="form.paidAmount" type="number" step="any"
                 class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1"
                 :max="form.netTotal" :placeholder="$t('common.paid_amount_placeholder')" />
-              <has-error :form="form" field="paidAmount" />
+              <has-error :form="form" field="paidAmount"  />
             </div>
           </div>
 
-          <div class="row" v-if="accounts &&
-                form.selectedProducts &&
-                form.selectedProducts.length > 0
-                ">
+          <div class="row" v-if="form.selectedProducts.length > 0 && isCash">
             <div class="form-group col-md-6">
               <input type="hidden" v-model="form.account">
               Cash :
             </div>
             <div class="form-group col-md-6">
-              <input type="number" step="any" class="form-control" :value="form.netTotal - form.paidAmount"
+              <input type="number" step="any" class="form-control"
+                :value="(isCash && isBank) ? form.netTotal - form.paidAmount : form.netTotal"
                 :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1" :max="form.netTotal"
-                :placeholder="$t('common.paid_amount_placeholder')" disabled />
+                :placeholder="$t('common.paid_amount_placeholder')" :readonly="(isCash && isBank) ? true : false" />
               <has-error :form="form" field="paidAmount" />
             </div>
           </div>
 
-          
+
         </div>
       </div>
       <div class="payment-modal-footer" slot="modal-footer">
@@ -317,11 +227,28 @@
           <button class="btn btn-primary" @click="addPayment" @keydown="form.onKeydown($event)">
             <i class="fas fa-save" /> {{ $t("common.save") }}
           </button>
- 
+
           <button class="modal-default-button btn btn-danger" @click="closeModalAndClearFormData">
             {{ $t("common.close") }}
           </button>
         </div>
+      </div>
+    </Modal>
+
+    <Modal class="this" v-if="showbtn">
+      <div slot="header" style="margin: 1rem" class="d-flex font-weight-bold justify-content-between w-100">
+        <span>Net payable amount :  <span>{{ form.netTotal | forBalanceSheetCurrencyDecimalOnly }}</span></span>
+        <span @click=additional_modal>X</span>
+        <!-- <button class="modal-default-button btn btn-danger" @click="additional_modal">
+          X
+        </button> -->
+      </div>
+      <div slot="body" class="d-flex flex-column p-3 w-100">
+        <button @click="go_cash('cash')" class="btn btn-primary fs2 mb-3">Cash</button>
+        <button @click="go_cash('bank')" class="btn btn-primary fs2 mb-3">QR</button>
+        <button @click="go_cash('both')" class="btn btn-primary fs2 mb-3">Both</button>
+      </div>
+      <div class="payment-modal-footer" slot="modal-footer">
       </div>
     </Modal>
     <!-- kjkjkjbkj -->
@@ -457,11 +384,11 @@
         },
         data: () => ({
           billContent: '',
-      printerServiceUUID: '000018f0-0000-1000-8000-00805f9b34fb', 
+      printerServiceUUID: '000018f0-0000-1000-8000-00805f9b34fb',
       device: null,
       server: null,
       characteristic: null,
-       
+
             breadcrumbsCurrent: "pos.breadcrumbs_current",
             breadcrumbs: [
                 {
@@ -515,7 +442,7 @@
             categories: [],
             productPrefix: "",
             invoicePrefix: "",
-            showModal: false,
+            showcash: false,
             occupiedRooms: [],
             allData: null,
             showSmallInvoiceModal: false,
@@ -548,6 +475,10 @@
             formBackup: null,
             tax_included: false,
             loading:false,
+            showbtn:false,
+            isCash:false,
+            isBank:false,
+
             // showSuggestions: false,
             // inputText:'',
             // suggestions: [],
@@ -680,6 +611,21 @@
             // },
         },
         methods: {
+          go_cash(type){
+            this.showbtn = false;
+            if(type == 'cash'){
+              this.isBank = false;
+              this.isCash = true;
+            } else if(type == 'bank'){
+              this.isBank = true;
+              this.isCash = false;
+            } else {
+              this.isCash = true;
+              this.isBank = true;
+            }
+            return this.completeOrderAndAddPayment();
+
+          },
           getSuggestions(item) {
 
               item.suggestions = this.products.filter(suggestion =>
@@ -978,6 +924,10 @@
                 this.selectedItemList.splice(index, 1);
             },
 
+
+
+
+
             async saveOrder(event, isPayment = '')
             {
                 this.form.hotel_id = this.hotel?.id || 1;
@@ -990,7 +940,8 @@
                 this.form.subTotal = this.foodItemFinalSubtotal;
 
                 if (this.form.client && isPayment) {
-                    return this.completeOrderAndAddPayment();
+                  return this.btn_pop();
+                    // return this.completeOrderAndAddPayment();
                 }
                 await this.form
                     .post(window.location.origin + "/api/restaurant/order")
@@ -1043,19 +994,19 @@
                         this.form.invoice_id = data.data.id;
                         this.form.invoice_slug = data.data.order_id_uniq;
                         this.form.receiptNo = data.data.order_id_uniq;
-            
+
                         if (this.form.invoice_id != null) {
                            this.form
                             .post(window.location.origin + "/api/food/order/invoice/pay")
                             .then(() => {
                                toast.fire({ type: "success", title: 'Order Place Successfully' });
-                                this.showModal = false;
+                                this.showcash = false;
                                 this.allData = _.cloneDeep(this.form);
                                 this.getProducts();
                                 this.resetForm();
                                 this.form.reset();
                                 this.againDefaultSettings();
-                                
+
                             })
                             .catch(() => {
                                 toast.fire({ type: "error", title: this.$t("common.error_msg") });
@@ -1069,8 +1020,11 @@
             },
 
             // close add payment modal and clear form data
+            additional_modal(){
+this.showbtn = false;
+            },
             closeModalAndClearFormData() {
-                this.showModal = false;
+                this.showcash = false;
                 // this.generateOrder = false;
                 // this.resetForm();
                 // this.form.reset();
@@ -1090,13 +1044,18 @@
             // complete order and add payment
             async completeOrderAndAddPayment() {
                 if (this.form.invoice_id != null) {
-                    this.showModal = true;
+                    this.showcash = true;
                     this.form.paidAmount = _.clone(this.form.netTotal);
 
                     this.$nextTick(() => this.$refs.paidAmountInput && this.$refs.paidAmountInput.focus());
                 }
             },
+            async btn_pop(){
+  if (this.form.invoice_id != null) {
+                    this.showbtn = true;
 
+                }
+},
             // show invoice and print
             async showInvoiceAndPrint() {
                 this.form.reset();
@@ -1123,7 +1082,7 @@
             againDefaultSettings() {
                 this.getAccounts();
                 this.getClients();
-                this.showModal = false;
+                this.showcash = false;
                 this.generateOrder = false;
             },
         },
@@ -1484,4 +1443,12 @@ li:hover {
   background-color: #f1f1f1;
 }
 
+.size {
+  font-size: larger;
+}
+
+.pay_btn {
+  height: 60px;
+  margin-left: 166px;
+}
 </style>

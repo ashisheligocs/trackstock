@@ -2670,12 +2670,26 @@ nav.main-header ul {
     position: fixed;
     width: 100%;
     left: 0;
-    
+
     bottom: 0;
     margin-bottom: 0;
     padding-bottom: 0;
+    z-index: 99;
 }
 
 .pos-net-total.noi-print {
     padding: 10px 25px;
+}
+.fs2 {
+  font-size: 28px;
+}
+.pos-net-total {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.pos-card-footer { margin: 0 !important;}
+
+.fs22 {
+  font-size: 22px;
 }

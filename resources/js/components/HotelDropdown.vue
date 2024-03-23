@@ -1,5 +1,5 @@
 <template>
-    <li v-if="shops && shops.length >= 1" class="nav-item dropdown">
+    <li v-if="shops && shops.length > 1" class="nav-item dropdown">
         <a
                 class="nav-link dropdown-toggle"
                 href="#"
