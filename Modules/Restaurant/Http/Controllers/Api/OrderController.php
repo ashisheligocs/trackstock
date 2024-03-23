@@ -178,7 +178,7 @@ class OrderController extends Controller
 
     public function payInvoice(Request $request)
     {
-       
+    //    echo "<pre/>"; print_r($request->input()); exit();
         $input = $request->all();
         $hotelId = $input['hotel_id'];
         $orderId = $input['invoice_slug'];
@@ -189,14 +189,14 @@ class OrderController extends Controller
         $note = '[' . $orderId . '] Order payment';
         $plutusId = $this->createPlutusEntry($hotelId,$note,now(),floatval($request->subtotal ?? 0));
 
-        if (floatval($request->paidAmount ?? 0)) {
+        // if (floatval($request->paidAmount ?? 0)) {
             
             if($request->paidAmount == $request->subtotal){
                 $bankAmount = $request->paidAmount;
                 $cashAmount = 0;
             } else if($request->paidAmount == 0){
                 $bankAmount = 0;
-                $cashAmount = $request->paidAmount;
+                $cashAmount = $request->subtotal;
             } else {
                 $bankAmount = $request->paidAmount;
                 $cashAmount = $request->subtotal - $request->paidAmount;
@@ -293,7 +293,7 @@ class OrderController extends Controller
                     }
                 }
             }
-        }
+        // }
     }
 
     protected function cancelOrder(Request $request,$id){

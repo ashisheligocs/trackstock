@@ -20,6 +20,7 @@
             </tr>
           </thead>
           <tbody>
+            
             <tr v-show="salePerson.length" v-for="(data, i) in salePerson" :key="i">
               <td>
                 <span>{{ i + 1 }}</span>
@@ -39,27 +40,31 @@
         </table>
       </div>
     </div>
-
-    <VModal v-if="changeShopModal" v-model="changeShopModal" @close="changeShopModal = false" >
-      <div style="min-height: 400px;">
-        <h3 slot="title" class="text-center">Change Shop</h3>
-        <div class="mt-1">
-          <div class="form-group">
-            <label for="note">Change Shop</label>
-            <v-select label="shop_name" name="shop" :options="shopTransfer" placeholder="Select Shop" />
-          </div>
-        </div>
-        <div slot="modal-footer">
-          <button @click="updateShop(allData.id)" class="btn btn-primary">Change Shop</button>
-        </div>
-      </div>
-    </VModal>
+   
+    <VModal v-if="changeShopModal" v-model="changeShopModal" @close="changeShopModal = false">
+            <h3 slot="title" class="text-center">Change Shop</h3>
+            <div class="mt-1">    
+                <div class="form-group">
+                    <label for="note">Change Shop</label>
+                    <v-select
+                        v-mode="form.change_shop"
+                        label="shop_name"
+                        name="shop"
+                        :options="shopTransfer"
+                        placeholder="Select Shop"
+                    />
+                </div>
+            </div>
+            <div slot="modal-footer">
+                <button @click="updateShop()" class="btn btn-primary">Change Shop</button>
+            </div>
+        </VModal>
   </div>
 </template>
 
 <script>
 
-
+import Form from "vform";
 import axios from "axios";
 import { mapGetters } from "vuex";
 
@@ -80,8 +85,12 @@ export default {
     this.getSalesPerson();
   },
   data: () => ({
-    salePerson: [],
-    changeShopModal: false,
+    salePerson : [],
+    changeShopModal:false,
+    form: new Form ({
+      change_shop: '',
+      user_id:"",
+    })
   }),
   methods: {
     goback() {
@@ -100,11 +109,23 @@ export default {
       this.salePerson = data.data;
 
     },
-    async changeShop(id) {
-      this.changeShopModal = true
+    changeShop(id) {
+      this.changeShopModal = true;
+      this.form.user_id = id;
     },
-    async updateShop(id) {
-      this.changeShopModal = false
+    async updateShop(){
+      if(this.form.change_shop)
+      await this.form
+        .post(window.location.origin + "/api/shop-sales-man-transfer")
+        .then((response) => {
+          console.log(response);
+          this.changeShopModal = false;
+          toast.fire({ type: "success", title: 'Sales man transfer successfully to another shop' })
+        })
+        .catch(() => {
+          toast.fire({ type: "error", title: 'Something Went Wrong' });
+        });
+      // 
     }
   },
   watch: {

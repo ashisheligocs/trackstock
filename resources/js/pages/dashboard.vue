@@ -62,10 +62,10 @@
                   <div v-for="(data, i) in hotelItems" :key="i">
                     <div class="mb-4">
                       <div class="small-box mb-0">
-                        <div class="inner text-center">
-                          <router-link :to="{ name: 'ShopView' }">
+                        <div class="inner text-center" @click="setShop(data)">
+                          <!-- <router-link :to="{ name: 'ShopView' }"> -->
                             <p>{{ data.shop_name }}</p>
-                          </router-link>
+                          <!-- </router-link> -->
                         </div>
                       </div>
                     </div>
@@ -126,6 +126,10 @@ export default {
     await this.getShopAvailableBalance();
   },
   methods: {
+    setShop(hotel){
+      this.$store.dispatch("operations/setHotel", { hotel });
+      this.$router.push({name: 'ShopView'});        
+    },
     async getHotelDataList() {
       await this.$store.dispatch('operations/getHotelData', {
         path: '/api/shop',
