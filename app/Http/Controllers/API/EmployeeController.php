@@ -139,7 +139,6 @@ class EmployeeController extends Controller
     {
         try {
             $employee = Employee::with('department', 'user')->where('slug', $slug)->first();
-            // dd($employee);
             return new EmployeeResource($employee);
         } catch (Exception $e) {
             return $this->responseWithError($e->getMessage());
