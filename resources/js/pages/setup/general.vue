@@ -6,7 +6,7 @@
 
     <div class="row">
       <div class="col-12 col-xl-3">
-        <SettingsSidebar />
+        <!-- <SettingsSidebar /> -->
       </div>
       <div class="col-12 col-xl-9">
         <form
