@@ -114,7 +114,9 @@ export default {
       this.form.user_id = id;
     },
     async updateShop(){
-      if(this.form.change_shop)
+      if(this.form.change_shop == ''){
+        return toast.fire({ type: "error", title: 'Please Select Shop' });
+      }
       await this.form
         .post(window.location.origin + "/api/shop-sales-man-transfer")
         .then((response) => {
