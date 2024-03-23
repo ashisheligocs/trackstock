@@ -307,11 +307,9 @@ export default {
     async getInventoryData(){
       this.loading = true;
       this.form.shop_id = (this.selectedHotel != 'all') ? this.selectedHotel : ''
-      console.log(this.form.shop_id);
       await this.form
         .post(window.location.origin + "/api/reports/inventory")
         .then((response) => {
-          console.log('response', response)
           this.inventoryData = response.data;
           this.calculateSum(this.inventoryData);
           this.loading = false;

@@ -1,9 +1,8 @@
 <template>
   <div>
     <div>
-
-      <button class="btn btn-secondary mt-2 mb-2" @click="goback"><i class="fas fa-long-arrow-alt-left" /> {{
-        $t("common.back") }}</button>
+      
+      <button class="btn btn-secondary mt-2 mb-2" @click="goback"><i class="fas fa-long-arrow-alt-left" /> {{ $t("common.back") }}</button>
     </div>
     <div class="card-body position-relative">
       <!-- <table-loading v-show="loading" /> -->
@@ -35,13 +34,14 @@
                 </div>
               </td>
             </tr>
-
+           
           </tbody>
         </table>
       </div>
     </div>
    
     <VModal v-if="changeShopModal" v-model="changeShopModal" @close="changeShopModal = false">
+<div style="min-height: 400px;">
             <h3 slot="title" class="text-center">Change Shop</h3>
             <div class="mt-1">    
                 <div class="form-group">
@@ -58,6 +58,7 @@
             <div slot="modal-footer">
                 <button @click="updateShop()" class="btn btn-primary">Change Shop</button>
             </div>
+ </div>
         </VModal>
   </div>
 </template>
@@ -74,13 +75,13 @@ export default {
     return { title: this.$t("dashboard.page_title") };
   },
   computed: {
-    ...mapGetters("operations", ["selectedHotel", "appInfo", "hotelItems"]),
+    ...mapGetters("operations", ["selectedHotel", "appInfo","hotelItems"]),
 
-    shopTransfer() {
-      return this.hotelItems.filter(shop => shop.id != this.selectedHotel);
+    shopTransfer(){
+        return this.hotelItems.filter(shop => shop.id != this.selectedHotel);      
     }
   },
-  created() {
+  created(){
     this.getShopDataList();
     this.getSalesPerson();
   },
@@ -92,24 +93,23 @@ export default {
       user_id:"",
     })
   }),
-  methods: {
+  methods:{
     goback() {
       this.$router.go(-1);
     },
-    getShopDataList() {
+    getShopDataList(){
       this.$store.dispatch('operations/getHotelData', {
         path: '/api/shop',
       });
     },
-    async getSalesPerson() {
+    async getSalesPerson(){
       const { data } = await axios.get(
         window.location.origin + "/api/shop-sales-man/" + this.selectedHotel
       );
 
       this.salePerson = data.data;
-
     },
-    changeShop(id) {
+    changeShop(id){
       this.changeShopModal = true;
       this.form.user_id = id;
     },
@@ -128,8 +128,8 @@ export default {
       // 
     }
   },
-  watch: {
-    selectedHotel() {
+  watch:{
+    selectedHotel(){
       this.getSalesPerson();
     }
   }
