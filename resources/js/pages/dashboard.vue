@@ -75,12 +75,12 @@
                       <tbody>
                         <tr>
                           <td>QR</td>
-                          <td>{{ 0 | forBalanceSheetCurrencyDecimalOnly }}</td>
+                          <td>{{ incharge_qr | forBalanceSheetCurrencyDecimalOnly }}</td>
                         </tr>
 
                         <tr>
                           <td>Cash</td>
-                          <td>{{ incharge_collection | forBalanceSheetCurrencyDecimalOnly }}</td>
+                          <td>{{ incharge_cash | forBalanceSheetCurrencyDecimalOnly }}</td>
                         </tr>
                         <tr>
                           <th>Total</th>
@@ -115,6 +115,8 @@ export default {
     shop_cash_balance : 0,
     shop_total_balance : 0,
     incharge_collection:0,
+    incharge_cash:0,
+    incharge_qr:0,
   }),
   computed: {
     ...mapGetters("operations", ["selectedHotel", "appInfo", "hotelItems"]),
@@ -142,7 +144,8 @@ export default {
       this.shop_cash_balance = data.cash;
       this.shop_total_balance = data.total_balance;
       this.incharge_collection = data.total_balance_incharge;
-
+      this.incharge_cash = data.incharge_cash;
+      this.incharge_qr = data.incharge_qr;
     },
   },
   watch:{

@@ -48,12 +48,14 @@ class TransferBalanceController extends Controller
     public function store(Request $request)
     {
         // validate request
-        // dd($request->input());
+       
         $this->validate($request, [
             // 'transferReason' => 'required|string|max:255',
-            'fromAccount' => 'required',
-            'toAccount' => 'required|different:fromAccount',
-            'amount' => 'required|numeric|min:1|max:'.$request->availableBalance,
+            'cashAccount' => 'required',
+            'bankAccount' => 'required',
+            'toAccount' => 'required|different:cashAccount',
+            'amountcash' => 'required|numeric|min:1|max:'.$request->availableBalanceCash,
+            'amountqr' => 'required|numeric|min:1|max:'.$request->availableBalanceQr,
             'date' => 'nullable|date_format:Y-m-d',
             // 'note' => 'nullable|string|max:255',
             'shop_id' => 'required'
@@ -64,17 +66,21 @@ class TransferBalanceController extends Controller
             $userId = auth()->user()->id;
 
             $toAccountNumber = $request->toAccount['accountNumber'];
-            $fromAccountNumber = $request->fromAccount['accountNumber'];
+            $fromCashAccountNumber = $request->cashAccount['accountNumber'];
+
+            $fromBankAccountNumber = $request->bankAccount['accountNumber'];
+
+            $totalAmount = $request->amountcash + $request->amountqr;
 
             $note = "Balance transfer to [$toAccountNumber] by ".auth()->user()->name;
-            $plutusId = $this->createPlutusEntry($request->shop_id,$note,now(),$request->amount);
+            $plutusId = $this->createPlutusEntry($request->shop_id,$note,now(),$totalAmount);
 
             
-            $debitReason = "Balance transfer from [$fromAccountNumber]";
+            $debitReason = "Balance transfer from [$fromCashAccountNumber]";
             // store debit transaction
             $debitTransaction = AccountTransaction::create([
-                'account_id' => $request->fromAccount['id'],
-                'amount' => $request->amount,
+                'account_id' => $request->cashAccount['id'],
+                'amount' => $request->amountcash,
                 'reason' => $debitReason,
                 'type' => 0,
                 'transaction_date' => $request->date,
@@ -89,7 +95,7 @@ class TransferBalanceController extends Controller
             // store credit transaction
             $creditTransaction = AccountTransaction::create([
                 'account_id' => $request->toAccount['id'],
-                'amount' => $request->amount,
+                'amount' => $request->amountcash,
                 'reason' => $creditReason,
                 'type' => 1,
                 'transaction_date' => $request->date,
@@ -104,7 +110,7 @@ class TransferBalanceController extends Controller
                 'reason' => ($request->transferReason != null) ? $request->transferReason : 'Cash Collect',
                 'debit_id' => $debitTransaction->id,
                 'credit_id' => $creditTransaction->id,
-                'amount' => $request->amount,
+                'amount' => $request->amountcash,
                 'date' => $request->date,
                 'note' => clean($request->note),
                 'status' => $request->status,
@@ -112,9 +118,55 @@ class TransferBalanceController extends Controller
                 'shop_id' => $request->shop_id
             ]);
 
+            if($request->amountqr != 0){
+
+            $debitReason = "Balance transfer from [$fromBankAccountNumber]";
+            // store debit transaction
+            $debitTransaction1 = AccountTransaction::create([
+                'account_id' => $request->bankAccount['id'],
+                'amount' => $request->amountqr,
+                'reason' => $debitReason,
+                'type' => 0,
+                'transaction_date' => $request->date,
+                'created_by' => $userId,
+                'status' => $request->status,
+                'shop_id' => $request->shop_id,
+                'plutus_entries_id' => $plutusId
+            ]);
+
+            
+            $creditReason = "Balance transfer to [$toAccountNumber]";
+            // store credit transaction
+            $creditTransaction1 = AccountTransaction::create([
+                'account_id' => $request->toAccount['id'],
+                'amount' => $request->amountqr,
+                'reason' => $creditReason,
+                'type' => 1,
+                'transaction_date' => $request->date,
+                'created_by' => $userId,
+                'status' => $request->status,
+                'shop_id' => $request->shop_id,
+                'plutus_entries_id' => $plutusId
+            ]);
+
+            // create transfer
+            BalanceTansfer::create([
+                'reason' => ($request->transferReason != null) ? $request->transferReason : 'Cash Collect From Qr',
+                'debit_id' => $debitTransaction1->id,
+                'credit_id' => $creditTransaction1->id,
+                'amount' => $request->amountqr,
+                'date' => $request->date,
+                'note' => clean($request->note),
+                'status' => $request->status,
+                'created_by' => $userId,
+                'shop_id' => $request->shop_id
+            ]);
+
+            }
+
             return $this->responseWithSuccess('Transfer added successfully');
         } catch (Exception $e) {
-            return $this->responseWithError($e->getMessage());
+            return $this->responseWithError($e->getMessage().'--'.$e->getLine());
         }
     }
 
