@@ -60,7 +60,7 @@
                 <router-link @click.native="closeSideBarControl" :to="{ name: 'productSubCats.index' }"
                   class="nav-link">
                   <i class="fas fa-code-branch nav-icon" />
-                  <p>Liquor Type</p>
+                  <p>Item Group</p>
                 </router-link>
               </li>
               <li v-if="$can('product-create') ||
@@ -109,7 +109,7 @@
               <p>{{ $t("sidebar.setup") }}</p>
             </router-link>
           </li> -->
-          <li>
+          <li class="d-none">
             <SettingsSidebar />
           </li>
         </ul>

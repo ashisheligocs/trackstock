@@ -1,10 +1,6 @@
 <template>
   <div id="pos">
-    <div>
-      <span>Address - </span>
-      <p>Current Date: {{ currentDate }}</p>
-      <p>Current Time: {{ currentTime }}</p>
-    </div>
+
     <div class="row sm-col-reverse">
 
       <!-- POS Right area start -->
@@ -36,7 +32,7 @@
                     <th class="text-center">
                       {{ $t("common.quantity") }}
                     </th>
-                    <th class="text-center"> Rate </th>
+                    <th class="text-right"> Rate </th>
                     <th scope="col" class="text-center">
                       {{ $t("common.action") }}
                     </th>
@@ -79,12 +75,19 @@
                           data-field="quantity" @click="adjustQuantity($event, i, 'increment')" /> -->
                       </div>
                     </td>
-                    <td class="text-center">{{ itemSubtotal(singleItem) }}</td>
+                    <td class="text-right">{{ itemSubtotal(singleItem) }}</td>
                     <td class="text-center">
                       <button type="button" class="btn btn-danger" @click="removeItem(i)">
                         <i class="fas fa-times"></i>
                       </button>
                     </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3"></td>
+                    <td class="text-right">Net Total:</td>
+                    <td class="text-right">{{ foodItemNetTotal}}</td>
+                    <td></td>
+
                   </tr>
                 </tbody>
                 <tbody v-else>
@@ -103,12 +106,9 @@
             <div class="pos-net-total noi-print">
 
               <div class="row">
-                <button class="btn btn-primary btn-block col-6 fs22" @click="saveOrder($event, true)">
+                <button class="btn btn-primary btn-block col-12 fs22" @click="saveOrder($event, true)">
                   <i class="fas fa-credit-card" /> &nbsp;Payment
                 </button>
-                <div class="align-items-center col-6 d-flex justify-content-center">
-                  Net Total: {{ foodItemNetTotal | withCurrency }}
-                </div>
               </div>
 
             </div>
@@ -434,6 +434,7 @@
                 date: new Date().toISOString().slice(0, 10),
                 note: "",
                 status: 1,
+                mode:'',
             }),
             audio: "",
             products: "",
@@ -566,12 +567,6 @@
             }
         },
         async created() {
-          setInterval(() => {
-      this.updateDateTime();
-    }, 1000);
-    this.updateDateTime();
-
-
             await this.getHotelDataList();
 
             if (this.selectedHotel && this.selectedHotel !== 'all') {
@@ -618,11 +613,6 @@
             // },
         },
         methods: {
-          updateDateTime() {
-      const now = new Date();
-      this.currentDate = now.toLocaleDateString();
-      this.currentTime = now.toLocaleTimeString();
-    },
           go_cash(type){
             this.showbtn = false;
             if(type == 'cash'){
@@ -1002,6 +992,11 @@
                 return toast.fire({ type: "error", title: "Max Amount should be "+this.form.netTotal });
               }
               this.form.hotel_id = (this.selectedHotel !== 'all') ? this.selectedHotel : this.hotel?.id || 1;
+              this.form.mode = (this.isBank && this.isCash) ? 'both' :
+                 (this.isBank) ? 'bank' :
+                 (this.isCash) ? 'cash' :
+                 '';
+
               await this.form
                     .post(window.location.origin + "/api/food/order/invoice")
                     .then(({ data }) => {

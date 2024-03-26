@@ -1,8 +1,8 @@
 <template>
   <div class="mb-50">
-    <!-- breadcrumbs Start -->
-    <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" />
-    <!-- breadcrumbs end -->
+    <div>
+          <button @click="goBack" class="btn btn-secondary mt-2 mb-2"><i class="fas fa-long-arrow-alt-left"></i> Back</button>
+        </div>
     <div class="row">
       <div class="col-lg-12">
         <div class="card custom-card w-100">
@@ -22,7 +22,7 @@
                 >
                   <i class="fas fa-upload"></i>
                 </a>
-                <a
+                <!-- <a
                   @click="refreshTable()"
                   href="#"
                   v-tooltip="'Refresh'"
@@ -30,7 +30,6 @@
                 >
                   <i class="fas fa-sync"></i>
                 </a>
-                <!--upload csv button end-->
                 <a
                   href="/products/export"
                   v-tooltip="$t('common.export_table')"
@@ -44,7 +43,7 @@
                   class="btn btn-info"
                 >
                   <i class="fas fa-print"></i>
-                </a>
+                </a> -->
                 <router-link
                   v-if="$can('product-create')"
                   :to="{ name: 'products.create' }"
@@ -77,14 +76,13 @@
                 <thead>
                   <tr>
                     <th>{{ $t("common.s_no") }}</th>
-                    <th>{{ $t("common.image") }}</th>
-                    <th>{{ $t("common.category") }}</th>
-                    <th>{{ $t("common.code") }}</th>
                     <th>{{ $t("common.name") }}</th>
-                    <th>{{ $t("common.item_model") }}</th>
+                    <th>Item Group</th>
                     <th>{{ $t("common.unit") }}</th>
-                    <th>{{ $t("products.list.common.selling_price") }}</th>
+                    <!-- <th>{{ $t("common.code") }}</th> -->
                     <th>{{ $t("common.status") }}</th>
+                    <!-- <th>{{ $t("common.item_model") }}</th>
+                    <th>{{ $t("products.list.common.selling_price") }}</th> -->
                     <th
                       v-if="
                         $can('product-edit') ||
@@ -109,49 +107,27 @@
                       <span v-else>{{ i + 1 }}</span>
                     </td>
                     <td>
-                      <a
-                        v-if="data.image"
-                        href="#"
-                        id="show-modal"
-                        @click="previewModal(data.image)"
-                      >
-                        <img
-                          :src="data.image"
-                          class="rounded preview-sm"
-                          loading="lazy"
-                        />
-                      </a>
-                      <div v-else class="bg-secondary rounded no-preview-sm">
-                        <small>{{ $t("common.no_preview") }}</small>
-                      </div>
+                        {{ data.name }}
                     </td>
                     <td>
                       <span v-if="data.subCategory"
-                        >{{ data.subCategory.name }} [{{
+                        >{{ data.subCategory.name }}
+                        <!-- [{{
                           data.subCategory.code | withPrefix(subCatPrefix)
-                        }}]
+                        }}] -->
                       </span>
                     </td>
-                    <td>{{ data.code | withPrefix(prefix) }}</td>
-                    <td>
-                      <router-link
-                        :to="{
-                          name: 'products.show',
-                          params: { slug: data.slug },
-                        }"
-                      >
-                        {{ data.name }}
-                      </router-link>
-                    </td>
-                    <td>{{ data.itemModel }}</td>
                     <td>{{ data.itemUnit.code }}</td>
+                    <!-- <td>{{ data.code | withPrefix(prefix) }}</td>
+
+                    <td>{{ data.itemModel }}</td>
                     <td>
-                      <span  
+                      <span
                         ><del>{{ data.regularPrice }}</del>
                         {{ data.sellingPrice | withCurrency }}  </span
                       >
-                      
-                    </td>
+
+                    </td> -->
                     <td>
                       <span v-if="data.status === 1" class="badge bg-success">{{
                         $t("common.active")
@@ -191,7 +167,7 @@
                         >
                           <i class="fas fa-edit" />
                         </router-link>
-                        <a
+                        <!-- <a
                           v-if="$can('product-delete')"
                           v-tooltip="$t('common.delete')"
                           href="#"
@@ -199,7 +175,7 @@
                           @click="deleteData(data.slug)"
                         >
                           <i class="fas fa-trash" />
-                        </a>
+                        </a> -->
                       </div>
                     </td>
                   </tr>
@@ -239,7 +215,7 @@
               />
               <!-- pagination-end -->
             </div>
-            
+
           </div>
         </div>
       </div>
@@ -361,6 +337,10 @@ export default {
     this.subCatPrefix = this.appInfo.proSubCatPrefix;
   },
   methods: {
+
+    goBack() {
+      this.$router.go(-1);
+    },
     // get the csv file to form
     onFileChange(e) {
       this.form.file = e.target.files[0];
