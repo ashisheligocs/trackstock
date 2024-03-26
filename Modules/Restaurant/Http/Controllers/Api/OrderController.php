@@ -179,7 +179,7 @@ class OrderController extends Controller
 
     public function payInvoice(Request $request)
     {
-       //    echo "<pre/>"; print_r($request->input()); exit();
+        //   echo "<pre/>"; print_r($request->input()); exit();
         $input = $request->all();
         $hotelId = $input['hotel_id'];
         $orderId = $input['invoice_slug'];

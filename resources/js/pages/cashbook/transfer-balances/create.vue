@@ -24,55 +24,34 @@
           <!-- form start -->
           <form role="form" @submit.prevent="saveTransfer" @keydown="form.onKeydown($event)">
             <div class="card-body">
-              <!-- <div class="row" v-if="!readonly">
-                <div class="form-group col-md-6">
-                  <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
-                    <span class="required">*</span></label>
-                  <v-select class="flex-grow-1" v-model="selectedHotelId" :options="hotelItems" label="shop_name"
-                    name="shop_id" placeholder="Search a Shop" @input="getAccoutns" />
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="transferReason">{{ $t('cashbook.common.transfer_reason') }}
-                    <span class="required">*</span></label>
-                  <input type="text" id="transferReason" v-model="form.transferReason" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('transferReason') }"
-                    :placeholder="$t('common.return_reason_placeholder')" name="transferReason" />
-                  <has-error :form="form" field="transferReason" />
-                </div>
-              </div> -->
-              <!-- <div class="row" v-if="items && !readonly">
-                <div class="form-group col-md-6">
-                  <label for="fromAccount">{{ $t('cashbook.common.from_account') }}
-                    <span class="required">*</span></label>
-                  <v-select v-model="form.fromAccount" :options="items" label="ledgerName"
-                    :class="{ 'is-invalid': form.errors.has('fromAccount') }" name="fromAccount"
-                    :placeholder="$t('common.account_placeholder')" @input="updateBalance" />
-                  <has-error :form="form" field="fromAccount" />
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="toAccount">{{ $t('cashbook.common.to_account') }}
-                    <span class="required">*</span></label>
-                  <v-select v-model="form.toAccount" :options="items" label="ledgerName"
-                    :class="{ 'is-invalid': form.errors.has('toAccount') }" name="toAccount"
-                    :placeholder="$t('common.account_placeholder')" />
-                  <has-error :form="form" field="toAccount" />
-                </div>
-              </div> -->
+              
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="availableBalance">{{
-      $t('common.available_balance')
-    }}</label>
-                  <input id="availableBalance" v-model="form.availableBalance" type="number" step="any"
-                    class="form-control" :class="{
-      'is-invalid': form.errors.has('availableBalance'),
-    }" name="availableBalance" readonly />
+                  <label for="availableBalanceInQr">Available Balance In QR</label>
+                  <input id="availableBalanceInQr" v-model="form.availableBalanceQr" type="number" step="any"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('availableBalanceInQr'),}" name="availableBalanceInQr" readonly />
+                  <has-error :form="form" field="availableBalanceInQr" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="amount">{{ $t('common.amount') }}
+                    <span class="required">*</span></label>
+                  <input id="amount" v-model="form.amountqr" type="number" step="any" class="form-control"
+                    :class="{ 'is-invalid': form.errors.has('amount') }" name="amount" placeholder="Enter an amount" readonly/>
+                  <has-error :form="form" field="amount" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="availableBalance">{{ $t('common.available_balance') }} In Cash</label>
+                  <input id="availableBalance" v-model="form.availableBalanceCash" type="number" step="any"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('availableBalance'), }" 
+                    name="availableBalance" readonly />
                   <has-error :form="form" field="availableBalance" />
                 </div>
                 <div class="form-group col-md-6">
                   <label for="amount">{{ $t('common.amount') }}
                     <span class="required">*</span></label>
-                  <input id="amount" v-model="form.amount" type="number"   step="any" class="form-control"
+                  <input id="amount" v-model="form.amountcash" type="number"   step="any" class="form-control"
                     :class="{ 'is-invalid': form.errors.has('amount') }" name="amount" placeholder="Enter an amount" />
                   <has-error :form="form" field="amount" />
                 </div>
@@ -84,26 +63,8 @@
                     :class="{ 'is-invalid': form.errors.has('date') }" name="date" min="" :readonly="readonly" />
                   <has-error :form="form" field="date" />
                 </div>
-                <!-- <div class="form-group col-md-6" v-if="!readonly">
-                  <label for="status">{{ $t('common.status') }}</label>
-                  <select id="status" v-model="form.status" class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('status') }">
-                    <option value="1">
-                      {{ $t('common.active') }}
-                    </option>
-                    <option value="0">
-                      {{ $t('common.in_active') }}
-                    </option>
-                  </select>
-                  <has-error :form="form" field="status" />
-                </div> -->
+               
               </div>
-              <!-- <div class="form-group" v-if="!readonly">
-                <label for="note">{{ $t('common.note') }}</label>
-                <textarea id="note" v-model="form.note" class="form-control"
-                  :class="{ 'is-invalid': form.errors.has('note') }" :placeholder="$t('common.note_placeholder')" />
-                <has-error :form="form" field="note" />
-              </div> -->
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
@@ -192,11 +153,14 @@ export default {
       },
     ],
     form: new Form({
-      fromAccount: null,
+      cashAccount: null,
+      bankAccount: null,
       toAccount: null,
       transferReason: '',
-      availableBalance: 0,
-      amount: '',
+      availableBalanceCash: 0,
+      availableBalanceQr: 0,
+      amountcash: '',
+      amountqr: '',
       date: new Date().toISOString().slice(0, 10),
       note: '',
       status: 1,
@@ -289,7 +253,8 @@ export default {
       if (this.items && this.items.length > 0) {
         let defaultAccountSlug = this.appInfo.defaultAccountSlug;
 
-        this.form.fromAccount = this.items.find(account => account.slug == defaultAccountSlug);
+        this.form.cashAccount = this.items.find(account => account.slug == defaultAccountSlug);
+        this.form.bankAccount = this.items.find(account => account.slug == 'bank');
         this.form.toAccount = this.items.find(account => account.slug == 'in-charge');
 
         this.updateBalance()
@@ -298,14 +263,15 @@ export default {
 
     // update available balance
     updateBalance() {
-      return (this.form.availableBalance =
-        this.form.fromAccount.availableBalance)
+      this.form.availableBalanceCash = this.form.cashAccount.availableBalance;
+      this.form.availableBalanceQr = this.form.bankAccount.availableBalance;
+      this.form.amountqr = this.form.bankAccount.availableBalance;
     },
 
     // save transfer
     async saveTransfer() {
       if (!this.selectedHotelId) return toast.fire({ type: 'error', title: 'Please select hotel' })
-      if (this.form.amount > this.form.availableBalance) {
+      if (this.form.amountcash > this.form.availableBalanceCash) {
         return toast.fire({ type: 'error', title: 'Please enter valid amount' })
       }
 
