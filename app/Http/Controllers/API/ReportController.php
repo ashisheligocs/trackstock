@@ -517,7 +517,6 @@ class ReportController extends Controller
             'subCategory' => 'required',
             'itemName' => 'required',
         ]);
-
         $allProducts = [];
         if (((@$request->category['slug'] && $request->category['slug'] == 'all') && $request->subCategory['slug'] == 'all' && $request->itemName['slug'] == 'all')) {
             $products = Product::orderBy('code', 'ASC')->get();

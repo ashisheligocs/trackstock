@@ -41,6 +41,7 @@
     </div>
    
     <VModal v-if="changeShopModal" v-model="changeShopModal" @close="changeShopModal = false">
+<div style="min-height: 400px;">
             <h3 slot="title" class="text-center">Change Shop</h3>
             <div class="mt-1">    
                 <div class="form-group">
@@ -57,6 +58,7 @@
             <div slot="modal-footer">
                 <button @click="updateShop()" class="btn btn-primary">Change Shop</button>
             </div>
+ </div>
         </VModal>
   </div>
 </template>
