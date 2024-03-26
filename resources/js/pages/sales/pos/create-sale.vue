@@ -1,9 +1,10 @@
 <template>
   <div id="pos">
-    <!-- breadcrumbs Start -->
-    <!-- <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" /> -->
-    <!-- breadcrumbs end -->
-
+    <div>
+      <span>Address - </span>
+      <p>Current Date: {{ currentDate }}</p>
+      <p>Current Time: {{ currentTime }}</p>
+    </div>
     <div class="row sm-col-reverse">
 
       <!-- POS Right area start -->
@@ -32,7 +33,6 @@
                     <th scope="col">Sr.No</th>
                     <th scope="col">Batch No.</th>
                     <th scope="col">{{ $t("common.product") }}</th>
-                    <!-- <th scope="col">{{ $t("common.price") }}</th> -->
                     <th class="text-center">
                       {{ $t("common.quantity") }}
                     </th>
@@ -64,7 +64,7 @@
                     <td>
                       {{ singleItem.name }}
                       <span v-if="singleItem.addonString != ''" style="font-size: 11px;"><br />{{
-                  singleItem.addonString }}</span>
+        singleItem.addonString }}</span>
                     </td>
                     <!-- <td>{{ parseFloat(singleItem?.price) | withCurrency }}</td> -->
                     <td>
@@ -201,7 +201,7 @@
               <input ref="paidAmountInput" id="paidAmount" v-model="form.paidAmount" type="number" step="any"
                 class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }" name="paidAmount" min="1"
                 :max="form.netTotal" :placeholder="$t('common.paid_amount_placeholder')" />
-              <has-error :form="form" field="paidAmount"  />
+              <has-error :form="form" field="paidAmount" />
             </div>
           </div>
 
@@ -237,7 +237,7 @@
 
     <Modal class="this" v-if="showbtn">
       <div slot="header" style="margin: 1rem" class="d-flex font-weight-bold justify-content-between w-100">
-        <span>Net payable amount :  <span>{{ form.netTotal | forBalanceSheetCurrencyDecimalOnly }}</span></span>
+        <span>Net payable amount : <span>{{ form.netTotal | forBalanceSheetCurrencyDecimalOnly }}</span></span>
         <span @click=additional_modal>X</span>
         <!-- <button class="modal-default-button btn btn-danger" @click="additional_modal">
           X
@@ -405,6 +405,8 @@
                 },
             ],
             showProductModal: false,
+            currentDate: '',
+      currentTime: '',
             form: new Form({
                 search: '',
                 invoice_id: "",
@@ -564,6 +566,11 @@
             }
         },
         async created() {
+          setInterval(() => {
+      this.updateDateTime();
+    }, 1000);
+    this.updateDateTime();
+
 
             await this.getHotelDataList();
 
@@ -611,6 +618,11 @@
             // },
         },
         methods: {
+          updateDateTime() {
+      const now = new Date();
+      this.currentDate = now.toLocaleDateString();
+      this.currentTime = now.toLocaleTimeString();
+    },
           go_cash(type){
             this.showbtn = false;
             if(type == 'cash'){

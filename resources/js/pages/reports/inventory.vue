@@ -181,7 +181,7 @@ export default {
       // fromDate: moment().subtract(7,'d').format('YYYY-MM-DD'),
       fromDate: moment().subtract(1,'d').format('YYYY-MM-DD'),
       toDate: moment().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSS'),
-      category: {id: 0, name: "All Categories", slug: "all"},
+       category: {id: 0, name: "All Categories", slug: "all"},
       subCategory: {id: 0, name: "All Sub Categories", slug: "all"},
       itemName: {id: 0, name: "All Items", slug: "all"},
       shop_id:''
@@ -214,7 +214,7 @@ export default {
         this.currentHotel = '';
       }
     this.prefix = this.appInfo.productPrefix;
-    this.form.category = 1;
+    this.form.category = "all";
     this.getProducts();
     this.getInventoryData();
   },
@@ -244,14 +244,16 @@ export default {
     // get sub categories for a category
     async getSubCategories() {
       this.subCategories = [];
-      // this.form.subCategory = "";
+      this.form.subCategory = "all";
 
       let slug = this.form.category.slug ?? 'liquor';
       const { data } = await axios.get(
         window.location.origin + "/api/pro-sub-categories-by-category/" + slug
       );
       this.subCategories = data.cats;
+      console.log(this.subCategories);
       this.products = data.products;
+      console.log(this.products);
 
       if (this.subCategories.length > 0) {
         this.subCategories.unshift({
