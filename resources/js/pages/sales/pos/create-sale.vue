@@ -45,7 +45,7 @@
                     <td>
                       <div class="form-group mb-0">
                         <div>
-                          <input autofocus v-model="singleItem.inputText" @input="getSuggestions(singleItem)"
+                          <input autofocus="autofocus" v-model="singleItem.inputText" @input="getSuggestions(singleItem)"
                             class="form-control" />
 
                           <ul v-if="singleItem.showSuggestions">
@@ -629,14 +629,19 @@
 
           },
           getSuggestions(item) { 
-      
- 
+                item.suggestions = this.products.filter(suggestion =>
+               
+                  suggestion.code && suggestion.code.toLowerCase().includes(item.inputText.toLowerCase()) 
+                
+              );
+              item.showSuggestions = true;
+
+              console.log(this.products);
               item.suggestions = this.products.filter(suggestion =>
                   suggestion.available_qty > 0 && // Filtering by available quantity
                   suggestion.code && suggestion.code.toLowerCase().includes(item.inputText.toLowerCase())
               );
               item.showSuggestions = true;
-
             },
 
             selectSuggestion(index,suggestion){
