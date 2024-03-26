@@ -49,7 +49,7 @@
                     <td>
                       <div class="form-group mb-0">
                         <div>
-                          <input v-model="singleItem.inputText" @input="getSuggestions(singleItem)"
+                          <input autofocus v-model="singleItem.inputText" @input="getSuggestions(singleItem)"
                             class="form-control" />
 
                           <ul v-if="singleItem.showSuggestions">
@@ -638,13 +638,15 @@
             return this.completeOrderAndAddPayment();
 
           },
-          getSuggestions(item) {
-
+          getSuggestions(item) { 
+      
+ 
               item.suggestions = this.products.filter(suggestion =>
-                    suggestion.code && suggestion.code.toLowerCase().includes(item.inputText.toLowerCase())
+                  suggestion.available_qty > 0 && // Filtering by available quantity
+                  suggestion.code && suggestion.code.toLowerCase().includes(item.inputText.toLowerCase())
+              );
+              item.showSuggestions = true;
 
-                    );
-                    item.showSuggestions = true;
             },
 
             selectSuggestion(index,suggestion){
