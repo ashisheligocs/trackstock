@@ -1,15 +1,16 @@
 <template>
   <div class="mb-50">
-    <!-- breadcrumbs Start -->
-    <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" />
-    <!-- breadcrumbs end -->
+
+    <div>
+          <button @click="goBack" class="btn btn-secondary mt-2 mb-2"><i class="fas fa-long-arrow-alt-left"></i> Back</button>
+        </div>
     <div class="row">
       <div class="col-lg-12">
         <div class="card custom-card w-100">
           <div class="card-header setings-header">
             <div class="col-xl-4 col-4">
               <h3 class="card-title">
-                {{ $t("products.sub_categories.index.page_title") }}
+                Item Group
               </h3>
             </div>
             <div class="col-xl-8 col-8 float-right text-right">
@@ -64,9 +65,9 @@
                 <thead>
                   <tr>
                     <th>{{ $t("common.s_no") }}</th>
-                    <th>{{ $t("common.category") }}</th>
-                    <th>{{ $t("common.sub_category_code") }}</th>
-                    <th>{{ $t("common.sub_category_name") }}</th>
+                    <th>Item Group</th>
+                    <!-- <th>{{ $t("common.sub_category_code") }}</th> -->
+                    <!-- <th>{{ $t("common.sub_category_name") }}</th> -->
                     <th>{{ $t("common.status") }}</th>
                     <th
                       v-if="
@@ -90,13 +91,13 @@
                       >
                       <span v-else>{{ i + 1 }}</span>
                     </td>
-                    <td>
+                    <!-- <td>
                       <span v-if="data.category"
-                        >{{ data.category.name }} [
-                        {{ data.category.code | withPrefix(catPrefix) }} ]
+                        >{{ data.category.name }}
+                        [{{ data.category.code | withPrefix(catPrefix) }} ]
                       </span>
-                    </td>
-                    <td>{{ data.code | withPrefix(subCatPrefix) }}</td>
+                    </td> -->
+                    <!-- <td>{{ data.code | withPrefix(subCatPrefix) }}</td> -->
                     <td>{{ data.name }}</td>
                     <td>
                       <span v-if="data.status === 1" class="badge bg-success">{{
@@ -108,8 +109,7 @@
                     </td>
                     <td
                       v-if="
-                        $can('product-sub-category-edit') ||
-                        $can('product-sub-category-delete')
+                        $can('product-sub-category-edit')
                       "
                       class="text-right no-print"
                     >
@@ -125,7 +125,7 @@
                         >
                           <i class="fas fa-edit" />
                         </router-link>
-                        <a
+                        <!-- <a
                           v-if="$can('product-sub-category-delete')"
                           v-tooltip="$t('common.delete')"
                           href="#"
@@ -133,7 +133,7 @@
                           @click="deleteData(data.slug)"
                         >
                           <i class="fas fa-trash" />
-                        </a>
+                        </a> -->
                       </div>
                     </td>
                   </tr>
@@ -228,6 +228,9 @@ export default {
     this.subCatPrefix = this.appInfo.proSubCatPrefix;
   },
   methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
     // update per page count
     updatePerPager() {
       this.pagination.current_page = 1;

@@ -63,9 +63,7 @@
                     <div class="mb-4">
                       <div class="small-box mb-0">
                         <div class="inner text-center" @click="setShop(data)">
-                          <!-- <router-link :to="{ name: 'ShopView' }"> -->
                             <p>{{ data.shop_name }}</p>
-                          <!-- </router-link> -->
                         </div>
                       </div>
                     </div>
@@ -128,7 +126,7 @@ export default {
   methods: {
     setShop(hotel){
       this.$store.dispatch("operations/setHotel", { hotel });
-      this.$router.push({name: 'ShopView'});        
+      this.$router.push({name: 'ShopView'});
     },
     async getHotelDataList() {
       await this.$store.dispatch('operations/getHotelData', {

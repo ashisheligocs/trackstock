@@ -29,7 +29,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-       
+
         $startDate = $request->startDate ? Carbon::parse($request->startDate) : null;
         $endDate = $request->endDate ? Carbon::parse($request->endDate)->addDay() : null;
         return RestaurantOrderResource::collection(Restroorder::with('items',
@@ -111,6 +111,7 @@ class OrderController extends Controller
     public function storeOrder($data)
     {
         $hotelId = $data['hotel_id'];
+
         $prevOrder = Restroorder::where('shop_id', $hotelId)->latest()->first();
         if (!empty($prevOrder)) {
             $previousBookingId = "RO-0000".$prevOrder->id;
@@ -149,7 +150,7 @@ class OrderController extends Controller
 
         $orderItems = $data['selectedProducts'];
 
-        
+
         foreach ($orderItems as $item) {
             if($item['id'] != 0){
                     $id = $item['id'];
@@ -160,9 +161,9 @@ class OrderController extends Controller
                 }
             }
         }
-        
+
         $newArray = array_values($newArray);
-        
+
         if ($newArray && !empty($newArray)) {
             foreach ($newArray as $item) {
                 RestroItem::create([
@@ -178,7 +179,7 @@ class OrderController extends Controller
 
     public function payInvoice(Request $request)
     {
-    //    echo "<pre/>"; print_r($request->input()); exit();
+       //    echo "<pre/>"; print_r($request->input()); exit();
         $input = $request->all();
         $hotelId = $input['hotel_id'];
         $orderId = $input['invoice_slug'];
@@ -190,17 +191,27 @@ class OrderController extends Controller
         $plutusId = $this->createPlutusEntry($hotelId,$note,now(),floatval($request->subtotal ?? 0));
 
         // if (floatval($request->paidAmount ?? 0)) {
-            
-            if($request->paidAmount == $request->subtotal){
-                $bankAmount = $request->paidAmount;
-                $cashAmount = 0;
-            } else if($request->paidAmount == 0){
-                $bankAmount = 0;
-                $cashAmount = $request->subtotal;
+            if($request->input('mode') == 'both'){
+                if($request->paidAmount == $request->subtotal){
+                    $bankAmount = $request->paidAmount;
+                    $cashAmount = 0;
+                } else if($request->paidAmount == 0){
+                    $bankAmount = 0;
+                    $cashAmount = $request->subtotal;
+                } else {
+                    $bankAmount = $request->paidAmount;
+                    $cashAmount = $request->subtotal - $request->paidAmount;
+                }
             } else {
-                $bankAmount = $request->paidAmount;
-                $cashAmount = $request->subtotal - $request->paidAmount;
+                if($request->input('mode') == 'cash'){
+                    $cashAmount = $request->paidAmount;
+                    $bankAmount = 0;
+                } else if ($request->input('mode') == 'bank'){
+                    $bankAmount = $request->paidAmount;
+                    $cashAmount = 0;
+                }
             }
+
 
             if($bankAmount != 0){
                 $bankLedger = LedgerAccount::where('code', 'bank')->first();
@@ -220,7 +231,7 @@ class OrderController extends Controller
                     'plutus_entries_id' => $plutusId,
                 ]);
             }
-            
+
             if($cashAmount != 0){
                 $transaction = AccountTransaction::create([
                     'account_id' => $request->account['id'],
@@ -238,7 +249,7 @@ class OrderController extends Controller
                     'plutus_entries_id' => $plutusId,
                 ]);
             }
-            
+
 
             NonInvoicePayment::create([
                 'slug' => uniqid(),
@@ -292,7 +303,7 @@ class OrderController extends Controller
                     }
                 }
             }
-            
+
             $newArray = array_values($newArray);
 
             if ($newArray && !empty($newArray)) {
@@ -375,7 +386,7 @@ class OrderController extends Controller
     public function createInvoice(Request $request)
     {
         try {
-            
+
             $order = $this->storeOrder($request->all());
 
             NonInvoicePayment::create([
@@ -477,27 +488,27 @@ class OrderController extends Controller
     //today sales
 
     public function todaySale(Request $request){
-       
+
         $today = date('Y-m-d');
-        
+
         $todaySale = RestroItem::with('restaurantItem','restaurantorder')->whereHas('restaurantorder', function ($newQuery) use ($request,$today) {
             $newQuery->where('shop_id', $request->shop_id);
             $newQuery->whereBetween('order_date', [$today, $request->todayDate]);
         })->get();
 
-      
+
         $finalArray = [];
         $totalQty = 0;
         $totalAmount = 0;
 
         foreach($todaySale as $value){
-            
+
             $productId = $value->restaurantItem->id;
             $totalQty += $value->qty;
             $totalAmount += $value->restaurantItem->selling_price;
             if (isset($finalArray[$productId])) {
                 $finalArray[$productId]['quantity'] += $value->qty;
-                
+
             } else {
                 $finalArray[$productId] = [
                     'product_id' => $value->restaurantItem->id,
@@ -509,7 +520,7 @@ class OrderController extends Controller
                     'order_date' => $value->restaurantorder->order_date
                 ];
             }
-           
+
         }
 
          $newArray = array_values($finalArray);
@@ -517,8 +528,8 @@ class OrderController extends Controller
             'data'=> $newArray,
             'qty'=> $totalQty,
             'amount'=> $totalAmount,
-        ]); 
-       
+        ]);
+
         // return TodaySalesResource::collection($todaySale);
     }
 }

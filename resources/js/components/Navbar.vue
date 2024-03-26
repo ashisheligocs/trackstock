@@ -14,11 +14,20 @@
 
       <!--<locale-dropdown/>-->
       <hotel-dropdown />
-      
+<li>
+  
+</li>
     </ul>
 
     <!-- Right nav links -->
     <ul class="navbar-nav ml-auto align-items-center">
+
+      <li>
+        <div class="mr-4">
+          <span>{{ currentDate }}</span>
+          <span>{{ currentTime }}</span>
+        </div>
+      </li>
       <!-- Notifications Dropdown Menu -->
       <li v-if="$can('restaurant-order')">
         <router-link :to="{ name: 'pos.create' }" class="btn pos-btn d-sm-block d-none">
@@ -143,6 +152,8 @@ export default {
     appName: window.config.appName,
     notificationCount: 0,
     activetab: 2,
+    currentDate: '',
+    currentTime: '',
   }),
 
   computed: mapGetters({
@@ -152,9 +163,24 @@ export default {
   created() {
     this.$route.params?.order && (this.activetab = 2);
     this.stockNotification();
+    setInterval(() => {
+      this.updateDateTime();
+    }, 1000);
+    this.updateDateTime();
   },
 
   methods: {
+    updateDateTime() {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+
+    this.currentDate = `${day}-${month}-${year}`;
+
+    this.currentTime = now.toLocaleTimeString();
+},
+
     // get stock notification
     async stockNotification() {
       const { data } = await axios.get(
