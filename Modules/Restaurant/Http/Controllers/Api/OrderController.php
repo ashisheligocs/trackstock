@@ -489,28 +489,80 @@ class OrderController extends Controller
 
     //today sales
 
+    // public function todaySale(Request $request){
+
+    //     $today = date('Y-m-d');
+
+    //     $todaySale = RestroItem::with('restaurantItem','restaurantorder')->whereHas('restaurantorder', function ($newQuery) use ($request,$today) {
+    //         $newQuery->where('shop_id', $request->shop_id);
+    //         $newQuery->whereBetween('order_date', [$today, $request->todayDate]);
+    //     })->get();
+
+
+
+
+    //     $finalArray = [];
+    //     $totalQty = 0;
+    //     $totalAmount = 0;
+
+    //     foreach($todaySale as $value){
+
+    //         $productId = $value->restaurantItem->id;
+    //         $totalQty += $value->qty;
+    //         $totalAmount += $value->restaurantItem->selling_price;
+    //         if (isset($finalArray[$productId])) {
+    //             $finalArray[$productId]['quantity'] += $value->qty;
+
+    //         } else {
+    //             $finalArray[$productId] = [
+    //                 'product_id' => $value->restaurantItem->id,
+    //                 'name' => $value->restaurantItem->name,
+    //                 'shop' => $value->restaurantorder->shop_id,
+    //                 'orderId' => $value->restaurantorder->order_id_uniq,
+    //                 'price' => $value->restaurantItem->selling_price,
+    //                 'quantity' => $value->qty,
+    //                 'order_date' => $value->restaurantorder->order_date
+    //             ];
+    //         }
+
+    //     }
+
+    //      $newArray = array_values($finalArray);
+    //      return response()->json([
+    //         'data'=> $newArray,
+    //         'qty'=> $totalQty,
+    //         'amount'=> $totalAmount,
+    //     ]);
+    //     // return TodaySalesResource::collection($todaySale);
+    // }
+
     public function todaySale(Request $request){
 
         $today = date('Y-m-d');
 
-        $todaySale = RestroItem::with('restaurantItem','restaurantorder')->whereHas('restaurantorder', function ($newQuery) use ($request,$today) {
-            $newQuery->where('shop_id', $request->shop_id);
-            $newQuery->whereBetween('order_date', [$today, $request->todayDate]);
-        })->get();
-
+        // Retrieve today's sales with the last order ID
+        $todaySale = RestroItem::with('restaurantItem', 'restaurantorder')
+            ->whereHas('restaurantorder', function ($newQuery) use ($request, $today) {
+                $newQuery->where('shop_id', $request->shop_id)
+                    ->whereBetween('order_date', [$today, $request->todayDate])
+                    ->orderBy('order_id', 'desc'); // Order by order_id in descending order
+            })
+            ->get();
 
         $finalArray = [];
         $totalQty = 0;
         $totalAmount = 0;
+        $lastOrderId = null; // Initialize last order ID variable
 
-        foreach($todaySale as $value){
+        foreach ($todaySale as $value) {
 
             $productId = $value->restaurantItem->id;
             $totalQty += $value->qty;
             $totalAmount += $value->restaurantItem->selling_price;
+            $lastOrderId = $value->restaurantorder->order_id_uniq; // Update last order ID
+
             if (isset($finalArray[$productId])) {
                 $finalArray[$productId]['quantity'] += $value->qty;
-
             } else {
                 $finalArray[$productId] = [
                     'product_id' => $value->restaurantItem->id,
@@ -522,16 +574,21 @@ class OrderController extends Controller
                     'order_date' => $value->restaurantorder->order_date
                 ];
             }
-
         }
 
-         $newArray = array_values($finalArray);
-         return response()->json([
+        $newArray = array_values($finalArray);
+
+        // Include last order ID within newArray
+        $newArray['last_order_id'] = $lastOrderId;
+
+        // Return response with newArray
+        return response()->json([
             'data'=> $newArray,
             'qty'=> $totalQty,
             'amount'=> $totalAmount,
         ]);
-
-        // return TodaySalesResource::collection($todaySale);
     }
+
+
+
 }

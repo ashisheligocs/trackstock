@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      
+
       <button class="btn btn-secondary mt-2 mb-2" @click="goback"><i class="fas fa-long-arrow-alt-left" /> {{ $t("common.back") }}</button>
     </div>
     <div class="card-body position-relative">
@@ -19,13 +19,14 @@
             </tr>
           </thead>
           <tbody>
-            
+
             <tr v-show="salePerson.length" v-for="(data, i) in salePerson" :key="i">
               <td>
                 <span>{{ i + 1 }}</span>
               </td>
               <td>
                 {{ data.name }}
+                {{ data }}
               </td>
               <td>{{ data.mobile_number }}</td>
               <td>
@@ -34,16 +35,16 @@
                 </div>
               </td>
             </tr>
-           
+
           </tbody>
         </table>
       </div>
     </div>
-   
+
     <VModal v-if="changeShopModal" v-model="changeShopModal" @close="changeShopModal = false">
 <div style="min-height: 400px;">
             <h3 slot="title" class="text-center">Change Shop</h3>
-            <div class="mt-1">    
+            <div class="mt-1">
                 <div class="form-group">
                     <label for="note">Change Shop</label>
                     <v-select
@@ -78,7 +79,7 @@ export default {
     ...mapGetters("operations", ["selectedHotel", "appInfo","hotelItems"]),
 
     shopTransfer(){
-        return this.hotelItems.filter(shop => shop.id != this.selectedHotel);      
+        return this.hotelItems.filter(shop => shop.id != this.selectedHotel);
     }
   },
   created(){
@@ -127,7 +128,7 @@ export default {
         .catch(() => {
           toast.fire({ type: "error", title: 'Something Went Wrong' });
         });
-      // 
+      //
     }
   },
   watch:{

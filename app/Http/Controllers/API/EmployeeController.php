@@ -240,6 +240,7 @@ class EmployeeController extends Controller
                 }
             }
             // update employee
+            // dd($request->shop);
             $employee->update([
                 'name' => NULL,
                 'department_id' => NULL,

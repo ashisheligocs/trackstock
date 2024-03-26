@@ -14,7 +14,7 @@
                 All
             </a>
 
-      <a v-for="(value, key) in shops" :key="key" class="dropdown-item" :title="value[1]" href="#" 
+      <a v-for="(value, key) in shops" :key="key" class="dropdown-item" :title="value[1]" href="#"
         @click.prevent="setHotel(value)">
         {{ value.shop_name }}
       </a>

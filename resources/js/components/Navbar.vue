@@ -51,7 +51,7 @@
             POS
           </router-link>
           <div class="dropdown-divider d-sm-none"></div>
-          <router-link v-if="$can('invoice-create')" :to="{ name: 'invoices.create' }"
+          <!-- <router-link v-if="$can('invoice-create')" :to="{ name: 'invoices.create' }"
             class="dropdown-item dropdown-icon-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor" stroke-width="2">
@@ -59,8 +59,8 @@
                 d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
             </svg>
             {{ $t("topbar.new_invoice") }}
-          </router-link>
-          <div class="dropdown-divider"></div>
+          </router-link> -->
+          <!-- <div class="dropdown-divider"></div>
           <router-link v-if="$can('expense-create')" :to="{ name: 'expenses.create' }"
             class="dropdown-item dropdown-icon-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -94,7 +94,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
             {{ $t("topbar.sales") }}
-          </router-link>
+          </router-link> -->
         </div>
       </li>
       <li class="nav-item">
@@ -111,7 +111,7 @@
       <li v-if="user" class="nav-item dropdown d-none d-md-block">
         <a class="nav-link user-profile" data-toggle="dropdown" href="#">
           <div>
-            <p class="mb-0 ml-2 d-none d-md-block">{{ user.name }}</p>
+            <p class="mb-0 ml-2 d-none d-md-block">{{ user.email }}</p>
           </div>
           <span class="mt-1 ml-1">
             <i class="fas fa-angle-down"></i>

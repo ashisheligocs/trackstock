@@ -19,7 +19,6 @@
                 <thead>
                   <tr>
                     <th>{{ $t("common.s_no") }}</th>
-                    <th>Order ID</th>
                     <th>Product</th>
                     <th>Quantity</th>
                     <th>Price</th>
@@ -34,7 +33,6 @@
                     <td>
                       <span>{{ i + 1 }}</span>
                     </td>
-                    <td>{{ data.orderId }}</td>
                     <td>{{ data.name }}</td>
                     <td>{{ data.quantity }}</td>
                     <td>{{ data.price }}</td>
@@ -42,6 +40,7 @@
       forBalanceSheetCurrencyDecimalOnly }}</td>
                   </tr>
                   <tr>
+                    <th></th>
                     <th></th>
                     <th>Qty</th>
                     <th>{{ total_qty_sale }}</th>

@@ -41,12 +41,12 @@
                   <has-error :form="form" field="mobileNumber" />
                 </div> -->
                              </div>
-              <!-- <div class="form-check">
+              <div class="form-check">
                 <input v-model="form.allowLogin" type="checkbox" class="form-check-input" id="allowLogin" />
                 <label class="form-check-label" for="allowLogin">{{
       $t("employees.common.allow_login")
     }}</label>
-              </div> -->
+              </div>
               <div class="row mt-3">
                 <div class="form-group col-md-6">
                   <label for="email">Username
