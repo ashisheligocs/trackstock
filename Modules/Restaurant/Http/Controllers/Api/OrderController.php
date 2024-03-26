@@ -114,9 +114,9 @@ class OrderController extends Controller
 
         $prevOrder = Restroorder::where('shop_id', $hotelId)->latest()->first();
         if (!empty($prevOrder)) {
-            $previousBookingId = "RO-0000".$prevOrder->id;
+            $previousBookingId = "0000".$prevOrder->id;
         } else {
-            $previousBookingId = "RO-00000";
+            $previousBookingId = "00000";
         }
 
         // $room = @$data['room'] ?? null;
@@ -363,11 +363,12 @@ class OrderController extends Controller
     {
 
         $hotel1 = Shop::where('id',$hotelId)->first();
+        $todayDayMonth = date("dm");
+        // $hotel = str_replace('Shop', '', $hotel1->shop_name);
+        // $hotel = str_replace('Shop', '', $hotel);
 
-        $hotel = str_replace('Shop', '', $hotel1->shop_name);
-        $hotel = str_replace('Shop', '', $hotel);
-
-        $hotel = ($hotel1->shop_prefix !== null) ? $hotel1->shop_prefix : Str::slug($hotel);
+        // $hotel = ($hotel1->shop_prefix !== null) ? $hotel1->shop_prefix : Str::slug($hotel);
+        $hotel = Str::slug($hotel1->shop_name);
 
 
         // Extract the numeric part of the previous booking ID
@@ -380,7 +381,8 @@ class OrderController extends Controller
         // Concatenate the prefix and the padded numeric part to form the new booking ID
         $prefix = substr($previousBookingId, 0, 3);
 
-        return $prefix.$hotel.'-'.$nextNumberPadded;
+        return $hotel.'/'.$todayDayMonth.'/'.$nextNumberPadded;
+        // return $prefix.$hotel.'-'.$nextNumberPadded;
     }
 
     public function createInvoice(Request $request)

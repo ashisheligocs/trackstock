@@ -15,7 +15,7 @@
       <!--<locale-dropdown/>-->
       <hotel-dropdown />
 <li>
-  
+
 </li>
     </ul>
 
@@ -110,9 +110,6 @@
       <!-- User Dropdown Menu -->
       <li v-if="user" class="nav-item dropdown d-none d-md-block">
         <a class="nav-link user-profile" data-toggle="dropdown" href="#">
-          <div>
-            <img :src="user.photo_url" :alt="user.name" />
-          </div>
           <div>
             <p class="mb-0 ml-2 d-none d-md-block">{{ user.name }}</p>
           </div>

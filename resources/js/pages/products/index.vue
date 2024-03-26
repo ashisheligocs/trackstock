@@ -1,6 +1,6 @@
 <template>
   <div class="mb-50">
-    <div>
+        <div>
           <button @click="goBack" class="btn btn-secondary mt-2 mb-2"><i class="fas fa-long-arrow-alt-left"></i> Back</button>
         </div>
     <div class="row">
@@ -240,22 +240,13 @@
           @submit.prevent="saveCsv"
           @keydown="form.onKeydown($event)"
         >
-          <div class="row">
-            <div class="alert alert-info">
-              <h5>{{ $t("csv.instructions") }}</h5>
-              <ul>
-                <li>{{ $t("csv.download_zip") }}</li>
-                <li>{{ $t("csv.populate_information") }}</li>
-                <li>{{ $t("csv.corresponding_CSV") }}</li>
-                <li>{{ $t("csv.example") }}</li>
-              </ul>
-            </div>
+          <!-- <div class="row">
             <div class="form-group">
               <a @click="downloadTemplate" class="btn btn-primary">
                 <i class="fas fa-download"></i> {{ $t("download") }}
               </a>
             </div>
-          </div>
+          </div> -->
           <div class="row">
             <input
               :class="{ 'is-invalid': form.errors.has('file') }"

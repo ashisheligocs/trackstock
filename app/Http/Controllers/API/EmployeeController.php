@@ -49,12 +49,12 @@ class EmployeeController extends Controller
     {
         // validate request
         $this->validate($request, [
-            'employeeName' => 'required|string|max:255',
+            'employeeName' => 'nullable',
             'department' => 'nullable',
             'designation' => 'nullable',
             'salary' => 'nullable',
             'commission' => 'nullable|numeric',
-            'mobileNumber' => 'required|string|max:20',
+            'mobileNumber' => 'nullable',
             'birthDate' => 'nullable',
             'appointmentDate' => 'nullable',
             'joiningDate' => 'nullable',
@@ -90,7 +90,7 @@ class EmployeeController extends Controller
                 $role = Role::where('slug', $request->role['slug'])->first();
                 // store user
                 $user = User::create([
-                    'name' => $request->employeeName,
+                    'name' => $request->employeeName ?? "no name",
                     'email' => $request->username,
                     'password' => Hash::make($request->password),
                     'account_role' => 0,
@@ -103,13 +103,13 @@ class EmployeeController extends Controller
 
             // create employee
             Employee::create([
-                'name' => $request->employeeName,
+                'name' => $request->employeeName ?? "noname",
                 'emp_id' => $code,
                 'department_id' => @$request->department ? $request->department['id'] : NULL,
                 'designation' => $request->designation,
                 'salary' => $request->salary,
                 'commission' => $request->commission,
-                'mobile_number' => $request->mobileNumber,
+                'mobile_number' => $request->mobileNumber ?? "no number",
                 'birth_date' => $request->birthDate,
                 'gender' => $request->gender,
                 'blood_group' => $request->bloodGroup,
@@ -162,12 +162,12 @@ class EmployeeController extends Controller
         }
         // validate request
         $this->validate($request, [
-            'employeeName' => 'required|string|max:255',
+            'employeeName' => 'nullable',
             'department' => 'nullable',
             'designation' => 'nullable',
             'salary' => 'nullable',
             'commission' => 'nullable|numeric',
-            'mobileNumber' => 'required|string|max:20',
+            'mobileNumber' => 'nullable',
             'birthDate' => 'nullable',
             'appointmentDate' => 'nullable',
             'joiningDate' => 'nullable',
@@ -209,7 +209,7 @@ class EmployeeController extends Controller
                         $password = Hash::make($request->password);
                     }
                     $user->update([
-                        'name' => $request->employeeName,
+                        'name' => $request->employeeName ?? "none",
                         'email' => $request->username,
                         'password' => $password,
                         'is_active' => 1,
@@ -220,7 +220,7 @@ class EmployeeController extends Controller
                 } else {
                     // store user login
                     $user = User::create([
-                        'name' => $request->employeeName,
+                        'name' => $request->employeeName  ?? "none",
                         'email' => $request->username,
                         'password' => Hash::make($request->password),
                         'account_role' => 0,
@@ -241,7 +241,7 @@ class EmployeeController extends Controller
             }
             // update employee
             $employee->update([
-                'name' => $request->employeeName,
+                'name' => NULL,
                 'department_id' => NULL,
                 'designation' => $request->designation,
                 'salary' => $request->salary,

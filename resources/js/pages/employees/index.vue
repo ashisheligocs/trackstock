@@ -40,9 +40,9 @@
                   <tr>
                     <th>{{ $t("common.s_no") }}</th>
                     <th>{{ $t("common.name") }}</th>
-                    <th>Shop</th>
+                    <!-- <th>Shop</th> -->
                     <th>Role</th>
-                    <th>{{ $t("common.contact_number") }}</th>
+                    <!-- <th>{{ $t("common.contact_number") }}</th> -->
 <!--                    <th>{{ $t("common.status") }}</th>-->
                     <th
                       v-if="
@@ -69,17 +69,17 @@
                       <span v-else>{{ i + 1 }}</span>
                     </td>
                     <td>
-                        {{ data.name }}
+                        {{ data.email }}
                     </td>
-                    <td>
+                    <!-- <td>
                       {{data?.shop?.shop_name}}
-                    </td>
+                    </td> -->
                     <td>
                       <span
                         >{{ data?.role?.name }}
                       </span>
                     </td>
-                    <td>{{ data.mobileNumber }}</td>
+                    <!-- <td>{{ data.mobileNumber }}</td> -->
 <!--                    <td>-->
 <!--                      <span v-if="data.status === 1" class="badge bg-success">{{-->
 <!--                        $t("common.active")-->
