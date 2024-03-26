@@ -1,8 +1,8 @@
 <template>
   <div class="mb-50">
-    <!-- breadcrumbs Start -->
-    <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" />
-    <!-- breadcrumbs end -->
+    <router-link :to="{ name: 'home' }">
+        Back
+      </router-link>
     <div class="row">
       <div
         class="col-lg-12"
@@ -23,28 +23,6 @@
             </div>
             <div class="col-xl-8 col-8 float-right text-right">
               <div class="btn-group c-w-100">
-                <a
-                  @click="refreshTable()"
-                  href="#"
-                  v-tooltip="'Refresh'"
-                  class="btn btn-success"
-                >
-                  <i class="fas fa-sync"></i>
-                </a>
-                <a
-                  href="/cashbook/transfer-balances/excel"
-                  v-tooltip="$t('common.export_table')"
-                  class="btn btn-dark"
-                >
-                  <i class="fas fa-file-export"></i>
-                </a>
-                <a
-                  @click="print"
-                  v-tooltip="$t('common.print_table')"
-                  class="btn btn-info"
-                >
-                  <i class="fas fa-print"></i>
-                </a>
                 <router-link
                   v-if="$can('account-transfer-balance-create')"
                   :to="{ name: 'transferBalances.create' }"
@@ -101,17 +79,6 @@
                     <th>{{ $t("cashbook.common.from_account") }}</th>
                     <th>{{ $t("cashbook.common.to_account") }}</th>
                     <th >{{ $t("common.amount") }}</th>
-                    <th>{{ $t("common.status") }}</th>
-                    <th
-                      v-if="
-                        $can('account-transfer-balance-edit') ||
-                        $can('account-transfer-balance-view') ||
-                        $can('account-transfer-balance-delete')
-                      "
-                      class="text-right no-print"
-                    >
-                      {{ $t("common.action") }}
-                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -133,18 +100,6 @@
                     <td>
                       {{data.shop?.shop_name}}
                     </td>
-                    <!-- <td>
-                      <router-link
-                        v-if="$can('account-transfer-balance-view')"
-                        :to="{
-                          name: 'transferBalances.show',
-                          params: { slug: data.slug },
-                        }"
-                      >
-                        {{ data.reason }}
-                      </router-link>
-                      <span v-else>{{ data.reason }}</span>
-                    </td> -->
                     <td>
                       <span v-if="data.fromAccount">{{
                         data.fromAccount.ledgerName
@@ -156,57 +111,6 @@
                       }}</span>
                     </td>
                     <td class="text-right">{{ data.amount | withCurrency }}</td>
-                    
-                    <td>
-                      <span v-if="data.status === 1" class="badge bg-success">{{
-                        $t("common.active")
-                      }}</span>
-                      <span v-else class="badge bg-danger">{{
-                        $t("common.in_active")
-                      }}</span>
-                    </td>
-                    <td
-                      v-if="
-                        $can('account-transfer-balance-edit') ||
-                        $can('account-transfer-balance-view') 
-                        // || $can('account-transfer-balance-delete')
-                      "
-                      class="text-right no-print"
-                    >
-                      <div class="btn-group">
-                        <router-link
-                          v-if="$can('account-transfer-balance-view')"
-                          v-tooltip="$t('common.view')"
-                          :to="{
-                            name: 'transferBalances.show',
-                            params: { slug: data.slug },
-                          }"
-                          class="btn btn-primary btn-sm"
-                        >
-                          <i class="fas fa-eye" />
-                        </router-link>
-                        <router-link
-                          v-if="$can('account-transfer-balance-edit')"
-                          v-tooltip="$t('common.edit')"
-                          :to="{
-                            name: 'transferBalances.edit',
-                            params: { slug: data.slug },
-                          }"
-                          class="btn btn-info btn-sm"
-                        >
-                          <i class="fas fa-edit" />
-                        </router-link>
-                        <!-- <a
-                          v-if="$can('account-transfer-balance-delete')"
-                          v-tooltip="$t('common.delete')"
-                          href="#"
-                          class="btn btn-danger btn-sm"
-                          @click="deleteData(data.slug)"
-                        >
-                          <i class="fas fa-trash" />
-                        </a> -->
-                      </div>
-                    </td>
                   </tr>
                   <tr v-show="!loading && !items.length">
                     <td colspan="8">
@@ -266,21 +170,6 @@ export default {
     DateRangePicker,
   },
   data: () => ({
-    breadcrumbsCurrent: "cashbook.transfers.index.breadcrumbs_current",
-    breadcrumbs: [
-      {
-        name: "cashbook.transfers.index.breadcrumbs_first",
-        url: "home",
-      },
-      {
-        name: "cashbook.transfers.index.breadcrumbs_second",
-        url: "",
-      },
-      {
-        name: "cashbook.transfers.index.breadcrumbs_active",
-        url: "",
-      },
-    ],
     query: "",
     perPage: 10,
     minDate: moment(new Date("01-01-2021")).format("YYYY-MM-DD"),

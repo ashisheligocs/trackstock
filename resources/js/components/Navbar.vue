@@ -14,6 +14,7 @@
 
       <!--<locale-dropdown/>-->
       <hotel-dropdown />
+      
     </ul>
 
     <!-- Right nav links -->
