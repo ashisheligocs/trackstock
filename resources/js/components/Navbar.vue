@@ -14,14 +14,17 @@
 
       <!--<locale-dropdown/>-->
       <hotel-dropdown />
-<li>
-  
-</li>
+      <li>
+
+      </li>
     </ul>
 
     <!-- Right nav links -->
     <ul class="navbar-nav ml-auto align-items-center">
 
+      <li>
+        <p>{{ last_order_id }}</p>
+      </li>
       <li>
         <div class="mr-4">
           <span>{{ currentDate }}</span>
@@ -38,20 +41,20 @@
       <li
         v-if="$can('lc-create') || $can('order-create') || $can('invoice-create') || $can('expense-create') || $can('international-purchase-create')"
         class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="true">
+        <!-- <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="true">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
             stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round"
               d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-        </a>
+        </a> -->
         <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
           <router-link :to="{ name: 'pos.create' }" class="d-sm-none dropdown-item dropdown-icon-center mob_pos">
             <i class="fas fa-cash-register w-6"></i>
             POS
           </router-link>
           <div class="dropdown-divider d-sm-none"></div>
-          <router-link v-if="$can('invoice-create')" :to="{ name: 'invoices.create' }"
+          <!-- <router-link v-if="$can('invoice-create')" :to="{ name: 'invoices.create' }"
             class="dropdown-item dropdown-icon-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor" stroke-width="2">
@@ -59,8 +62,8 @@
                 d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
             </svg>
             {{ $t("topbar.new_invoice") }}
-          </router-link>
-          <div class="dropdown-divider"></div>
+          </router-link> -->
+          <!-- <div class="dropdown-divider"></div>
           <router-link v-if="$can('expense-create')" :to="{ name: 'expenses.create' }"
             class="dropdown-item dropdown-icon-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -94,7 +97,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
             {{ $t("topbar.sales") }}
-          </router-link>
+          </router-link> -->
         </div>
       </li>
       <li class="nav-item">
@@ -111,10 +114,7 @@
       <li v-if="user" class="nav-item dropdown d-none d-md-block">
         <a class="nav-link user-profile" data-toggle="dropdown" href="#">
           <div>
-            <img :src="user.photo_url" :alt="user.name" />
-          </div>
-          <div>
-            <p class="mb-0 ml-2 d-none d-md-block">{{ user.name }}</p>
+            <p class="mb-0 ml-2 d-none d-md-block">{{ user.email }}</p>
           </div>
           <span class="mt-1 ml-1">
             <i class="fas fa-angle-down"></i>
@@ -138,6 +138,8 @@
 
 <script>
 import axios from "axios";
+import Form from "vform";
+import moment from "moment";
 import { mapGetters } from "vuex";
 import LocaleDropdown from "./LocaleDropdown";
 import HotelDropdown from "./HotelDropdown";
@@ -154,11 +156,21 @@ export default {
     activetab: 2,
     currentDate: '',
     currentTime: '',
+    form: new Form({
+      todayDate: moment().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSS'),
+      shop_id: '',
+    }),
+    last_order_id: '',
   }),
 
-  computed: mapGetters({
+  computed: {
+  ...mapGetters({
     user: "auth/user",
-  }),
+    operations: "appInfo",
+    selectedHotel: "selectedHotel"
+  })
+},
+
 
   created() {
     this.$route.params?.order && (this.activetab = 2);
@@ -167,19 +179,32 @@ export default {
       this.updateDateTime();
     }, 1000);
     this.updateDateTime();
+    this.getTodaySale();
   },
 
+
   methods: {
+    async getTodaySale() {
+      this.form.shop_id = this.selectedHotel;
+      console.log(this.form);
+      await this.form
+        .post(window.location.origin + '/api/food/order/todaysale')
+        .then((response) => {
+          console.log(response);
+          this.last_order_id = response.data.last_order_id;
+          console.log(this.last_order_id);
+        });
+    },
     updateDateTime() {
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, '0');
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const year = now.getFullYear();
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const year = now.getFullYear();
 
-    this.currentDate = `${day}-${month}-${year}`;
+      this.currentDate = `${day}-${month}-${year}`;
 
-    this.currentTime = now.toLocaleTimeString();
-},
+      this.currentTime = now.toLocaleTimeString();
+    },
 
     // get stock notification
     async stockNotification() {

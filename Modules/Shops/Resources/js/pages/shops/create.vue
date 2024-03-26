@@ -1,8 +1,6 @@
 <template>
     <div>
-        <!-- breadcrumbs Start -->
-        <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" />
-        <!-- breadcrumbs end -->
+      <button class="btn btn-secondary mt-2 mb-2"  @click="goBack"><i class="fas fa-long-arrow-alt-left" /> {{ $t("common.back") }}</button>
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -10,9 +8,8 @@
                         <h3 class="card-title">
                             {{ $t('shop.shopAdd.create.form_title') }}
                         </h3>
-                        
 
-                        <button class="btn btn-secondary mt-2 mb-2"  @click="goBack"><i class="fas fa-long-arrow-alt-left" /> {{ $t("common.back") }}</button>
+
 
                     </div>
                     <!-- /.card-header -->
@@ -44,9 +41,6 @@
                             <v-button :loading="form.busy" class="btn btn-primary">
                                 <i class="fas fa-save" /> {{ $t('common.save') }}
                             </v-button>
-                            <button type="reset" class="btn btn-secondary float-right" @click="form.reset()">
-                                <i class="fas fa-power-off" /> {{ $t('common.reset') }}
-                            </button>
                         </div>
                     </form>
                 </div>

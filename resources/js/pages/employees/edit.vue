@@ -1,8 +1,8 @@
 <template>
   <div>
-    <!-- breadcrumbs Start -->
-    <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" />
-    <!-- breadcrumbs end -->
+    <router-link :to="{ name: 'employees.index' }" class="btn btn-secondary mt-2 mb-2">
+              <i class="fas fa-long-arrow-alt-left" /> {{ $t('common.back') }}
+            </router-link>
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
@@ -10,9 +10,7 @@
             <h3 class="card-title">
               {{ $t('employees.list.edit.form_title') }}
             </h3>
-            <router-link :to="{ name: 'employees.index' }" class="btn btn-secondary float-right">
-              <i class="fas fa-long-arrow-alt-left" /> {{ $t('common.back') }}
-            </router-link>
+
           </div>
           <!-- /.card-header -->
           <!-- form start -->
@@ -31,7 +29,7 @@
                     placeholder="Search a Shop"
                   />
                 </div>
-                <div class="form-group col-md-4">
+                <!-- <div class="form-group col-md-4">
                   <label for="employeeName">{{ $t('employees.common.employee_name') }}
                     <span class="required">*</span></label>
                   <input id="employeeName" v-model="form.employeeName" type="text" class="form-control"
@@ -39,18 +37,18 @@
                       $t('employees.common.employee_name_placeholder')
                     " />
                   <has-error :form="form" field="employeeName" />
-                </div>
+                </div> -->
               </div>
               <div class="row">
 
-                <div class="form-group col-md-3">
+                <!-- <div class="form-group col-md-3">
                   <label for="mobileNumber">{{ $t('common.contact_number') }}
                     <span class="required">*</span></label>
                   <input id="mobileNumber" v-model="form.mobileNumber" type="text" class="form-control"
                     :class="{ 'is-invalid': form.errors.has('mobileNumber') }" name="mobileNumber"
                     :placeholder="$t('common.contact_number_placeholder')" />
                   <has-error :form="form" field="mobileNumber" />
-                </div>
+                </div> -->
 
 
               </div>
@@ -97,7 +95,7 @@
                   <has-error :form="form" field="role" />
                 </div>
                 <div class="form-group col-md-6">
-                  
+
                   <label for="hotel" class="d-block">{{ $t('sidebar.shops') }}
                     <span class="required">*</span></label>
                   <multiselect id="hotel" v-model="selectedHotels" :options="hotelItems" :show-labels="false" tag-placeholder="" :taggable="false" placeholder="Search an hotel"
@@ -110,9 +108,6 @@
               <v-button :loading="form.busy" class="btn btn-primary">
                 <i class="fas fa-edit" /> {{ $t('common.save_changes') }}
               </v-button>
-              <button type="reset" class="btn btn-secondary float-right" @click="form.reset()">
-                <i class="fas fa-power-off" /> {{ $t('common.reset') }}
-              </button>
             </div>
           </form>
         </div>
@@ -217,7 +212,7 @@ export default {
       const { data } = await this.form.get(
         window.location.origin + '/api/employees/' + this.$route.params.slug
       )
-      
+
       this.form.employeeName = data.data.name
       this.form.department = data.data.department
       this.form.designation = data.data.designation

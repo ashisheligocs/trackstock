@@ -114,9 +114,9 @@ class OrderController extends Controller
 
         $prevOrder = Restroorder::where('shop_id', $hotelId)->latest()->first();
         if (!empty($prevOrder)) {
-            $previousBookingId = "RO-0000".$prevOrder->id;
+            $previousBookingId = "0000".$prevOrder->id;
         } else {
-            $previousBookingId = "RO-00000";
+            $previousBookingId = "00000";
         }
 
         // $room = @$data['room'] ?? null;
@@ -179,7 +179,7 @@ class OrderController extends Controller
 
     public function payInvoice(Request $request)
     {
-        //   echo "<pre/>"; print_r($request->input()); exit();
+       //    echo "<pre/>"; print_r($request->input()); exit();
         $input = $request->all();
         $hotelId = $input['hotel_id'];
         $orderId = $input['invoice_slug'];
@@ -363,11 +363,12 @@ class OrderController extends Controller
     {
 
         $hotel1 = Shop::where('id',$hotelId)->first();
+        $todayDayMonth = date("dm");
+        // $hotel = str_replace('Shop', '', $hotel1->shop_name);
+        // $hotel = str_replace('Shop', '', $hotel);
 
-        $hotel = str_replace('Shop', '', $hotel1->shop_name);
-        $hotel = str_replace('Shop', '', $hotel);
-
-        $hotel = ($hotel1->shop_prefix !== null) ? $hotel1->shop_prefix : Str::slug($hotel);
+        // $hotel = ($hotel1->shop_prefix !== null) ? $hotel1->shop_prefix : Str::slug($hotel);
+        $hotel = Str::slug($hotel1->shop_name);
 
 
         // Extract the numeric part of the previous booking ID
@@ -380,7 +381,8 @@ class OrderController extends Controller
         // Concatenate the prefix and the padded numeric part to form the new booking ID
         $prefix = substr($previousBookingId, 0, 3);
 
-        return $prefix.$hotel.'-'.$nextNumberPadded;
+        return $hotel.'/'.$todayDayMonth.'/'.$nextNumberPadded;
+        // return $prefix.$hotel.'-'.$nextNumberPadded;
     }
 
     public function createInvoice(Request $request)
@@ -487,28 +489,80 @@ class OrderController extends Controller
 
     //today sales
 
+    // public function todaySale(Request $request){
+
+    //     $today = date('Y-m-d');
+
+    //     $todaySale = RestroItem::with('restaurantItem','restaurantorder')->whereHas('restaurantorder', function ($newQuery) use ($request,$today) {
+    //         $newQuery->where('shop_id', $request->shop_id);
+    //         $newQuery->whereBetween('order_date', [$today, $request->todayDate]);
+    //     })->get();
+
+
+
+
+    //     $finalArray = [];
+    //     $totalQty = 0;
+    //     $totalAmount = 0;
+
+    //     foreach($todaySale as $value){
+
+    //         $productId = $value->restaurantItem->id;
+    //         $totalQty += $value->qty;
+    //         $totalAmount += $value->restaurantItem->selling_price;
+    //         if (isset($finalArray[$productId])) {
+    //             $finalArray[$productId]['quantity'] += $value->qty;
+
+    //         } else {
+    //             $finalArray[$productId] = [
+    //                 'product_id' => $value->restaurantItem->id,
+    //                 'name' => $value->restaurantItem->name,
+    //                 'shop' => $value->restaurantorder->shop_id,
+    //                 'orderId' => $value->restaurantorder->order_id_uniq,
+    //                 'price' => $value->restaurantItem->selling_price,
+    //                 'quantity' => $value->qty,
+    //                 'order_date' => $value->restaurantorder->order_date
+    //             ];
+    //         }
+
+    //     }
+
+    //      $newArray = array_values($finalArray);
+    //      return response()->json([
+    //         'data'=> $newArray,
+    //         'qty'=> $totalQty,
+    //         'amount'=> $totalAmount,
+    //     ]);
+    //     // return TodaySalesResource::collection($todaySale);
+    // }
+
     public function todaySale(Request $request){
 
         $today = date('Y-m-d');
 
-        $todaySale = RestroItem::with('restaurantItem','restaurantorder')->whereHas('restaurantorder', function ($newQuery) use ($request,$today) {
-            $newQuery->where('shop_id', $request->shop_id);
-            $newQuery->whereBetween('order_date', [$today, $request->todayDate]);
-        })->get();
 
+        $todaySale = RestroItem::with('restaurantItem', 'restaurantorder')
+            ->whereHas('restaurantorder', function ($newQuery) use ($request, $today) {
+                $newQuery->where('shop_id', $request->shop_id)
+                    ->whereBetween('order_date', [$today, $request->todayDate])
+                    ->orderBy('order_id', 'desc');
+            })
+            ->get();
 
         $finalArray = [];
         $totalQty = 0;
         $totalAmount = 0;
+        $lastOrderId = null;
 
-        foreach($todaySale as $value){
+        foreach ($todaySale as $value) {
 
             $productId = $value->restaurantItem->id;
             $totalQty += $value->qty;
             $totalAmount += $value->restaurantItem->selling_price;
+            $lastOrderId = $value->restaurantorder->order_id_uniq;
+
             if (isset($finalArray[$productId])) {
                 $finalArray[$productId]['quantity'] += $value->qty;
-
             } else {
                 $finalArray[$productId] = [
                     'product_id' => $value->restaurantItem->id,
@@ -520,16 +574,18 @@ class OrderController extends Controller
                     'order_date' => $value->restaurantorder->order_date
                 ];
             }
-
         }
 
-         $newArray = array_values($finalArray);
-         return response()->json([
+        $newArray = array_values($finalArray);
+
+
+        return response()->json([
             'data'=> $newArray,
             'qty'=> $totalQty,
             'amount'=> $totalAmount,
+            'last_order_id' => $lastOrderId,
         ]);
-
-        // return TodaySalesResource::collection($todaySale);
     }
+
+
 }
