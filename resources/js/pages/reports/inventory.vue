@@ -277,7 +277,8 @@ export default {
       this.products = [];
       // this.form.itemName = "";
       let catSlug = this.form.category.slug ?? 'liquor';
-      let subCatSlug = this.form.subCategory.slug;
+      let subCatSlug = this.form.subCategory.slug ?? 'all';
+
       const { data } = await axios.get(
         window.location.origin +
           "/api/products-by-sub-categories/" +
@@ -308,6 +309,7 @@ export default {
 
     async getInventoryData(){
       this.loading = true;
+      this.form.category = 1;
       this.form.shop_id = (this.selectedHotel != 'all') ? this.selectedHotel : ''
       await this.form
         .post(window.location.origin + "/api/reports/inventory")

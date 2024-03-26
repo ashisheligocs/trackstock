@@ -521,7 +521,7 @@ class ReportController extends Controller
         if (((@$request->category['slug'] && $request->category['slug'] == 'all') && $request->subCategory['slug'] == 'all' && $request->itemName['slug'] == 'all')) {
             $products = Product::orderBy('code', 'ASC')->get();
             $allProducts = $this->generateItemsArray($products, $request);
-        } elseif (($request->category && $request->subCategory['slug'] == 'all' && $request->itemName['slug'] == 'all')) {
+        } elseif (($request->category && $request->subCategory && $request->itemName['slug'] == 'all')) {
             $catId = (@$request->category['id']) ? $request->category['id'] : $request->category;
             $products = Product::with('proSubCategory.category')->whereHas('proSubCategory', function ($newQuery) use ($catId) {
                 $newQuery->whereHas('category', function ($newQuery) use ($catId) {
