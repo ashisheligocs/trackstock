@@ -3,7 +3,7 @@
     <a class="nav-link dropdown-toggle" href="#" role="button"
       :data-toggle="shops && shops.length === 1 ? '' : 'dropdown'" aria-haspopup="true" aria-expanded="false">
       {{ selectedHotel && selectedHotel === 'all' ? 'All' : (selectedHotel && Object.keys(selectedHotel).length > 0 ?
-    selectedHotel.shop_name : $t('common.select_hotel')) }}
+    selectedHotel.shop_name : "Select shop" )}}
     </a>
     <div class="dropdown-menu dropdown-menu-sm">
       <a

@@ -179,7 +179,7 @@ class OrderController extends Controller
 
     public function payInvoice(Request $request)
     {
-        //   echo "<pre/>"; print_r($request->input()); exit();
+       //    echo "<pre/>"; print_r($request->input()); exit();
         $input = $request->all();
         $hotelId = $input['hotel_id'];
         $orderId = $input['invoice_slug'];
@@ -540,26 +540,26 @@ class OrderController extends Controller
 
         $today = date('Y-m-d');
 
-        // Retrieve today's sales with the last order ID
+
         $todaySale = RestroItem::with('restaurantItem', 'restaurantorder')
             ->whereHas('restaurantorder', function ($newQuery) use ($request, $today) {
                 $newQuery->where('shop_id', $request->shop_id)
                     ->whereBetween('order_date', [$today, $request->todayDate])
-                    ->orderBy('order_id', 'desc'); // Order by order_id in descending order
+                    ->orderBy('order_id', 'desc');
             })
             ->get();
 
         $finalArray = [];
         $totalQty = 0;
         $totalAmount = 0;
-        $lastOrderId = null; // Initialize last order ID variable
+        $lastOrderId = null;
 
         foreach ($todaySale as $value) {
 
             $productId = $value->restaurantItem->id;
             $totalQty += $value->qty;
             $totalAmount += $value->restaurantItem->selling_price;
-            $lastOrderId = $value->restaurantorder->order_id_uniq; // Update last order ID
+            $lastOrderId = $value->restaurantorder->order_id_uniq;
 
             if (isset($finalArray[$productId])) {
                 $finalArray[$productId]['quantity'] += $value->qty;
@@ -578,17 +578,14 @@ class OrderController extends Controller
 
         $newArray = array_values($finalArray);
 
-        // Include last order ID within newArray
-        $newArray['last_order_id'] = $lastOrderId;
 
-        // Return response with newArray
         return response()->json([
             'data'=> $newArray,
             'qty'=> $totalQty,
             'amount'=> $totalAmount,
+            'last_order_id' => $lastOrderId,
         ]);
     }
-
 
 
 }

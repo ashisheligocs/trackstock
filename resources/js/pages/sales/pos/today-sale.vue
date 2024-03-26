@@ -27,7 +27,6 @@
 
                 </thead>
                 <tbody>
-
                   <tr v-if="todaySale && todaySale?.length" v-for="(data, i) in todaySale" :key="i">
 
                     <td>
@@ -40,7 +39,6 @@
       forBalanceSheetCurrencyDecimalOnly }}</td>
                   </tr>
                   <tr>
-                    <th></th>
                     <th></th>
                     <th>Qty</th>
                     <th>{{ total_qty_sale }}</th>
@@ -60,14 +58,6 @@
                 </i>
               </small>
             </div>
-          </div>
-
-          <div class="dtable-footer pb-3">
-            <!-- pagination-start -->
-            <div></div>
-            <pagination v-if="pagination && pagination.last_page > 1" :pagination="pagination" :offset="5"
-              class="justify-flex-end" @paginate="paginate" />
-            <!-- pagination-end -->
           </div>
 
         </div>
@@ -132,7 +122,7 @@ export default {
           this.todaySale = response.data.data;
           this.total_qty_sale = response.data.qty;
           this.total_amount = response.data.amount;
-
+          this.last_order_id = response.data.last_order_id;
         });
     }
   }
