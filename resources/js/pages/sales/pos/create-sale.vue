@@ -1,8 +1,5 @@
 <template>
   <div id="pos">
-    <!-- breadcrumbs Start -->
-    <!-- <breadcrumbs :items="breadcrumbs" :current="breadcrumbsCurrent" /> -->
-    <!-- breadcrumbs end -->
     <div>
       <span>Address - </span>
       <p>Current Date: {{ currentDate }}</p>
@@ -36,7 +33,6 @@
                     <th scope="col">Sr.No</th>
                     <th scope="col">Batch No.</th>
                     <th scope="col">{{ $t("common.product") }}</th>
-                    <!-- <th scope="col">{{ $t("common.price") }}</th> -->
                     <th class="text-center">
                       {{ $t("common.quantity") }}
                     </th>
@@ -573,7 +569,7 @@
           setInterval(() => {
       this.updateDateTime();
     }, 1000);
-    this.updateDateTime(); 
+    this.updateDateTime();
 
 
             await this.getHotelDataList();
