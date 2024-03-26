@@ -548,7 +548,7 @@ class ProductController extends Controller
                             'model' => @$item['Batch'],
                             'barcode_symbology' => @$item['barcode_type'] ? $item['barcode_type'] : NULL,
                             'sub_cat_id' => $subCategoryId,
-                            'brand_id' => ($brand) ? $brand->id : $subCategoryId,
+                            'brand_id' => @$brand ? $brand->id : $subCategoryId,
                             'unit_id' => @$item['unit_id'],
                             'tax_type' => @$item['taxType'],
                             'selling_price' => isset($item['Rate']) ? $item['Rate'] : 0,
